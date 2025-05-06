@@ -1,0 +1,16 @@
+{
+  "Navigation": {
+    "postProperty": "Post property",
+    "home": "Home",
+    "about": "About"
+  },
+  "Search": {
+    "buy": "Buy",
+    "rent": "Rent",
+    "apartments": "Apartments",
+    "homes": "Homes",
+    "offices": "Offices",
+    "searchPlaceholder": "Search in Macedonia",
+    "searchButton": "Search"
+  }
+}

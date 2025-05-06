@@ -1,0 +1,16 @@
+{
+  "Navigation": {
+    "postProperty": "Posto pronë",
+    "home": "Ballina",
+    "about": "Rreth neshk"
+  },
+  "Search": {
+    "buy": "Blej",
+    "rent": "Merr me qira",
+    "apartments": "Apartamente",
+    "homes": "Shtëpi",
+    "offices": "Zyra",
+    "searchPlaceholder": "Kërko në Maqedoni",
+    "searchButton": "Kërko"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "Navigation": {
+    "postProperty": "Објави имот",
+    "home": "Дома",
+    "about": "За нас"
+  },
+  "Search": {
+    "buy": "Купи",
+    "rent": "Изнајми",
+    "apartments": "Станови",
+    "homes": "Куќи",
+    "offices": "Канцеларии",
+    "searchPlaceholder": "Пребарај во Македонија",
+    "searchButton": "Пребарај"
+  }
+}

@@ -47,10 +47,11 @@ export const TopLink = styled.a`
 `;
 
 export const LanguageSelect = styled.select`
-  padding: 0.4rem 0.6rem;
-  border-radius: 8px;
+  padding: 0.2rem 0.6rem;
   border: 1px solid #ccc;
   font-size: 0.95rem;
+  background-color: #ffffff4d;
+  border-radius: 8px;
 `;
 
 export const Overlay = styled.div`
@@ -61,7 +62,7 @@ export const Overlay = styled.div`
 
 export const Logo = styled.h1`
   font-size: 6.5rem;
-  color: black;
+  color: #072e29;
   margin-bottom: 2.5rem;
 `;
 

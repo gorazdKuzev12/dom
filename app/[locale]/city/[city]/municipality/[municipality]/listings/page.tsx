@@ -7,15 +7,22 @@ import styled from "styled-components";
 import { FiSearch, FiMapPin, FiMenu, FiUser, FiX } from "react-icons/fi";
 import { BiSolidBuildingHouse } from "react-icons/bi";
 import Menu from "@/components/Menu/page";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 
 export default function ZoneListingsPage() {
+  const locale = useLocale();
+  const router = useRouter();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [activeFilter, setActiveFilter] = useState("Buy");
+  const handleSearch = () => {
+    // keep the current locale prefix in the URL (mk / en / sq)
+    router.push(`/${locale}/apartment`);
+  };
 
   return (
     <Wrapper>
       <Menu />
-      
 
       <Main>
         <Sidebar>
@@ -33,7 +40,7 @@ export default function ZoneListingsPage() {
 
         <ListArea>
           {[1, 2, 3, 4].map((i) => (
-            <PropertyCard key={i}>
+            <PropertyCard key={i} onClick={handleSearch}>
               <CardImage src="/so.png" alt="property" />
               <CardContent>
                 <Subtitle>

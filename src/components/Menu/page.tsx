@@ -1,12 +1,32 @@
 "use client";
 import styled from "styled-components";
 import { FiHome, FiPlusSquare } from "react-icons/fi";
+import { useLocale, useTranslations } from "next-intl";
+import { usePathname, useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 export default function Menu() {
+  const t = useTranslations("Navigation");
+  const locale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const handleLocaleChange = (e) => {
+    const newLocale = e.target.value;
+    startTransition(() => {
+      // Get the path without the locale prefix
+      const pathWithoutLocale = pathname.replace(`/${locale}`, "");
+
+      // Navigate to the new locale path
+      router.push(`/${newLocale}${pathWithoutLocale}`);
+    });
+  };
+
   return (
     <Navbar>
       <LogoContainer>
-        <Logo href="/">
+        <Logo href={`/${locale}`}>
           <FiHome size={20} style={{ marginRight: "6px" }} />
           dom.mk
         </Logo>
@@ -14,16 +34,21 @@ export default function Menu() {
 
       <DesktopMenu>
         <NavLinks>
-          <PostButton href="/post-property">
+          <PostButton href={`/${locale}/post-property`}>
             <FiPlusSquare size={18} />
-            <span>Post property</span>
+            <span>{t("postProperty")}</span>
           </PostButton>
         </NavLinks>
 
         <RightNav>
-          <LanguageSelector>
-            <option>Macedonian</option>
-            <option>English</option>
+          <LanguageSelector
+            value={locale}
+            onChange={handleLocaleChange}
+            disabled={isPending}
+          >
+            <option value="mk">Македонски</option>
+            <option value="en">English</option>
+            <option value="sq">Shqip</option>
           </LanguageSelector>
         </RightNav>
       </DesktopMenu>
@@ -37,7 +62,7 @@ const Navbar = styled.nav`
   align-items: center;
   padding: 1.2rem 2rem;
   background: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.073);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -95,6 +120,7 @@ const PostButton = styled.a`
     box-shadow: 0 4px 12px rgba(26, 72, 44, 0.2);
   }
 `;
+
 const RightNav = styled.div`
   display: flex;
   align-items: center;
