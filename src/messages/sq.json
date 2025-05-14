@@ -2,15 +2,25 @@
   "Navigation": {
     "postProperty": "Posto pronë",
     "home": "Ballina",
-    "about": "Rreth neshk"
+    "about": "Rreth neshk",
+    "roommates": "Lidhuni me shokët e dhomës"
   },
   "Search": {
-    "buy": "Blej",
-    "rent": "Merr me qira",
     "apartments": "Apartamente",
     "homes": "Shtëpi",
+    "rooms": "Dhoma",
+    "garages": "Garazhe",
+    "storageRooms": "Dhoma magazinimi",
     "offices": "Zyra",
-    "searchPlaceholder": "Kërko në Maqedoni",
+    "commercialProperties": "Prona komerciale",
+    "land": "Tokë",
+    "buildings": "Ndërtesa",
+    "villas": "Vila",
+    "choose": "Zgjidhni një qytet",
+    "holiday": "Pushime",
+    "chooseLocal": "Zgjidhni një lloj",
+    "buy": "Blej",
+    "rent": "Merr me qira",
     "searchButton": "Kërko"
   }
 }

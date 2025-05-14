@@ -9,6 +9,7 @@ import {
   ReactNode,
   ReactPortal,
 } from "react";
+import { GlobalStyle } from "@/styles/GlobalStyles/styles";
 
 // Load fonts
 const geistSans = Geist({
@@ -48,8 +49,9 @@ const RootLayout = async (props: {
   return (
     <StyledJsxRegistry>
       <html>
-        <body style={{margin: 0, padding: 0}}>
+        <body style={{ margin: 0, padding: 0 }}>
           <NextIntlClientProvider messages={messages}>
+            <GlobalStyle /> {/* 👈 inject global styles */}
             <ApolloWrapper>{props.children}</ApolloWrapper>
           </NextIntlClientProvider>
         </body>

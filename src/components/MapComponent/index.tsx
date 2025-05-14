@@ -688,7 +688,7 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }) {
                 backgroundImage: `url(${
                   mapView === "satellite"
                     ? mapImages.satellite
-                    : mapImages.standard
+                    : "/skopje-map.png"
                 })`,
               }}
             >

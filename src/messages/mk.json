@@ -2,15 +2,25 @@
   "Navigation": {
     "postProperty": "Објави имот",
     "home": "Дома",
-    "about": "За нас"
+    "about": "За нас",
+    "roommates": "Поврзи се со цимери"
   },
   "Search": {
-    "buy": "Купи",
-    "rent": "Изнајми",
     "apartments": "Станови",
     "homes": "Куќи",
+    "rooms": "Соби",
+    "garages": "Гаражи",
+    "storageRooms": "Магацински простор",
     "offices": "Канцеларии",
-    "searchPlaceholder": "Пребарај во Македонија",
+    "commercialProperties": "Комерцијални имоти",
+    "land": "Земјиште",
+    "buildings": "Згради",
+    "holiday": "Имоти за одмор",
+    "villas": "Вили",
+    "choose": "Избери град",
+    "chooseLocal": "Избери тип",
+    "buy": "Купи",
+    "rent": "Изнајми",
     "searchButton": "Пребарај"
   }
 }

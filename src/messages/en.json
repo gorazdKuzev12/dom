@@ -2,15 +2,27 @@
   "Navigation": {
     "postProperty": "Post property",
     "home": "Home",
-    "about": "About"
+    "about": "About",
+    "roommates": "Connect with roommates"
   },
   "Search": {
-    "buy": "Buy",
-    "rent": "Rent",
     "apartments": "Apartments",
     "homes": "Homes",
+    "rooms": "Rooms",
+    "garages": "Garages",
+    "villas": "Villas",
+
+    "storageRooms": "Storage rooms",
     "offices": "Offices",
-    "searchPlaceholder": "Search in Macedonia",
+    "commercialProperties": "Commercial properties",
+    "land": "Land",
+    "buildings": "Buildings",
+    "holiday": "Holiday",
+    "buy": "Buy",
+    "rent": "Rent",
+    "choose": "Choose a city",
+    "chooseLocal": "Choose a type",
+
     "searchButton": "Search"
   }
 }
