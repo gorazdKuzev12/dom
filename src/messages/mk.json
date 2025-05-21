@@ -3,7 +3,41 @@
     "postProperty": "Објави имот",
     "home": "Дома",
     "about": "За нас",
-    "roommates": "Поврзи се со цимери"
+    "roommates": "Поврзи се со цимери",
+    "favorites": "Зачувани имоти"
+  },
+  "Roommates": {
+    "title": "Најди го твојот совршен цимер",
+    "subtitle": "Поврзи се со луѓе кои бараат заеднички простор за живеење",
+    "postButton": "Објави дека барам соба",
+    "filters": {
+      "title": "Филтри",
+      "areas": "Сите области",
+      "cityCenter": "Центар",
+      "karpos": "Карпош",
+      "aerodrom": "Аеродром",
+      "gaziBaba": "Гази Баба",
+      "maxBudget": "Максимален буџет (€/месец)",
+      "lookingFor": "Барам",
+      "any": "Било што",
+      "roomInShared": "Соба во заеднички стан",
+      "entireApartment": "Цел стан со цимер",
+      "moveInDate": "Датум на вселување",
+      "lifestyle": "Начин на живот",
+      "nonSmoker": "Непушач",
+      "petFriendly": "Дозволени миленици",
+      "student": "Студент",
+      "professional": "Вработен"
+    },
+    "card": {
+      "verified": "Верификуван",
+      "viewPhone": "Види телефон",
+      "message": "Порака",
+      "budget": "Буџет",
+      "available": "Достапен",
+      "lookingFor": "Бара",
+      "prefers": "Преферира"
+    }
   },
   "Search": {
     "apartments": "Станови",
@@ -22,5 +56,51 @@
     "buy": "Купи",
     "rent": "Изнајми",
     "searchButton": "Пребарај"
+  },
+  "Favorites": {
+    "savedProperties": "Зачувани имоти",
+    "savedPropertiesDesc": "Прегледај и управувај со твоите зачувани имоти",
+    "noSavedProperties": "Сè уште нема зачувани имоти",
+    "startSaving": "Започни со зачувување на имоти со кликање на иконата срце"
+  },
+  "Filters": {
+    "propertyType": "Тип на имот",
+    "select": "Избери...",
+    "house": "Куќа",
+    "apartment": "Стан",
+    "villa": "Вила",
+    "office": "Канцеларија",
+    "land": "Земјиште",
+    "priceRange": "Опсег на цена",
+    "min": "Мин",
+    "max": "Макс",
+    "size": "Големина",
+    "squareMeters": "м²",
+    "bedrooms": "Спални соби",
+    "bathrooms": "Бањи",
+    "condition": "Состојба",
+    "new": "Нов",
+    "good": "Добра",
+    "needsRenovation": "Потребна реновација",
+    "features": "Карактеристики",
+    "parking": "Паркинг",
+    "balcony": "Тераса",
+    "garden": "Градина",
+    "elevator": "Лифт",
+    "airConditioning": "Клима уред",
+    "floor": "Кат",
+    "ground": "Приземје",
+    "basement": "Подрум",
+    "top": "Последен кат",
+    "middle": "Среден кат",
+    "listingDate": "Датум на објавување",
+    "today": "Денес",
+    "thisWeek": "Оваа недела",
+    "thisMonth": "Овој месец",
+    "sort": {
+      "newest": "Најнови",
+      "priceAsc": "Најниска цена",
+      "priceDesc": "Највисока цена"
+    }
   }
 }

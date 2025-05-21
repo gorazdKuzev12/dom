@@ -3,7 +3,41 @@
     "postProperty": "Posto pronë",
     "home": "Ballina",
     "about": "Rreth neshk",
-    "roommates": "Lidhuni me shokët e dhomës"
+    "roommates": "Lidhuni me shokët e dhomës",
+    "favorites": "Pronat e ruajtura"
+  },
+  "Roommates": {
+    "title": "Gjeni shokun tuaj të dhomës perfekt",
+    "subtitle": "Lidhuni me njerëz që kërkojnë hapësira të përbashkëta banimi",
+    "postButton": "Posto që po kërkoj dhomë",
+    "filters": {
+      "title": "Filtrat",
+      "areas": "Të gjitha zonat",
+      "cityCenter": "Qendra",
+      "karpos": "Karposh",
+      "aerodrom": "Aerodrom",
+      "gaziBaba": "Gazi Baba",
+      "maxBudget": "Buxheti maksimal (€/muaj)",
+      "lookingFor": "Duke kërkuar",
+      "any": "Çfarëdo",
+      "roomInShared": "Dhomë në apartament të përbashkët",
+      "entireApartment": "Apartament i plotë me shok dhome",
+      "moveInDate": "Data e hyrjes",
+      "lifestyle": "Stili i jetesës",
+      "nonSmoker": "Jo-duhanpirës",
+      "petFriendly": "Miqësor ndaj kafshëve",
+      "student": "Student",
+      "professional": "Profesionist"
+    },
+    "card": {
+      "verified": "Verifikuar",
+      "viewPhone": "Shiko telefonin",
+      "message": "Mesazh",
+      "budget": "Buxheti",
+      "available": "I disponueshëm",
+      "lookingFor": "Duke kërkuar",
+      "prefers": "Preferon"
+    }
   },
   "Search": {
     "apartments": "Apartamente",
@@ -22,5 +56,51 @@
     "buy": "Blej",
     "rent": "Merr me qira",
     "searchButton": "Kërko"
+  },
+  "Favorites": {
+    "savedProperties": "Pronat e ruajtura",
+    "savedPropertiesDesc": "Shikoni dhe menaxhoni pronat tuaja të ruajtura",
+    "noSavedProperties": "Ende nuk ka prona të ruajtura",
+    "startSaving": "Filloni të ruani prona duke klikuar ikonën e zemrës"
+  },
+  "Filters": {
+    "propertyType": "Lloji i pronës",
+    "select": "Zgjidhni...",
+    "house": "Shtëpi",
+    "apartment": "Apartament",
+    "villa": "Vilë",
+    "office": "Zyrë",
+    "land": "Tokë",
+    "priceRange": "Intervali i çmimit",
+    "min": "Min",
+    "max": "Maks",
+    "size": "Madhësia",
+    "squareMeters": "m²",
+    "bedrooms": "Dhoma gjumi",
+    "bathrooms": "Banjo",
+    "condition": "Gjendja",
+    "new": "E re",
+    "good": "E mirë",
+    "needsRenovation": "Ka nevojë për rinovim",
+    "features": "Karakteristikat",
+    "parking": "Parking",
+    "balcony": "Ballkon",
+    "garden": "Kopsht",
+    "elevator": "Ashensor",
+    "airConditioning": "Kondicionim",
+    "floor": "Kati",
+    "ground": "Përdhesë",
+    "basement": "Bodrum",
+    "top": "Kati i fundit",
+    "middle": "Kati i mesëm",
+    "listingDate": "Data e postimit",
+    "today": "Sot",
+    "thisWeek": "Këtë javë",
+    "thisMonth": "Këtë muaj",
+    "sort": {
+      "newest": "Më të rejat",
+      "priceAsc": "Çmimi më i ulët",
+      "priceDesc": "Çmimi më i lartë"
+    }
   }
 }

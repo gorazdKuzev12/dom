@@ -19,7 +19,9 @@ import {
   TopBar,
   TopLink,
   Wrapper,
-} from "../../../src/styles/mainPage/styles";
+  LanguageButton,
+  LanguageContainer,
+} from "../../../src/styles/mainPage/styles.tsx";
 
 const customSelectStyles = {
   control: (base, state) => ({
@@ -77,7 +79,7 @@ const languageSelectStyles = {
     minWidth: "unset",
     minHeight: "unset",
     width: "85px",
-    
+
     "@media (max-width: 480px)": {
       width: "80px",
     },
@@ -93,6 +95,13 @@ const languageSelectStyles = {
   }),
 };
 
+// Language options
+const languages = [
+  { value: "mk", label: "MK" },
+  { value: "en", label: "EN" },
+  { value: "sq", label: "AL" },
+];
+
 export default function HomePageClient({ initialCities }) {
   const t = useTranslations("Navigation");
   const searchT = useTranslations("Search");
@@ -104,13 +113,6 @@ export default function HomePageClient({ initialCities }) {
   const [selectedPropertyType, setSelectedPropertyType] = useState(null);
   const [searchMode, setSearchMode] = useState("buy");
   const [open, setOpen] = useState(false);
-
-  // Language options
-  const languageOptions = [
-    { value: "mk", label: "MK" },
-    { value: "en", label: "EN" },
-    { value: "sq", label: "Shqip" },
-  ];
 
   // Property type options
   const propertyTypeOptions = [
@@ -139,8 +141,7 @@ export default function HomePageClient({ initialCities }) {
     ...cityOptions,
   ];
 
-  const handleLocaleChange = (selectedOption) => {
-    const newLocale = selectedOption.value;
+  const handleLocaleChange = (newLocale) => {
     startTransition(() => {
       // Get the path without the locale prefix
       const pathWithoutLocale = pathname.replace(`/${locale}`, "");
@@ -199,15 +200,19 @@ export default function HomePageClient({ initialCities }) {
         {/* 1️⃣ Desktop links */}
         <LinksDesktop>{NavLinks}</LinksDesktop>
 
-        {/* 2️⃣ Language selector – always visible */}
-        <Select
-          styles={languageSelectStyles}
-          value={languageOptions.find((option) => option.value === locale)}
-          onChange={handleLocaleChange}
-          options={languageOptions}
-          isDisabled={isPending}
-          isSearchable={false}
-        />
+        {/* 2️⃣ Language buttons – always visible */}
+        <LanguageContainer>
+          {languages.map((lang) => (
+            <LanguageButton
+              key={lang.value}
+              onClick={() => handleLocaleChange(lang.value)}
+              active={locale === lang.value}
+              disabled={isPending}
+            >
+              {lang.label}
+            </LanguageButton>
+          ))}
+        </LanguageContainer>
 
         {/* 3️⃣ Hamburger (mobile only) */}
         <BurgerButton

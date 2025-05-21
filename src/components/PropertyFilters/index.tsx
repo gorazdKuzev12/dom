@@ -1,31 +1,49 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import styled from "styled-components";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+
+interface FilterState {
+  listingType: string;
+  sortOption: string;
+  propertyType: string;
+  priceMin: string;
+  priceMax: string;
+  sizeMin: string;
+  sizeMax: string;
+  bedrooms: string[];
+  bathrooms: string[];
+  condition: string[];
+  specificDetails: string[];
+  floor: string[];
+  listingDate: string;
+}
 
 export default function PropertyFilters() {
+  const t = useTranslations();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   // Filter states
-  const [listingType, setListingType] = useState("buy");
-  const [sortOption, setSortOption] = useState("recent");
-  const [propertyType, setPropertyType] = useState("apartment");
-  const [priceMin, setPriceMin] = useState("");
-  const [priceMax, setPriceMax] = useState("");
-  const [sizeMin, setSizeMin] = useState("");
-  const [sizeMax, setSizeMax] = useState("");
-  const [bedrooms, setBedrooms] = useState(["1"]);
-  const [bathrooms, setBathrooms] = useState([]);
-  const [condition, setCondition] = useState([]);
-  const [specificDetails, setSpecificDetails] = useState([]);
-  const [floor, setFloor] = useState([]);
-  const [listingDate, setListingDate] = useState("");
+  const [listingType, setListingType] = useState<FilterState["listingType"]>("buy");
+  const [sortOption, setSortOption] = useState<FilterState["sortOption"]>("recent");
+  const [propertyType, setPropertyType] = useState<FilterState["propertyType"]>("apartment");
+  const [priceMin, setPriceMin] = useState<FilterState["priceMin"]>("");
+  const [priceMax, setPriceMax] = useState<FilterState["priceMax"]>("");
+  const [sizeMin, setSizeMin] = useState<FilterState["sizeMin"]>("");
+  const [sizeMax, setSizeMax] = useState<FilterState["sizeMax"]>("");
+  const [bedrooms, setBedrooms] = useState<FilterState["bedrooms"]>(["1"]);
+  const [bathrooms, setBathrooms] = useState<FilterState["bathrooms"]>([]);
+  const [condition, setCondition] = useState<FilterState["condition"]>([]);
+  const [specificDetails, setSpecificDetails] = useState<FilterState["specificDetails"]>([]);
+  const [floor, setFloor] = useState<FilterState["floor"]>([]);
+  const [listingDate, setListingDate] = useState<FilterState["listingDate"]>("");
 
   // Format price with currency symbol and thousands separators
-  const formatPrice = (value) => {
+  const formatPrice = (value: string): string => {
     if (!value) return "";
     if (parseInt(value) < 10) {
       return `${value}`;
@@ -34,7 +52,7 @@ export default function PropertyFilters() {
       style: "currency",
       currency: "USD",
       maximumFractionDigits: 0,
-    }).format(value);
+    }).format(parseInt(value));
   };
 
   // Initialize filters from URL on component mount
@@ -117,45 +135,45 @@ export default function PropertyFilters() {
   };
 
   // Handle change for various filter types with immediate application
-  const handleListingTypeChange = (value) => {
+  const handleListingTypeChange = (value: FilterState["listingType"]): void => {
     setListingType(value);
     applyFilters({ listingType: value });
   };
 
-  const handleSortChange = (e) => {
+  const handleSortChange = (e: ChangeEvent<HTMLSelectElement>): void => {
     const value = e.target.value;
     setSortOption(value);
     applyFilters({ sort: value });
   };
 
-  const handlePropertyTypeChange = (e) => {
+  const handlePropertyTypeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
     const value = e.target.value;
     setPropertyType(value);
     applyFilters({ propertyType: value });
   };
 
-  const handlePriceMinChange = (e) => {
+  const handlePriceMinChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.value;
     if (value === "" || parseInt(value) >= 0) {
       setPriceMin(value);
     }
   };
 
-  const handlePriceMaxChange = (e) => {
+  const handlePriceMaxChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.value;
     if (value === "" || parseInt(value) >= 0) {
       setPriceMax(value);
     }
   };
 
-  const handleSizeMinChange = (e) => {
+  const handleSizeMinChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.value;
     if (value === "" || parseInt(value) >= 0) {
       setSizeMin(value);
     }
   };
 
-  const handleSizeMaxChange = (e) => {
+  const handleSizeMaxChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.value;
     if (value === "" || parseInt(value) >= 0) {
       setSizeMax(value);
@@ -178,21 +196,26 @@ export default function PropertyFilters() {
     applyFilters({ sizeMax });
   };
 
-  const toggleSelection = (value, state, setState, paramName) => {
-    let newState;
+  const toggleSelection = (
+    value: string,
+    state: string[],
+    setState: (value: string[]) => void,
+    paramName: keyof FilterState
+  ): void => {
+    let newState: string[];
     if (state.includes(value)) {
-      newState = state.filter((item) => item !== value);
+      newState = state.filter((item: string) => item !== value);
     } else {
       newState = [...state, value];
     }
     setState(newState);
 
-    const updatedValues = {};
+    const updatedValues: Partial<Record<keyof FilterState, string[]>> = {};
     updatedValues[paramName] = newState;
     applyFilters(updatedValues);
   };
 
-  const handleDateChange = (value) => {
+  const handleDateChange = (value: FilterState["listingDate"]): void => {
     setListingDate(value);
     applyFilters({ listingDate: value });
   };
@@ -205,48 +228,48 @@ export default function PropertyFilters() {
             active={listingType === "buy"}
             onClick={() => handleListingTypeChange("buy")}
           >
-            Buy
+            {t("Search.buy")}
           </ToggleButton>
           <ToggleButton
             active={listingType === "rent"}
             onClick={() => handleListingTypeChange("rent")}
           >
-            Rent
+            {t("Search.rent")}
           </ToggleButton>
         </ListingTypeToggle>
 
         <SortSelect value={sortOption} onChange={handleSortChange}>
-          <option value="newest">Most recent</option>
-          <option value="price_asc">Lowest price</option>
-          <option value="price_desc">Highest price</option>
+          <option value="newest">{t("Filters.sort.newest")}</option>
+          <option value="price_asc">{t("Filters.sort.priceAsc")}</option>
+          <option value="price_desc">{t("Filters.sort.priceDesc")}</option>
         </SortSelect>
       </TopOptions>
 
       <FilterSection>
-        <FilterTitle>Property Type</FilterTitle>
+        <FilterTitle>{t("Filters.propertyType")}</FilterTitle>
         <SelectInput value={propertyType} onChange={handlePropertyTypeChange}>
-          <option value="">Select...</option>
-          <option value="house">House</option>
-          <option value="apartment">Apartment</option>
-          <option value="villa">Villa</option>
-          <option value="office">Office</option>
-          <option value="land">Land</option>
+          <option value="">{t("Filters.select")}</option>
+          <option value="house">{t("Filters.house")}</option>
+          <option value="apartment">{t("Filters.apartment")}</option>
+          <option value="villa">{t("Filters.villa")}</option>
+          <option value="office">{t("Filters.office")}</option>
+          <option value="land">{t("Filters.land")}</option>
         </SelectInput>
       </FilterSection>
 
       <FilterSection>
-        <FilterTitle>Price Range</FilterTitle>
+        <FilterTitle>{t("Filters.priceRange")}</FilterTitle>
         <RangeInputs>
           <TextInput
             type="number"
-            placeholder="Min"
+            placeholder={t("Filters.min")}
             value={priceMin}
             onChange={handlePriceMinChange}
             onBlur={handlePriceMinBlur}
           />
           <TextInput
             type="number"
-            placeholder="Max"
+            placeholder={t("Filters.max")}
             value={priceMax}
             onChange={handlePriceMaxChange}
             onBlur={handlePriceMaxBlur}
@@ -255,39 +278,40 @@ export default function PropertyFilters() {
       </FilterSection>
 
       <FilterSection>
-        <FilterTitle>Size (m²)</FilterTitle>
+        <FilterTitle>{t("Filters.size")}</FilterTitle>
         <RangeInputs>
           <TextInput
             type="number"
-            placeholder="Min"
+            placeholder={t("Filters.min")}
             value={sizeMin}
             onChange={handleSizeMinChange}
             onBlur={handleSizeMinBlur}
           />
           <TextInput
             type="number"
-            placeholder="Max"
+            placeholder={t("Filters.max")}
             value={sizeMax}
             onChange={handleSizeMaxChange}
             onBlur={handleSizeMaxBlur}
           />
         </RangeInputs>
         <SizeDisplay>
-          {sizeMin || "0"} - {sizeMax || "Any"} m²
+          {sizeMin || "0"} - {sizeMax || t("Filters.max")} {t("Filters.squareMeters")}
         </SizeDisplay>
       </FilterSection>
+
       <FilterSection>
-        <FilterTitle>Amenities</FilterTitle>
+        <FilterTitle>{t("Filters.features")}</FilterTitle>
         <CheckboxGroup>
           {[
-            { value: "ac", label: "Air conditioning" },
+            { value: "ac", label: t("Filters.airConditioning") },
             { value: "heating", label: "Heating" },
-            { value: "lift", label: "Lift" },
-            { value: "parking", label: "Parking and storage" },
-            { value: "terrace", label: "Terrace" },
-            { value: "garden", label: "Garden" },
+            { value: "lift", label: t("Filters.elevator") },
+            { value: "parking", label: t("Filters.parking") },
+            { value: "balcony", label: t("Filters.balcony") },
+            { value: "garden", label: t("Filters.garden") },
             { value: "pool", label: "Swimming pool" },
-            { value: "accessible", label: "Accessible property" },
+            { value: "accessible", label: "Accessible property" }
           ].map((item) => (
             <CheckboxItem key={`detail-${item.value}`}>
               <Checkbox
@@ -310,14 +334,15 @@ export default function PropertyFilters() {
           ))}
         </CheckboxGroup>
       </FilterSection>
+
       <FilterSection>
-        <FilterTitle>Condition</FilterTitle>
+        <FilterTitle>{t("Filters.condition")}</FilterTitle>
         <CheckboxGroup>
           {[
-            { value: "new", label: "New building" },
-            { value: "good", label: "Good condition" },
-            { value: "needs_renovation", label: "Needs renovating" },
-            { value: "renovated", label: "Fully renovated" },
+            { value: "new", label: t("Filters.new") },
+            { value: "good", label: t("Filters.good") },
+            { value: "needs_renovation", label: t("Filters.needsRenovation") },
+            { value: "renovated", label: "Fully renovated" }
           ].map((item) => (
             <CheckboxItem key={`condition-${item.value}`}>
               <Checkbox
@@ -340,8 +365,9 @@ export default function PropertyFilters() {
           ))}
         </CheckboxGroup>
       </FilterSection>
+
       <FilterSection>
-        <FilterTitle>Bedrooms</FilterTitle>
+        <FilterTitle>{t("Filters.bedrooms")}</FilterTitle>
         <CheckboxGroup>
           {[1, 2, 3, 4, "5+"].map((num) => (
             <CheckboxItem key={`bedroom-${num}`}>
@@ -365,7 +391,7 @@ export default function PropertyFilters() {
       </FilterSection>
 
       <FilterSection>
-        <FilterTitle>Bathrooms</FilterTitle>
+        <FilterTitle>{t("Filters.bathrooms")}</FilterTitle>
         <CheckboxGroup>
           {[1, 2, 3, "4+"].map((num) => (
             <CheckboxItem key={`bathroom-${num}`}>
@@ -389,13 +415,13 @@ export default function PropertyFilters() {
       </FilterSection>
 
       <FilterSection>
-        <FilterTitle>Floor</FilterTitle>
+        <FilterTitle>{t("Filters.floor")}</FilterTitle>
         <CheckboxGroup>
           {[
-            { value: "ground", label: "Ground floor" },
-            { value: "intermediate", label: "Intermediate floor" },
-            { value: "top", label: "Top floor" },
-            { value: "with_plan", label: "With floor plan" },
+            { value: "ground", label: t("Filters.ground") },
+            { value: "intermediate", label: t("Filters.middle") },
+            { value: "top", label: t("Filters.top") },
+            { value: "with_plan", label: "With floor plan" }
           ].map((item) => (
             <CheckboxItem key={`floor-${item.value}`}>
               <Checkbox
@@ -415,12 +441,12 @@ export default function PropertyFilters() {
       </FilterSection>
 
       <FilterSection>
-        <FilterTitle>Publication Date</FilterTitle>
+        <FilterTitle>{t("Filters.listingDate")}</FilterTitle>
         <RadioGroup>
           {[
-            { value: "last_24h", label: "Last 24 hours" },
-            { value: "last_week", label: "Last week" },
-            { value: "last_month", label: "Last month" },
+            { value: "last_24h", label: t("Filters.today") },
+            { value: "last_week", label: t("Filters.thisWeek") },
+            { value: "last_month", label: t("Filters.thisMonth") }
           ].map((item) => (
             <RadioItem key={`date-${item.value}`}>
               <Radio
@@ -486,7 +512,11 @@ const ListingTypeToggle = styled.div`
   height: 44px;
 `;
 
-const ToggleButton = styled.button`
+interface ToggleButtonProps {
+  active: boolean;
+}
+
+const ToggleButton = styled.button<ToggleButtonProps>`
   flex: 1;
   padding: 12px 0;
   text-align: center;

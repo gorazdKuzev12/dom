@@ -51,7 +51,6 @@ const RootLayout = async (props: {
       <html>
         <body style={{ margin: 0, padding: 0 }}>
           <NextIntlClientProvider messages={messages}>
-            <GlobalStyle /> {/* 👈 inject global styles */}
             <ApolloWrapper>{props.children}</ApolloWrapper>
           </NextIntlClientProvider>
         </body>

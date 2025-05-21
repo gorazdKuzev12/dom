@@ -4,30 +4,65 @@ import styled from "styled-components";
 
 /* --- Wrapper ----------------------------------------------------------- */
 export const Wrapper = styled.div`
-  background: url("/so.png") center center / cover no-repeat;
-  min-height: 100vh; /* full-screen image everywhere */
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-dark) 0%,
+    var(--color-primary) 100%
+  );
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("/so.png") center center / cover no-repeat;
+    mix-blend-mode: overlay;
+  }
 
   /* reserve space for the fixed TopBar on small screens */
   @media (max-width: 768px) {
-    padding-top: 70px; /* ≈ TopBar height + a little air */
-  }
-
-  /* Style overrides for React Select components */
-  .property-type-select,
-  .city-select {
-    margin-bottom: 0.5rem;
-
-    @media (min-width: 769px) {
-      margin-bottom: 0;
-    }
+    padding-top: var(--space-2xl);
   }
 `;
 
+export const ContentWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-xl);
+  
+  @media (max-width: 768px) {
+    padding: var(--space-lg);
+  }
+`;
+
+export const SearchBar = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  background: #fff;
+  padding: 2.2rem;
+  border-radius: 50px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+
+  /* Tablet↓ */
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 1.2rem;
+    width: 100%;
+  }
+`;
 export const TopLink = styled.a`
   display: flex;
   align-items: center;
@@ -54,6 +89,7 @@ export const TopLink = styled.a`
   @media (max-width: 480px) {
     font-size: 0.95rem;
     padding: 0.3rem 0.6rem;
+    font-weight: 500; /* Slightly bolder on mobile for better visibility */
   }
 `;
 
@@ -66,7 +102,13 @@ export const LanguageSelect = styled.select`
 
   /* Mobile↓ */
   @media (max-width: 480px) {
-    width: 40%;
+    width: auto;
+    padding: 0.4rem 0.8rem; /* Larger touch target */
+    font-size: 1rem;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.7); /* More visible */
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   }
 `;
 
@@ -86,43 +128,80 @@ export const Overlay = styled.div`
   /* keep it nicely contained on phones */
   width: calc(100% - 2rem);
   max-width: 400px;
+
+  /* Mobile specific adjustments */
+  @media (max-width: 480px) {
+    width: calc(100% - 3rem); /* More horizontal breathing room */
+    top: 45%; /* Move up slightly to improve visibility */
+  }
 `;
+export const LanguageContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`;
+
+export const LanguageButton = styled.button<{ active: boolean }>`
+  background: ${props => props.active ? '#0c4240' : 'rgba(255, 255, 255, 0.4)'};
+  color: ${props => props.active ? '#fff' : '#111'};
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: ${props => props.active ? '#0c4240' : 'rgba(255, 255, 255, 0.6)'};
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 3px 6px;
+    font-size: 12px;
+  }
+`; 
 
 export const Logo = styled.h1`
-  font-size: 6.5rem;
-  color: #072e29;
-  margin-bottom: 2.5rem;
-
-  /* Tablet↓ */
+  font-size: 5rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: var(--space-xl);
+  text-shadow: var(--shadow-lg);
+  letter-spacing: -0.02em;
+  
   @media (max-width: 768px) {
-    font-size: 5rem;
+    font-size: 3.5rem;
+    margin-bottom: var(--space-lg);
   }
-
-  /* Mobile↓ */
+  
   @media (max-width: 480px) {
-    font-size: 5rem;
+    font-size: 2.75rem;
+    margin-bottom: var(--space-md);
   }
 `;
 
-export const SearchBar = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  background: #fff;
-  padding: 2.2rem;
-  border-radius: 50px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-
-  /* Tablet↓ */
+export const SearchContainer = styled.div`
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-xl);
+  
   @media (max-width: 768px) {
-    flex-direction: column;
-    padding: 1.2rem;
-    width: 100%;
+    padding: var(--space-md);
   }
 `;
 
 /* ---------- CONTROLS ---------- */
+
 
 export const ToggleGroup = styled.div`
   display: flex;
@@ -141,6 +220,7 @@ export const ToggleGroup = styled.div`
     width: 100%;
   }
 `;
+
 
 export const ToggleButton = styled.button<{ active?: boolean }>`
   padding: 0.6rem 1.2rem;
@@ -162,17 +242,39 @@ export const ToggleButton = styled.button<{ active?: boolean }>`
     text-align: center;
   }
 `;
+export const SearchForm = styled.form`
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: var(--space-md);
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+`;
 
 export const Dropdown = styled.select`
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 0.8rem 1.3rem;
+  width: 100%;
+  padding: var(--space-md);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-lg);
   font-size: 1rem;
-  background: #fff;
-
-  /* Mobile↓ */
+  color: var(--color-neutral-800);
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    border-color: var(--color-neutral-300);
+  }
+  
+  &:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(26, 61, 55, 0.1);
+  }
+  
   @media (max-width: 480px) {
-    width: 100%;
+    padding: var(--space-sm) var(--space-md);
   }
 `;
 
@@ -188,8 +290,24 @@ export const Input = styled.input`
   @media (max-width: 480px) {
     width: 100%;
     min-width: 0;
+    padding: 0.9rem 1.2rem;
+    border-radius: 12px;
+    background: #f9f9f9;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    font-size: 1.05rem;
+
+    &::placeholder {
+      color: #aaa;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(12, 66, 64, 0.2);
+    }
   }
 `;
+
 
 export const SearchButton = styled.button`
   background-color: #0c4240;
@@ -210,7 +328,7 @@ export const SearchButton = styled.button`
     width: 100%;
     margin-top: 0.5rem;
   }
-`;
+`
 export const TopBar = styled.div`
   position: absolute;
   top: 30px;
@@ -228,12 +346,15 @@ export const TopBar = styled.div`
     position: fixed;
     top: 0;
     left: 0;
-    width: 96%;
+    width: 95%;
     justify-content: space-between;
     gap: 8px;
     border-radius: 0;
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(15px);
     z-index: 1000;
+    padding: 0.8rem 1rem;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.08);
   }
 `;
 
@@ -261,6 +382,14 @@ export const BurgerButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
   }
 
   /* three bars */
@@ -312,13 +441,46 @@ export const MobileMenu = styled.div<{ open: boolean }>`
     left: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(12px);
-    padding: 1rem;
-    gap: 1rem;
+    backdrop-filter: blur(15px);
+    padding: 1.5rem;
+    gap: 1.2rem;
     flex-direction: column;
     z-index: 999;
     transform: ${({ open }) => (open ? "translateY(0)" : "translateY(-120%)")};
-    transition: transform 0.25s ease;
+    transition: transform 0.3s ease;
     display: flex;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+    /* Add animation and styling for links */
+    a {
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(12, 66, 64, 0.08);
+      }
+
+      /* Animation delay for staggered appearance */
+      opacity: ${({ open }) => (open ? 1 : 0)};
+      transform: ${({ open }) =>
+        open ? "translateY(0)" : "translateY(-10px)"};
+      transition: opacity 0.3s ease, transform 0.3s ease;
+
+      &:nth-child(2) {
+        transition-delay: 0.05s;
+      }
+
+      &:nth-child(3) {
+        transition-delay: 0.1s;
+      }
+
+      &:nth-child(4) {
+        transition-delay: 0.15s;
+      }
+    }
   }
 `;

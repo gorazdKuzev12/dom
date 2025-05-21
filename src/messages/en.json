@@ -3,7 +3,41 @@
     "postProperty": "Post property",
     "home": "Home",
     "about": "About",
-    "roommates": "Connect with roommates"
+    "roommates": "Connect with roommates",
+    "favorites": "Saved properties"
+  },
+  "Roommates": {
+    "title": "Find Your Perfect Roommate",
+    "subtitle": "Connect with people looking for shared living spaces",
+    "postButton": "Post Me as Looking for Room",
+    "filters": {
+      "title": "Filters",
+      "areas": "All Areas",
+      "cityCenter": "City Center",
+      "karpos": "Karpoš",
+      "aerodrom": "Aerodrom",
+      "gaziBaba": "Gazi Baba",
+      "maxBudget": "Max budget (€/month)",
+      "lookingFor": "Looking for",
+      "any": "Any",
+      "roomInShared": "Room in shared apartment",
+      "entireApartment": "Entire apartment with roommate",
+      "moveInDate": "Move-in date",
+      "lifestyle": "Lifestyle",
+      "nonSmoker": "Non-smoker",
+      "petFriendly": "Pet friendly",
+      "student": "Student",
+      "professional": "Professional"
+    },
+    "card": {
+      "verified": "Verified",
+      "viewPhone": "View phone",
+      "message": "Message",
+      "budget": "Budget",
+      "available": "Available",
+      "lookingFor": "Looking for",
+      "prefers": "Prefers"
+    }
   },
   "Search": {
     "apartments": "Apartments",
@@ -24,5 +58,51 @@
     "chooseLocal": "Choose a type",
 
     "searchButton": "Search"
+  },
+  "Favorites": {
+    "savedProperties": "Saved Properties",
+    "savedPropertiesDesc": "View and manage your saved properties",
+    "noSavedProperties": "No saved properties yet",
+    "startSaving": "Start saving properties by clicking the heart icon"
+  },
+  "Filters": {
+    "propertyType": "Property Type",
+    "select": "Select...",
+    "house": "House",
+    "apartment": "Apartment",
+    "villa": "Villa",
+    "office": "Office",
+    "land": "Land",
+    "priceRange": "Price Range",
+    "min": "Min",
+    "max": "Max",
+    "size": "Size",
+    "squareMeters": "m²",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "condition": "Condition",
+    "new": "New",
+    "good": "Good",
+    "needsRenovation": "Needs Renovation",
+    "features": "Features",
+    "parking": "Parking",
+    "balcony": "Balcony",
+    "garden": "Garden",
+    "elevator": "Elevator",
+    "airConditioning": "Air Conditioning",
+    "floor": "Floor",
+    "ground": "Ground Floor",
+    "basement": "Basement",
+    "top": "Top Floor",
+    "middle": "Middle Floor",
+    "listingDate": "Listing Date",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "sort": {
+      "newest": "Most recent",
+      "priceAsc": "Lowest price",
+      "priceDesc": "Highest price"
+    }
   }
 }
