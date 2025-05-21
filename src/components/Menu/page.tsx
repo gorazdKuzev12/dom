@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect } from "react";
 import styled from "styled-components";
-import { FiHome, FiPlusSquare, FiUserPlus, FiMenu, FiX, FiHeart } from "react-icons/fi";
+import { FiHome, FiPlusSquare, FiUserPlus, FiMenu, FiX, FiHeart, FiGlobe } from "react-icons/fi";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -43,21 +43,6 @@ export default function Menu() {
     { value: "sq", label: "AL" },
   ];
 
-  const LangButtons = (
-    <LanguageContainer>
-      {languages.map((lang) => (
-        <LanguageButton
-          key={lang.value}
-          onClick={() => handleLocaleChange(lang.value)}
-          active={locale === lang.value}
-          disabled={isPending}
-        >
-          {lang.label}
-        </LanguageButton>
-      ))}
-    </LanguageContainer>
-  );
-
   return (
     <Navbar>
       {/* logo */}
@@ -83,8 +68,20 @@ export default function Menu() {
             <FiHeart size={18} fill="white" stroke="white" />
             {savedCount > 0 && <SavedCount>{savedCount}</SavedCount>}
           </FavoritesButton>
+          <LanguageSelector>
+            <FiGlobe size={16} />
+            {languages.map((lang) => (
+              <LangButton
+                key={lang.value}
+                onClick={() => handleLocaleChange(lang.value)}
+                active={locale === lang.value}
+                disabled={isPending}
+              >
+                {lang.label}
+              </LangButton>
+            ))}
+          </LanguageSelector>
         </NavLinks>
-        {LangButtons}
       </DesktopMenu>
 
       {/* mobile burger */}
@@ -113,13 +110,26 @@ export default function Menu() {
             href={`/${locale}/favorites`}
             onClick={() => setMobileOpen(false)}
           >
-            <FiHeart size={18} fill="currentColor" />
+            <FiHeart size={18} />
             {t("favorites")}
             {savedCount > 0 && <SavedCountMobile>{savedCount}</SavedCountMobile>}
           </MobileLink>
-
-          {/* language picker */}
-          <LangWrapper>{LangButtons}</LangWrapper>
+          <MobileLangSelector>
+            <FiGlobe size={16} />
+            {languages.map((lang) => (
+              <MobileLangButton
+                key={lang.value}
+                onClick={() => {
+                  handleLocaleChange(lang.value);
+                  setMobileOpen(false);
+                }}
+                active={locale === lang.value}
+                disabled={isPending}
+              >
+                {lang.label}
+              </MobileLangButton>
+            ))}
+          </MobileLangSelector>
         </Drawer>
       )}
     </Navbar>
@@ -132,35 +142,42 @@ const Navbar = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.9);
+  padding: 0.8rem 2rem;
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   position: sticky;
   top: 0;
   z-index: 10000;
+
+  @media (max-width: 768px) {
+    padding: 0.8rem 1.2rem;
+  }
 `;
 
-const LogoWrapper = styled.div``;
+const LogoWrapper = styled.div`
+  position: relative;
+`;
 
 const Logo = styled.a`
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 1.5rem;
+  gap: 0.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: #0c4240;
   text-decoration: none;
-  transition: color 0.2s;
+  transition: all 0.2s ease;
+
   &:hover {
     color: #143823;
+    transform: translateY(-1px);
   }
 `;
 
 const DesktopMenu = styled.div`
   display: flex;
   align-items: center;
-  gap: 2rem;
   @media (max-width: 768px) {
     display: none;
   }
@@ -173,18 +190,24 @@ const NavLinks = styled.div`
 `;
 
 const baseBtn = `
-  display:flex;align-items:center;gap:0.5rem;
-  padding:0.45rem 0.7rem;border-radius:6px;
-  font-size:0.9rem;font-weight:500;
-  text-decoration:none;transition:all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
 `;
 
 const TopLink = styled.a`
   ${baseBtn};
   color: #0c4240;
-  background: #eef6f5;
+  background: #f5f9f9;
+  
   &:hover {
-    background: #d7ece9;
+    background: #e7f1f1;
     transform: translateY(-1px);
   }
 `;
@@ -193,11 +216,11 @@ const PostButton = styled.a`
   ${baseBtn};
   color: #ffffff;
   background: #0c4240;
-  box-shadow: 0 2px 8px rgba(26, 72, 44, 0.15);
+  box-shadow: 0 2px 6px rgba(12, 66, 64, 0.15);
+  
   &:hover {
     background: #143823;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(26, 72, 44, 0.22);
   }
 `;
 
@@ -205,24 +228,59 @@ const FavoritesButton = styled.a<{ 'aria-label': string }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   background: #0c4240;
   color: white;
   text-decoration: none;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(26, 72, 44, 0.15);
+  box-shadow: 0 2px 6px rgba(12, 66, 64, 0.15);
   position: relative;
 
   &:hover {
     background: #143823;
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 4px 12px rgba(26, 72, 44, 0.22);
+    transform: translateY(-1px);
+  }
+`;
+
+const LanguageSelector = styled.div`
+  display: flex;
+  align-items: center;
+ gap: 0.2rem;
+  margin-left: 0.4rem;
+  padding: 0.25rem 0.3rem;
+  border-radius: 6px;
+  background: #f5f9f9;
+  transition: all 0.2s ease;
+
+  svg {
+    color: #0c4240;
+        width: 14px;
+    height: 14px;
+    margin-right: 0.1rem;
+  }
+`;
+
+const LangButton = styled.button<{ active: boolean }>`
+  background: none;
+  border: none;
+   padding: 0.15rem 0.3rem;
+  font-size: 0.75rem;
+  font-weight: ${props => props.active ? '600' : '400'};
+  color: ${props => props.active ? '#0c4240' : '#666'};
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 3px;
+
+  &:hover {
+    background: ${props => props.active ? 'transparent' : '#e7f1f1'};
+    color: #0c4240;
   }
 
-  &:active {
-    transform: translateY(0) scale(0.95);
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 `;
 
@@ -232,6 +290,14 @@ const Burger = styled.button`
   border: none;
   cursor: pointer;
   color: #0c4240;
+  padding: 0.4rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f5f9f9;
+  }
+
   @media (max-width: 768px) {
     display: block;
   }
@@ -247,57 +313,47 @@ const Drawer = styled.div`
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  gap: 0.8rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  animation: slideDown 0.2s ease;
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 `;
 
 const MobileLink = styled.a`
   ${baseBtn};
   color: #0c4240;
-  background: #eef6f5;
+  background: #f5f9f9;
+  width: 100%;
   justify-content: flex-start;
+  
   &:hover {
-    background: #d7ece9;
+    background: #e7f1f1;
   }
 `;
 
-const LangWrapper = styled.div`
-  padding: 0.5rem 0;
-`;
-
-const LanguageContainer = styled.div`
+const MobileLangSelector = styled.div`
   display: flex;
-  gap: 8px;
   align-items: center;
-  
-  @media (max-width: 768px) {
-    justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 0.5rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid #eef2f2;
+
+  svg {
+    color: #0c4240;
+    margin-right: 0.3rem;
   }
 `;
 
-const LanguageButton = styled.button<{ active: boolean }>`
-  background: ${props => props.active ? '#0c4240' : 'rgba(255, 255, 255, 0.4)'};
-  color: ${props => props.active ? '#fff' : '#111'};
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 2px 6px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  
-  &:hover {
-    background: ${props => props.active ? '#0c4240' : 'rgba(255, 255, 255, 0.6)'};
-  }
-  
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-  
-  @media (max-width: 768px) {
-    padding: 2px 4px;
-    font-size: 11px;
-  }
+const MobileLangButton = styled(LangButton)`
+  flex: 1;
+  padding: 0.4rem;
+  text-align: center;
+  font-size: 0.9rem;
 `;
 
 const SavedCount = styled.div`
@@ -315,7 +371,6 @@ const SavedCount = styled.div`
   align-items: center;
   justify-content: center;
   padding: 0 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 2px solid white;
 `;
 
