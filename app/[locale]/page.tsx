@@ -28,6 +28,6 @@ export async function generateStaticParams() {
   return [
     { locale: 'en' },
     { locale: 'mk' },
-    { locale: 'al' }
+    { locale: 'sq' }
   ];
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Select from "react-select";
-import { FiPlusSquare, FiUserPlus } from "react-icons/fi";
+import Select, { StylesConfig, ActionMeta, SingleValue, MultiValue, CSSObjectWithLabel } from "react-select";
+import { FiPlusSquare, FiUserPlus, FiGlobe } from "react-icons/fi";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -19,12 +19,35 @@ import {
   TopBar,
   TopLink,
   Wrapper,
-  LanguageButton,
-  LanguageContainer,
-} from "../../../src/styles/mainPage/styles.tsx";
+} from "@/styles/mainPage/styles";
+import styled from "styled-components";
 
-const customSelectStyles = {
-  control: (base, state) => ({
+interface SelectStylesProps {
+  isFocused?: boolean;
+  isSelected?: boolean;
+}
+
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
+interface City {
+  id: string;
+  name: string;
+  name_mk: string;
+  name_en: string;
+  name_sq: string;
+}
+
+interface HomePageClientProps {
+  initialCities: City[];
+}
+
+type StylesBase = Record<string, unknown>;
+
+const customSelectStyles: StylesConfig<SelectOption> = {
+  control: (base: CSSObjectWithLabel, state: SelectStylesProps) => ({
     ...base,
     borderRadius: "10px",
     border: "1px solid #ddd",
@@ -40,7 +63,7 @@ const customSelectStyles = {
       minWidth: "0",
     },
   }),
-  option: (base, state) => ({
+  option: (base: CSSObjectWithLabel, state: SelectStylesProps) => ({
     ...base,
     backgroundColor: state.isSelected
       ? "#0c4240"
@@ -50,17 +73,17 @@ const customSelectStyles = {
     color: state.isSelected ? "white" : "#333",
     padding: "0.6rem 1.3rem",
   }),
-  menu: (base) => ({
+  menu: (base: CSSObjectWithLabel) => ({
     ...base,
     borderRadius: "8px",
     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
     zIndex: 9999,
   }),
-  menuPortal: (base) => ({
+  menuPortal: (base: CSSObjectWithLabel) => ({
     ...base,
     zIndex: 9999,
   }),
-  placeholder: (base) => ({
+  placeholder: (base: CSSObjectWithLabel) => ({
     ...base,
     color: "#888",
   }),
@@ -102,20 +125,59 @@ const languages = [
   { value: "sq", label: "AL" },
 ];
 
-export default function HomePageClient({ initialCities }) {
+const LanguageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.25rem 0.3rem;
+  border-radius: 6px;
+  background: #f5f9f9;
+  transition: all 0.2s ease;
+
+  svg {
+    color: #0c4240;
+    width: 14px;
+    height: 14px;
+    margin-right: 0.1rem;
+  }
+`;
+
+const LanguageButton = styled.button<{ active: boolean }>`
+  background: none;
+  border: none;
+  padding: 0.15rem 0.3rem;
+  font-size: 0.75rem;
+  font-weight: ${props => props.active ? '600' : '400'};
+  color: ${props => props.active ? '#0c4240' : '#666'};
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 3px;
+
+  &:hover {
+    background: ${props => props.active ? 'transparent' : '#e7f1f1'};
+    color: #0c4240;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`;
+
+export default function HomePageClient({ initialCities }: HomePageClientProps) {
   const t = useTranslations("Navigation");
   const searchT = useTranslations("Search");
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [selectedCity, setSelectedCity] = useState(null);
-  const [selectedPropertyType, setSelectedPropertyType] = useState(null);
+  const [selectedCity, setSelectedCity] = useState<SelectOption | null>(null);
+  const [selectedPropertyType, setSelectedPropertyType] = useState<SelectOption | null>(null);
   const [searchMode, setSearchMode] = useState("buy");
   const [open, setOpen] = useState(false);
 
   // Property type options
-  const propertyTypeOptions = [
+  const propertyTypeOptions: SelectOption[] = [
     { value: "apartments", label: searchT("apartments") },
     { value: "homes", label: searchT("homes") },
     { value: "rooms", label: searchT("rooms") },
@@ -128,56 +190,49 @@ export default function HomePageClient({ initialCities }) {
     { value: "buildings", label: searchT("buildings") },
   ];
 
-  // Format city options based on locale
-  const cityOptions =
-    initialCities?.map((city) => ({
-      value: city.slug,
-      label: getCityName(city),
-    })) || [];
+  // City options
+  const cityOptions: SelectOption[] = initialCities.map(city => ({
+    value: city.id,
+    label: getCityName(city)
+  }));
 
-  // Add placeholder option for cities
-  const cityOptionsWithPlaceholder = [
-    { value: "", label: searchT("choose"), isDisabled: true },
-    ...cityOptions,
-  ];
-
-  const handleLocaleChange = (newLocale) => {
+  const handleLocaleChange = (newLocale: string) => {
     startTransition(() => {
-      // Get the path without the locale prefix
-      const pathWithoutLocale = pathname.replace(`/${locale}`, "");
-
-      // Navigate to the new locale path
-      router.push(`/${newLocale}${pathWithoutLocale}`);
+      const stripped = pathname.replace(`/${locale}`, "");
+      router.push(`/${newLocale}${stripped}`);
     });
   };
 
-  // Handle city selection
-  const handleCityChange = (selectedOption) => {
-    setSelectedCity(selectedOption);
+  const handleCityChange = (
+    newValue: SingleValue<SelectOption> | MultiValue<SelectOption>,
+    actionMeta: ActionMeta<SelectOption>
+  ) => {
+    setSelectedCity(newValue as SelectOption | null);
   };
 
-  // Handle property type selection
-  const handlePropertyTypeChange = (selectedOption) => {
-    setSelectedPropertyType(selectedOption);
+  const handlePropertyTypeChange = (
+    newValue: SingleValue<SelectOption> | MultiValue<SelectOption>,
+    actionMeta: ActionMeta<SelectOption>
+  ) => {
+    setSelectedPropertyType(newValue as SelectOption | null);
   };
 
   const handleSearch = () => {
     if (!selectedCity || !selectedCity.value) return; // nothing chosen -> stay put
 
     // keep the current locale prefix in the URL (mk / en / sq)
-    router.push(`/${locale}/map/${selectedCity.value}`);
+    router.push(`/${locale}/map/skopje`);
   };
 
-  const handleSearchModeChange = (mode) => {
+  const handleSearchModeChange = (mode: string) => {
     setSearchMode(mode);
   };
 
-  // Get city name based on current locale
-  function getCityName(city) {
+  function getCityName(city: City): string {
     if (locale === "mk") return city.name_mk;
     if (locale === "en") return city.name_en;
     if (locale === "sq") return city.name_sq;
-    return city.name_en; // Fallback to English
+    return city.name_en; // fallback to English
   }
 
   const NavLinks = (
@@ -202,6 +257,7 @@ export default function HomePageClient({ initialCities }) {
 
         {/* 2️⃣ Language buttons – always visible */}
         <LanguageContainer>
+          <FiGlobe size={14} />
           {languages.map((lang) => (
             <LanguageButton
               key={lang.value}
@@ -265,7 +321,7 @@ export default function HomePageClient({ initialCities }) {
             styles={customSelectStyles}
             value={selectedCity}
             onChange={handleCityChange}
-            options={cityOptionsWithPlaceholder}
+            options={cityOptions}
             placeholder={searchT("choose")}
             className="city-select"
             menuPortalTarget={
