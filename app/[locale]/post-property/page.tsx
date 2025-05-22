@@ -25,6 +25,7 @@ import {
   Image,
 } from "lucide-react";
 import Menu from "@/components/Menu/page";
+import Footer from "@/components/Footer/page";
 
 interface FormData {
   name: string;
@@ -546,6 +547,7 @@ export default function PostPropertyPage() {
           </FormContainer>
         </ContentContainer>
       </MainContent>
+      <Footer />
     </PageWrapper>
   );
 }

@@ -164,6 +164,51 @@ const LanguageButton = styled.button<{ active: boolean }>`
   }
 `;
 
+const MainTitle = styled.h1`
+  font-size: 6rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  text-transform: lowercase;
+  letter-spacing: -3px;
+  font-family: 'Playfair Display', serif;
+  background: linear-gradient(135deg, #ffffff 0%, #FFD700 50%, #a8e6cf 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  display: inline-block;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    background: linear-gradient(135deg, #0c4240 0%, #1a5f5c 50%, #27795b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: -1;
+    filter: blur(1px);
+  }
+
+  &::before {
+    content: attr(data-text);
+    position: absolute;
+    left: -2px;
+    top: -2px;
+    background: linear-gradient(135deg, #ffffff 0%, #e6e6e6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: -2;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 4rem;
+    letter-spacing: -2px;
+  }
+`;
+
+
+
 export default function HomePageClient({ initialCities }: HomePageClientProps) {
   const t = useTranslations("Navigation");
   const searchT = useTranslations("Search");

@@ -7,7 +7,8 @@
     "favorites": "Pronat e ruajtura",
     "registerAgency": "Regjistrohu si agjenci",
     "postWithoutLogin": "Posto pronë (pa hyrje)",
-    "agencyLogin": "Hyrje për agjenci"
+    "agencyLogin": "Hyrje për agjenci",
+    "myAgency": "Agjencia Ime"
   },
   "Roommates": {
     "title": "Gjeni shokun tuaj të dhomës perfekt",
@@ -308,5 +309,44 @@
       "maxPhotos": "Lejohen maksimum 10 fotografi",
       "minPhotos": "Ju lutemi shtoni të paktën një fotografi"
     }
+  },
+  "MyAgency": {
+    "title": "Agjencia Ime",
+    "subtitle": "Menaxhoni profilin tuaj dhe listimin e pronave",
+    "editProfile": "Ndrysho Profilin",
+    "properties": {
+      "title": "Listimet e Pronave",
+      "subtitle": "Menaxhoni dhe ndiqni të gjitha listimet tuaja të pronave",
+      "addNew": "Shto Pronë",
+      "edit": "Ndrysho",
+      "delete": "Fshij",
+      "noProperties": "Ende nuk ka prona të listuara",
+      "addFirstProperty": "Shtoni listimin tuaj të parë të pronës"
+    }
+  },
+  "Footer": {
+    "description": "Platforma juaj e besueshme e pasurive të paluajtshme në Maqedoninë e Veriut. Gjeni shtëpinë tuaj të përkryer, lidhuni me shokët e dhomës ose zhvilloni biznesin tuaj të pasurive të paluajtshme me ne.",
+    "quickLinks": {
+      "title": "Lidhje të Shpejta",
+      "about": "Rreth Nesh",
+      "contact": "Kontakt",
+      "terms": "Kushtet e Përdorimit",
+      "privacy": "Politika e Privatësisë"
+    },
+    "services": {
+      "title": "Shërbimet Tona",
+      "postProperty": "Posto Pronë",
+      "findRoommate": "Gjej Shok Dhome",
+      "registerAgency": "Regjistro Agjenci",
+      "savedProperties": "Pronat e Ruajtura"
+    },
+    "newsletter": {
+      "title": "Buletini",
+      "description": "Abonohu në buletinin tonë për përditësimet më të fundit të pronave dhe lajmet e tregut të pasurive të paluajtshme.",
+      "placeholder": "Adresa juaj e emailit",
+      "subscribe": "Abonohu"
+    },
+    "copyright": "Të gjitha të drejtat e rezervuara.",
+    "madeWith": "Bërë me dashuri në Shkup"
   }
 }

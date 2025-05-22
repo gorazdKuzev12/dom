@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { FiMail, FiLock, FiAlertCircle, FiBriefcase } from "react-icons/fi";
 import Menu from "@/components/Menu/page";
 import { useRouter } from "next/navigation";
+import Footer from "@/components/Footer/page";
 
 const BenefitsSection = styled.div`
   background: white;
@@ -406,6 +407,7 @@ export default function AgencyLoginPage() {
           </BenefitsSection>
         </LoginContainer>
       </MainContent>
+      <Footer />
     </PageWrapper>
   );
 } 

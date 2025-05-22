@@ -1,0 +1,50 @@
+{
+  "About": {
+    "hero": {
+      "title": "Partneri juaj i besueshëm i pasurive të paluajtshme",
+      "subtitle": "Duke ndihmuar mijëra njerëz të gjejnë shtëpinë e tyre të përkryer që nga viti 2015"
+    },
+    "mission": {
+      "title": "Misioni ynë",
+      "description": "Ne jemi të përkushtuar në revolucionarizimin e përvojës së pasurive të paluajtshme në Maqedoni përmes teknologjisë inovative dhe shërbimit të jashtëzakonshëm. Platforma jonë lidh kërkuesit e pronave me shtëpitë e tyre të ëndrrave dhe ndihmon pronarët e pronave të arrijnë audiencën e duhur."
+    },
+    "stats": {
+      "properties": "Prona të listuara",
+      "users": "Përdorues aktivë",
+      "satisfaction": "Kënaqësia e klientit"
+    },
+    "services": {
+      "residential": "Prona banimi",
+      "commercial": "Hapësira komerciale",
+      "luxury": "Pasuri të paluajtshme luksoze"
+    },
+    "team": {
+      "title": "Njihuni me ekipin tonë",
+      "description": "Ekipi ynë i përkushtuar i profesionistëve është këtu për t'ju udhëhequr në çdo hap të udhëtimit tuaj në pasuri të paluajtshme.",
+      "members": {
+        "1": {
+          "name": "Elena Petrova",
+          "role": "CEO & Themeluese"
+        },
+        "2": {
+          "name": "Stefan Nikolovski",
+          "role": "Drejtori i Operacioneve"
+        },
+        "3": {
+          "name": "Ana Dimitrova",
+          "role": "Suksesi i Klientëve"
+        },
+        "4": {
+          "name": "Marko Trajkovski",
+          "role": "Drejtori Teknik"
+        }
+      }
+    },
+    "contact": {
+      "title": "Na kontaktoni",
+      "phone": "Telefoni",
+      "email": "Email",
+      "address": "Adresa"
+    }
+  }
+} 

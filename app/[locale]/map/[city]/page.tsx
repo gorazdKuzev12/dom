@@ -2,6 +2,7 @@ import { gql } from "@apollo/client";
 import { getClient } from "@/lib/client";
 import NeighborhoodsClient from "@/components/MapComponent";
 import { GET_MUNICIPALITIES_BY_CITY_NAME } from "@/lib/queries";
+import Footer from "@/components/Footer/page";
 
 export default async function NeighborhoodsPage({ params }) {
   const { city } = params;
@@ -31,13 +32,17 @@ export default async function NeighborhoodsPage({ params }) {
     );
 
     return (
-      <NeighborhoodsClient cityName={city} neighborhoods={municipalities} />
+      <div>
+        <NeighborhoodsClient cityName={city} neighborhoods={municipalities} />
+        <Footer />
+      </div>
     );
   } catch (error) {
     console.error("Error fetching municipalities:", error);
     return (
       <div>
         <h1>Error loading neighborhoods</h1>
+        <Footer />
       </div>
     );
   }

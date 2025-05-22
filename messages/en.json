@@ -1,0 +1,72 @@
+{
+  "About": {
+    "hero": {
+      "title": "Your Trusted Real Estate Partner",
+      "subtitle": "Helping thousands find their perfect home since 2015"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "We are committed to revolutionizing the real estate experience in Macedonia through innovative technology and exceptional service. Our platform connects property seekers with their dream homes and helps property owners reach the right audience."
+    },
+    "stats": {
+      "properties": "Listed Properties",
+      "users": "Active Users",
+      "satisfaction": "Client Satisfaction"
+    },
+    "services": {
+      "residential": "Residential Properties",
+      "commercial": "Commercial Spaces",
+      "luxury": "Luxury Real Estate"
+    },
+    "team": {
+      "title": "Meet Our Team",
+      "description": "Our dedicated team of professionals is here to guide you through every step of your real estate journey.",
+      "members": {
+        "1": {
+          "name": "Elena Petrova",
+          "role": "CEO & Founder"
+        },
+        "2": {
+          "name": "Stefan Nikolovski",
+          "role": "Head of Operations"
+        },
+        "3": {
+          "name": "Ana Dimitrova",
+          "role": "Customer Success"
+        },
+        "4": {
+          "name": "Marko Trajkovski",
+          "role": "Tech Lead"
+        }
+      }
+    },
+    "contact": {
+      "title": "Get in Touch",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address"
+    }
+  },
+  "Home": {
+    "hero": {
+      "title": "Find Your Perfect Home",
+      "subtitle": "Discover thousands of properties for sale and rent across Macedonia"
+    },
+    "search": {
+      "placeholder": "Search by location, property type...",
+      "allLocations": "All Locations",
+      "button": "Search Properties"
+    },
+    "filters": {
+      "buy": "Buy",
+      "rent": "Rent",
+      "find_roommate": "Find Roommate"
+    },
+    "featured": {
+      "title": "Featured Properties",
+      "type": "Apartment",
+      "propertyTitle": "Modern Apartment in City Center",
+      "location": "Skopje, Macedonia"
+    }
+  }
+} 

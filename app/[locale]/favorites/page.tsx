@@ -6,6 +6,7 @@ import { FiHome, FiHeart, FiMapPin, FiMaximize2, FiDollarSign } from "react-icon
 import Menu from "@/components/Menu/page";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import Footer from "@/components/Footer/page";
 
 interface Apartment {
   id: string;
@@ -102,6 +103,7 @@ export default function FavoritesPage() {
           </Grid>
         )}
       </Container>
+      <Footer />
     </Wrapper>
   );
 }

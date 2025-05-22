@@ -7,7 +7,8 @@
     "favorites": "Saved properties",
     "registerAgency": "Register as Agency",
     "postWithoutLogin": "Post Property (No Login)",
-    "agencyLogin": "Agency Login"
+    "agencyLogin": "Agency Login",
+    "myAgency": "My Agency"
   },
   "Roommates": {
     "title": "Find Your Perfect Roommate",
@@ -292,5 +293,44 @@
       "maxPhotos": "Maximum 10 photos allowed",
       "minPhotos": "Please add at least one photo"
     }
+  },
+  "MyAgency": {
+    "title": "My Agency",
+    "subtitle": "Manage your agency profile and property listings",
+    "editProfile": "Edit Profile",
+    "properties": {
+      "title": "Property Listings",
+      "subtitle": "Manage and track all your property listings",
+      "addNew": "Add Property",
+      "edit": "Edit",
+      "delete": "Delete",
+      "noProperties": "No properties listed yet",
+      "addFirstProperty": "Add your first property listing"
+    }
+  },
+  "Footer": {
+    "description": "Your trusted real estate platform in North Macedonia. Find your perfect home, connect with roommates, or grow your real estate business with us.",
+    "quickLinks": {
+      "title": "Quick Links",
+      "about": "About Us",
+      "contact": "Contact",
+      "terms": "Terms & Conditions",
+      "privacy": "Privacy Policy"
+    },
+    "services": {
+      "title": "Our Services",
+      "postProperty": "Post Property",
+      "findRoommate": "Find Roommate",
+      "registerAgency": "Register Agency",
+      "savedProperties": "Saved Properties"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Subscribe to our newsletter for the latest property updates and real estate news.",
+      "placeholder": "Your email address",
+      "subscribe": "Subscribe"
+    },
+    "copyright": "All rights reserved.",
+    "madeWith": "Made with love in Skopje"
   }
 }

@@ -6,6 +6,7 @@ import { FiArrowLeft, FiUpload, FiCheck, FiInfo } from "react-icons/fi";
 import { IoPersonOutline } from "react-icons/io5";
 import Menu from "@/components/Menu/page";
 import Link from "next/link";
+import Footer from "@/components/Footer/page";
 
 export default function PostRoommateProfilePage() {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -233,6 +234,7 @@ export default function PostRoommateProfilePage() {
           </SuccessContainer>
         )}
       </Main>
+      <Footer />
     </Wrapper>
   );
 }

@@ -83,6 +83,9 @@ export default function Menu() {
                   <DropdownItem href={`/${locale}/agency-login`}>
                     {t("agencyLogin")}
                   </DropdownItem>
+                  <DropdownItem href={`/${locale}/my-agency`}>
+                    {t("myAgency")}
+                  </DropdownItem>
                 </DropdownMenu>
               )}
             </DropdownWrapper>
@@ -132,6 +135,10 @@ export default function Menu() {
           <MobileLink href={`/${locale}/agency-login`}>
             <FiLogIn size={18} />
             {t("agencyLogin")}
+          </MobileLink>
+          <MobileLink href={`/${locale}/my-agency`}>
+            <FiBriefcase size={18} />
+            {t("myAgency")}
           </MobileLink>
           <MobileLink href={`/${locale}/favorites`}>
             <FiHeart size={18} />

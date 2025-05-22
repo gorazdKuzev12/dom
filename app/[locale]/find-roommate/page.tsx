@@ -19,6 +19,7 @@ import { IoPersonOutline } from "react-icons/io5";
 import Menu from "@/components/Menu/page";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import Footer from "@/components/Footer/page";
 
 interface OnlineStatusProps {
   active: boolean;
@@ -206,6 +207,7 @@ export default function FindRoommatePage() {
           ))}
         </ListArea>
       </Main>
+      <Footer />
     </Wrapper>
   );
 }

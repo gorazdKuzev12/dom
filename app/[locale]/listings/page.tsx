@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { FiSearch, FiMapPin, FiMenu, FiUser, FiX } from "react-icons/fi";
 import { BiSolidBuildingHouse } from "react-icons/bi";
 import Menu from "@/components/Menu/page";
+import Footer from "@/components/Footer/page";
 
 export default function ZoneListingsPage() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -85,6 +86,7 @@ export default function ZoneListingsPage() {
           ))}
         </ListArea>
       </Main>
+      <Footer />
     </Wrapper>
   );
 }

@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import Menu from "@/components/Menu/page";
 import { FaFacebookMessenger, FaViber, FaInstagram, FaWhatsapp, FaTelegram, FaCopy } from 'react-icons/fa';
+import Footer from "@/components/Footer/page";
 
 export default function ApartmentPage() {
   const [showMenu, setShowMenu] = useState(false);
@@ -339,21 +340,7 @@ export default function ApartmentPage() {
         </Sidebar>
       </ContentContainer>
 
-      <Footer>
-        <FooterContent>
-          <FooterLogo>
-            <Home size={16} />
-            <span>dom.mk</span>
-          </FooterLogo>
-          <FooterLinks>
-            <FooterLink>About</FooterLink>
-            <FooterLink>Terms</FooterLink>
-            <FooterLink>Privacy</FooterLink>
-            <FooterLink>Contact</FooterLink>
-          </FooterLinks>
-          <FooterCopyright>© 2025 dom.mk. All rights reserved.</FooterCopyright>
-        </FooterContent>
-      </Footer>
+      <Footer />
 
       {showShareMenu && (
         <ShareMenuOverlay onClick={() => setShowShareMenu(false)}>
@@ -843,54 +830,6 @@ const MapAddress = styled.div`
     color: #666;
     margin: 0.3rem 0 0 0;
   }
-`;
-
-const Footer = styled.footer`
-  background: white;
-  margin-top: 3rem;
-  padding: 2rem 0;
-  border-top: 1px solid #eee;
-`;
-
-const FooterContent = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  text-align: center;
-`;
-
-const FooterLogo = styled.div`
-  font-size: 1.1rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-`;
-
-const FooterLinks = styled.div`
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
-`;
-
-const FooterLink = styled.a`
-  color: #555;
-  text-decoration: none;
-  font-size: 0.9rem;
-
-  &:hover {
-    color: #0066ff;
-  }
-`;
-
-const FooterCopyright = styled.div`
-  font-size: 0.85rem;
-  color: #777;
 `;
 
 const ShareMenuOverlay = styled.div`
