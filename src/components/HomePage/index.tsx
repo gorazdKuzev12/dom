@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Select, { StylesConfig, ActionMeta, SingleValue, MultiValue, CSSObjectWithLabel } from "react-select";
-import { FiPlusSquare, FiUserPlus, FiGlobe } from "react-icons/fi";
+import { FiPlusSquare, FiUserPlus, FiGlobe, FiBriefcase, FiChevronDown } from "react-icons/fi";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -17,7 +17,7 @@ import {
   ToggleButton,
   ToggleGroup,
   TopBar,
-  TopLink,
+  TopLink as BaseTopLink,
   Wrapper,
 } from "@/styles/mainPage/styles";
 import styled from "styled-components";
@@ -45,6 +45,20 @@ interface HomePageClientProps {
 }
 
 type StylesBase = Record<string, unknown>;
+
+// Rename the imported TopLink to avoid naming conflict
+const TopLink = styled(BaseTopLink)`
+  font-size: 0.9rem;
+  
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+  }
+`;
 
 const customSelectStyles: StylesConfig<SelectOption> = {
   control: (base: CSSObjectWithLabel, state: SelectStylesProps) => ({
@@ -92,7 +106,7 @@ const customSelectStyles: StylesConfig<SelectOption> = {
 // Custom styles for language selector
 const languageSelectStyles = {
   ...customSelectStyles,
-  control: (base) => ({
+  control: (base: CSSObjectWithLabel) => ({
     ...base,
     backgroundColor: "rgba(255, 255, 255, 0.4)",
     borderRadius: "8px",
@@ -108,11 +122,11 @@ const languageSelectStyles = {
     },
   }),
 
-  singleValue: (base) => ({
+  singleValue: (base: CSSObjectWithLabel) => ({
     ...base,
     color: "#111",
   }),
-  menu: (base) => ({
+  menu: (base: CSSObjectWithLabel) => ({
     ...base,
     width: "85px",
   }),
@@ -207,7 +221,73 @@ const MainTitle = styled.h1`
   }
 `;
 
+// Agency dropdown styles
+const AgencyDropdownWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
 
+const AgencyDropdownButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #111;
+  background: none;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.041);
+    color: #000;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+    font-weight: 500;
+  }
+`;
+
+const AgencyDropdownMenu = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.5rem;
+  min-width: 180px;
+  z-index: 1000;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+`;
+
+const AgencyDropdownItem = styled.a`
+  display: block;
+  padding: 0.6rem 1rem;
+  color: #333;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+
+  &:hover {
+    background: rgba(12, 66, 64, 0.08);
+    color: #0c4240;
+  }
+`;
 
 export default function HomePageClient({ initialCities }: HomePageClientProps) {
   const t = useTranslations("Navigation");
@@ -220,6 +300,7 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
   const [selectedPropertyType, setSelectedPropertyType] = useState<SelectOption | null>(null);
   const [searchMode, setSearchMode] = useState("buy");
   const [open, setOpen] = useState(false);
+  const [agencyDropdownOpen, setAgencyDropdownOpen] = useState(false);
 
   // Property type options
   const propertyTypeOptions: SelectOption[] = [
@@ -280,33 +361,99 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
     return city.name_en; // fallback to English
   }
 
-  const NavLinks = (
-    <>
-      <TopLink href="/post-property">
-        <FiPlusSquare size={18} />
-        <span>{t("postProperty")}</span>
-      </TopLink>
-
-      <TopLink href="/find-roommate">
-        <FiUserPlus size={18} />
-        <span>{t("roommates")}</span>
-      </TopLink>
-    </>
-  );
-
   return (
     <Wrapper>
       <TopBar>
-        {/* 1️⃣ Desktop links */}
-        <LinksDesktop>{NavLinks}</LinksDesktop>
+        <LinksDesktop>
+          <TopLink href={`/${locale}/post-property`}>
+            <FiPlusSquare size={16} />
+            {t("postProperty")}
+          </TopLink>
 
-        {/* 2️⃣ Language buttons – always visible */}
+          <TopLink href={`/${locale}/find-roommate`}>
+            <FiUserPlus size={16} />
+            {t("roommates")}
+          </TopLink>
+
+          <AgencyDropdownWrapper>
+            <AgencyDropdownButton
+              onClick={() => setAgencyDropdownOpen(!agencyDropdownOpen)}
+            >
+              <FiBriefcase size={16} />
+              {t("agency")}
+              <FiChevronDown size={14} />
+            </AgencyDropdownButton>
+            
+            {agencyDropdownOpen && (
+              <AgencyDropdownMenu>
+                <AgencyDropdownItem href={`/${locale}/register-agency`}>
+                  {t("registerAgency")}
+                </AgencyDropdownItem>
+                <AgencyDropdownItem href={`/${locale}/agency-login`}>
+                  {t("agencyLogin")}
+                </AgencyDropdownItem>
+                <AgencyDropdownItem href={`/${locale}/my-agency`}>
+                  {t("myAgency")}
+                </AgencyDropdownItem>
+              </AgencyDropdownMenu>
+            )}
+          </AgencyDropdownWrapper>
+
+          <LanguageContainer>
+            <FiGlobe />
+            {languages.map((lang) => (
+              <LanguageButton
+                key={lang.value}
+                onClick={() => handleLocaleChange(lang.value)}
+                active={locale === lang.value}
+                disabled={isPending}
+              >
+                {lang.label}
+              </LanguageButton>
+            ))}
+          </LanguageContainer>
+        </LinksDesktop>
+
+        <BurgerButton
+          onClick={() => setOpen(!open)}
+          className={open ? "open" : ""}
+        >
+          <span />
+        </BurgerButton>
+      </TopBar>
+
+      {/* Mobile menu with agency section */}
+      <MobileMenu open={open}>
+        <TopLink href={`/${locale}/post-property`}>
+          <FiPlusSquare size={16} />
+          {t("postProperty")}
+        </TopLink>
+        <TopLink href={`/${locale}/find-roommate`}>
+          <FiUserPlus size={16} />
+          {t("roommates")}
+        </TopLink>
+        <TopLink href={`/${locale}/register-agency`}>
+          <FiBriefcase size={16} />
+          {t("registerAgency")}
+        </TopLink>
+        <TopLink href={`/${locale}/agency-login`}>
+          <FiBriefcase size={16} />
+          {t("agencyLogin")}
+        </TopLink>
+        <TopLink href={`/${locale}/my-agency`}>
+          <FiBriefcase size={16} />
+          {t("myAgency")}
+        </TopLink>
+        
         <LanguageContainer>
-          <FiGlobe size={14} />
+          <FiGlobe />
           {languages.map((lang) => (
             <LanguageButton
               key={lang.value}
-              onClick={() => handleLocaleChange(lang.value)}
+              onClick={() => {
+                handleLocaleChange(lang.value);
+                setOpen(false);
+              }}
               active={locale === lang.value}
               disabled={isPending}
             >
@@ -314,19 +461,8 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
             </LanguageButton>
           ))}
         </LanguageContainer>
+      </MobileMenu>
 
-        {/* 3️⃣ Hamburger (mobile only) */}
-        <BurgerButton
-          aria-label="Menu"
-          className={open ? "open" : ""}
-          onClick={() => setOpen(!open)}
-        >
-          <span />
-        </BurgerButton>
-      </TopBar>
-
-      {/* 4️⃣ Slide-down mobile menu */}
-      <MobileMenu open={open}>{NavLinks}</MobileMenu>
       <Overlay>
         <Logo>dom.mk</Logo>
         <SearchBar>
@@ -346,7 +482,6 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
           </ToggleGroup>
 
           {/* Property type dropdown with React Select */}
-
           <Select
             styles={customSelectStyles}
             value={selectedPropertyType}

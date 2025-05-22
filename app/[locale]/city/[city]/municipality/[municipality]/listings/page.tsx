@@ -6,7 +6,47 @@ import { parse } from "querystring";
 export const toEnum = (val?: string) =>
   typeof val === "string" ? val.toUpperCase() : undefined;
 
-export default async function Page({ params, searchParams }) {
+interface PageParams {
+  municipality: string;
+  city: string;
+  locale: string;
+}
+
+interface SearchParams {
+  listingType?: string;
+  propertyType?: string;
+  condition?: string;
+  priceMin?: string;
+  priceMax?: string;
+  bedrooms?: string;
+  bathrooms?: string;
+  specificDetails?: string;
+  listingDate?: string;
+  sort?: string;
+}
+
+// Convert specificDetails to Amenity enum format
+const toAmenityEnum = (detail: string): string => {
+  // Map frontend values to backend enum values
+  const amenityMap: Record<string, string> = {
+    balcony: "BALCONY",
+    heating: "HEATING",
+    "air-conditioning": "AIR_CONDITIONING",
+    furnished: "FURNISHED",
+    elevator: "ELEVATOR",
+    parking: "PARKING",
+  };
+  
+  return amenityMap[detail.toLowerCase()] || detail.toUpperCase();
+};
+
+export default async function Page({ 
+  params, 
+  searchParams 
+}: { 
+  params: PageParams; 
+  searchParams: SearchParams;
+}) {
   const municipalityName = params?.municipality || "Centar";
 
   // turn the /?x=... string into an object
@@ -25,7 +65,7 @@ export default async function Page({ params, searchParams }) {
       : undefined,
     bathrooms: searchParams.bathrooms && +searchParams.bathrooms,
     amenities: searchParams.specificDetails
-      ? String(searchParams.specificDetails).split(",")
+      ? String(searchParams.specificDetails).split(",").map(toAmenityEnum)
       : undefined,
     listingDate: searchParams.listingDate, // unchanged
     sort: searchParams.sort,

@@ -66,6 +66,7 @@ export const SearchBar = styled.div`
 export const TopLink = styled.a`
   display: flex;
   align-items: center;
+  justify-content: center;
   font-size: 1.05rem;
   color: #111;
   text-decoration: none;
@@ -74,6 +75,7 @@ export const TopLink = styled.a`
   padding: 0.4rem 0.8rem;
   border-radius: 8px;
   transition: background 0.2s ease, color 0.2s ease;
+  text-align: center;
 
   &:hover {
     background: rgba(0, 0, 0, 0.041);
@@ -89,7 +91,7 @@ export const TopLink = styled.a`
   @media (max-width: 480px) {
     font-size: 0.95rem;
     padding: 0.3rem 0.6rem;
-    font-weight: 500; /* Slightly bolder on mobile for better visibility */
+    font-weight: 500;
   }
 `;
 
@@ -167,21 +169,49 @@ export const LanguageButton = styled.button<{ active: boolean }>`
 `; 
 
 export const Logo = styled.h1`
+  font-family: 'Inter', 'Montserrat', sans-serif;
   font-size: 5rem;
-  font-weight: 800;
+  font-weight: 700;
   color: white;
   margin-bottom: var(--space-xl);
-  text-shadow: var(--shadow-lg);
-  letter-spacing: -0.02em;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  letter-spacing: -0.03em;
+  position: relative;
+  background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 3px;
+    width: 60px;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
+    border-radius: 2px;
+  }
   
   @media (max-width: 768px) {
     font-size: 3.5rem;
     margin-bottom: var(--space-lg);
+    
+    &::after {
+      width: 45px;
+      bottom: -6px;
+    }
   }
   
   @media (max-width: 480px) {
     font-size: 2.75rem;
     margin-bottom: var(--space-md);
+    
+    &::after {
+      width: 35px;
+      bottom: -5px;
+    }
   }
 `;
 
@@ -332,22 +362,26 @@ export const SearchButton = styled.button`
 export const TopBar = styled.div`
   position: absolute;
   top: 30px;
-  right: 40px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   gap: 16px;
   align-items: center;
+  justify-content: center;
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.118);
-  padding: 0.2rem 0.6rem;
+  padding: 0.4rem 1.2rem;
   border-radius: 12px;
+  min-width: 320px;
 
   /* phones & tablets */
   @media (max-width: 768px) {
     position: fixed;
     top: 0;
     left: 0;
-    width: 95%;
-    justify-content: space-between;
+    width: 100%;
+    transform: none;
+    justify-content: center;
     gap: 8px;
     border-radius: 0;
     background: rgba(255, 255, 255, 0.8);
@@ -355,6 +389,7 @@ export const TopBar = styled.div`
     z-index: 1000;
     padding: 0.8rem 1rem;
     box-shadow: 0 1px 10px rgba(0, 0, 0, 0.08);
+    min-width: unset;
   }
 `;
 
@@ -362,6 +397,8 @@ export const TopBar = styled.div`
 export const LinksDesktop = styled.div`
   display: flex;
   gap: 16px;
+  justify-content: center;
+  align-items: center;
 
   @media (max-width: 768px) {
     display: none;
@@ -445,6 +482,7 @@ export const MobileMenu = styled.div<{ open: boolean }>`
     padding: 1.5rem;
     gap: 1.2rem;
     flex-direction: column;
+    align-items: center;
     z-index: 999;
     transform: ${({ open }) => (open ? "translateY(0)" : "translateY(-120%)")};
     transition: transform 0.3s ease;
@@ -459,6 +497,9 @@ export const MobileMenu = styled.div<{ open: boolean }>`
       border-radius: 12px;
       font-weight: 500;
       transition: all 0.2s ease;
+      text-align: center;
+      width: 100%;
+      max-width: 280px;
 
       &:hover {
         background: rgba(12, 66, 64, 0.08);

@@ -37,13 +37,25 @@ export default function Footer() {
             </ContactItem>
           </ContactInfo>
           <SocialLinks>
-            <SocialButton href="https://facebook.com" target="_blank" aria-label="Facebook">
+            <SocialButton
+              href="https://facebook.com"
+              target="_blank"
+              aria-label="Facebook"
+            >
               <Facebook size={16} />
             </SocialButton>
-            <SocialButton href="https://instagram.com" target="_blank" aria-label="Instagram">
+            <SocialButton
+              href="https://instagram.com"
+              target="_blank"
+              aria-label="Instagram"
+            >
               <Instagram size={16} />
             </SocialButton>
-            <SocialButton href="https://twitter.com" target="_blank" aria-label="Twitter">
+            <SocialButton
+              href="https://twitter.com"
+              target="_blank"
+              aria-label="Twitter"
+            >
               <Twitter size={16} />
             </SocialButton>
           </SocialLinks>
@@ -84,7 +96,9 @@ export default function Footer() {
             </LinkItem>
             <LinkItem>
               <ChevronRight size={12} />
-              <Link href="/register-agency">{t("services.registerAgency")}</Link>
+              <Link href="/register-agency">
+                {t("services.registerAgency")}
+              </Link>
             </LinkItem>
             <LinkItem>
               <ChevronRight size={12} />
@@ -238,4 +252,4 @@ const MadeWith = styled.div`
   svg {
     color: #ff6b6b;
   }
-`; 
+`;
