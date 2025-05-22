@@ -50,6 +50,7 @@ const RootLayout = async (props: {
     <StyledJsxRegistry>
       <html>
         <body style={{ margin: 0, padding: 0 }}>
+          <GlobalStyle />
           <NextIntlClientProvider messages={messages}>
             <ApolloWrapper>{props.children}</ApolloWrapper>
           </NextIntlClientProvider>

@@ -4,7 +4,10 @@
     "home": "Home",
     "about": "About",
     "roommates": "Connect with roommates",
-    "favorites": "Saved properties"
+    "favorites": "Saved properties",
+    "registerAgency": "Register as Agency",
+    "postWithoutLogin": "Post Property (No Login)",
+    "agencyLogin": "Agency Login"
   },
   "Roommates": {
     "title": "Find Your Perfect Roommate",
@@ -103,6 +106,191 @@
       "newest": "Most recent",
       "priceAsc": "Lowest price",
       "priceDesc": "Highest price"
+    }
+  },
+  "AgencyRegistration": {
+    "title": "Register Your Real Estate Agency",
+    "subtitle": "Join dom.mk's network of trusted real estate professionals",
+    "steps": {
+      "agencyInfo": "Agency Information",
+      "accountDetails": "Account Details",
+      "profileSetup": "Profile Setup"
+    },
+    "form": {
+      "companyName": "Company Name",
+      "email": "Business Email",
+      "phone": "Business Phone",
+      "website": "Website",
+      "address": "Office Address",
+      "city": "City",
+      "zipCode": "Zip/Postal Code",
+      "contactPerson": "Contact Person",
+      "contactRole": "Role/Position",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "licenseNumber": "Real Estate License Number",
+      "taxId": "Tax ID / Business Registration Number",
+      "agencySize": "Agency Size",
+      "sizes": {
+        "small": "Small (1-5 agents)",
+        "medium": "Medium (6-20 agents)",
+        "large": "Large (21+ agents)"
+      },
+      "logo": "Company Logo",
+      "logoHelp": "Recommended size: 400x400px, JPG or PNG format",
+      "description": "Company Description",
+      "descriptionPlaceholder": "Tell potential clients about your agency, your values, and what makes you special...",
+      "specializations": "Specializations",
+      "specializationsSubtitle": "Select all areas your agency specializes in",
+      "agreeTerms": "I agree to dom.mk's Terms of Service and Privacy Policy",
+      "submit": "Submit Registration",
+      "back": "Back",
+      "continue": "Continue",
+      "uploadLogo": "Drag and drop or click to upload"
+    },
+    "benefits": {
+      "title": "Why Join dom.mk?",
+      "items": {
+        "clients": "Access to thousands of potential clients",
+        "system": "User-friendly property management system",
+        "visibility": "Enhanced visibility in search results",
+        "profile": "Dedicated agency profile page",
+        "analytics": "Real-time analytics and reporting"
+      }
+    },
+    "verification": {
+      "title": "Before you submit",
+      "message": "Your application will be reviewed by our team. The verification process usually takes 1-2 business days. We'll notify you by email once your agency account is approved."
+    }
+  },
+  "AgencyLogin": {
+    "title": "Agency Login",
+    "subtitle": "Access your agency dashboard and manage your properties",
+    "form": {
+      "email": "Email Address",
+      "emailPlaceholder": "Enter your business email",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "noAccount": "Don't have an agency account?",
+      "registerNow": "Register now"
+    },
+    "errors": {
+      "requiredFields": "Please fill in all required fields",
+      "invalidCredentials": "Invalid email or password",
+      "unknown": "An unexpected error occurred"
+    },
+    "benefits": {
+      "title": "Agency Portal Benefits",
+      "items": {
+        "dashboard": "Access your personalized dashboard",
+        "listings": "Manage all your property listings",
+        "analytics": "View detailed performance analytics",
+        "leads": "Track and manage client leads",
+        "support": "Get priority customer support"
+      }
+    }
+  },
+  "PostProperty": {
+    "title": "Post Your Property",
+    "subtitle": "Fill in the details to list your property",
+    "steps": {
+      "details": "Details",
+      "media": "Media",
+      "publish": "Publish"
+    },
+    "contactInfo": {
+      "title": "Contact Information",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "email": "Email Address",
+      "emailPlaceholder": "Enter your email address",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number"
+    },
+    "propertyDetails": {
+      "title": "Property Details",
+      "listingTitle": "Title",
+      "listingTitlePlaceholder": "e.g. Cozy Studio in Centar",
+      "propertyType": "Property Type",
+      "types": {
+        "apartment": "Apartment",
+        "house": "House",
+        "office": "Office",
+        "land": "Land"
+      },
+      "listingType": "Listing Type",
+      "listingTypes": {
+        "rent": "Rent",
+        "buy": "Buy"
+      },
+      "price": "Price",
+      "pricePlaceholder": "Price (€)",
+      "size": "Size",
+      "sizePlaceholder": "Size (m²)",
+      "condition": "Condition",
+      "conditions": {
+        "new": "New",
+        "renovated": "Renovated",
+        "needsRenovation": "Needs renovation"
+      },
+      "floor": "Floor",
+      "floorPlaceholder": "Floor number",
+      "totalFloors": "Total Floors",
+      "totalFloorsPlaceholder": "Total number of floors",
+      "rooms": "Rooms",
+      "roomsPlaceholder": "Number of rooms",
+      "bathrooms": "Bathrooms",
+      "bathroomsPlaceholder": "Number of bathrooms"
+    },
+    "location": {
+      "title": "Location",
+      "city": "City",
+      "cities": {
+        "skopje": "Skopje",
+        "bitola": "Bitola",
+        "kumanovo": "Kumanovo",
+        "ohrid": "Ohrid",
+        "tetovo": "Tetovo"
+      },
+      "address": "Address",
+      "addressPlaceholder": "Enter the property address"
+    },
+    "amenities": {
+      "title": "Amenities",
+      "balcony": "Balcony",
+      "heating": "Heating",
+      "airConditioning": "Air conditioning",
+      "furnished": "Furnished",
+      "elevator": "Elevator",
+      "parking": "Parking"
+    },
+    "description": {
+      "title": "Description",
+      "placeholder": "Describe your property in detail..."
+    },
+    "media": {
+      "title": "Photos",
+      "subtitle": "Add photos of your property",
+      "dragDrop": "Drag and drop photos here or click to upload",
+      "maxSize": "Maximum file size: 5MB",
+      "formats": "Supported formats: JPG, PNG"
+    },
+    "buttons": {
+      "back": "Back",
+      "next": "Next",
+      "publish": "Publish Listing"
+    },
+    "errors": {
+      "required": "Please fill in all required fields",
+      "invalidEmail": "Please enter a valid email address",
+      "invalidPhone": "Please enter a valid phone number",
+      "uploadFailed": "Failed to upload photos",
+      "maxPhotos": "Maximum 10 photos allowed",
+      "minPhotos": "Please add at least one photo"
     }
   }
 }

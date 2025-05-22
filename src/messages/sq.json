@@ -4,7 +4,10 @@
     "home": "Ballina",
     "about": "Rreth neshk",
     "roommates": "Lidhuni me shokët e dhomës",
-    "favorites": "Pronat e ruajtura"
+    "favorites": "Pronat e ruajtura",
+    "registerAgency": "Regjistrohu si agjenci",
+    "postWithoutLogin": "Posto pronë (pa hyrje)",
+    "agencyLogin": "Hyrje për agjenci"
   },
   "Roommates": {
     "title": "Gjeni shokun tuaj të dhomës perfekt",
@@ -101,6 +104,209 @@
       "newest": "Më të rejat",
       "priceAsc": "Çmimi më i ulët",
       "priceDesc": "Çmimi më i lartë"
+    }
+  },
+  "AgencyRegistration": {
+    "title": "Regjistroni Agjencinë Tuaj",
+    "subtitle": "Bashkohuni me platformën tonë dhe prezantoni pronat tuaja mijëra klientëve potencialë",
+    "steps": {
+      "agencyInfo": "Informacioni i Agjencisë",
+      "accountDetails": "Detajet e Llogarisë",
+      "profileSetup": "Konfigurimi i Profilit"
+    },
+    "form": {
+      "companyName": "Emri i Kompanisë",
+      "companyNamePlaceholder": "Shkruani emrin e agjencisë tuaj",
+      "email": "Adresa e Emailit",
+      "emailPlaceholder": "Shkruani emailin tuaj të biznesit",
+      "phone": "Numri i Telefonit",
+      "phonePlaceholder": "Shkruani telefonin tuaj të biznesit",
+      "website": "Faqja e Internetit (Opsionale)",
+      "websitePlaceholder": "Shkruani URL-në e faqes tuaj",
+      "address": "Adresa",
+      "addressPlaceholder": "Shkruani adresën e zyrës",
+      "city": "Qyteti",
+      "cityPlaceholder": "Shkruani qytetin tuaj",
+      "zipCode": "Kodi Postar",
+      "zipCodePlaceholder": "Shkruani kodin postar",
+      "contactPerson": "Personi i Kontaktit",
+      "contactPersonPlaceholder": "Shkruani emrin e plotë",
+      "contactRole": "Roli në Kompani",
+      "contactRolePlaceholder": "p.sh. Pronar, Menaxher",
+      "password": "Fjalëkalimi",
+      "passwordPlaceholder": "Krijoni një fjalëkalim të fortë",
+      "confirmPassword": "Konfirmoni Fjalëkalimin",
+      "confirmPasswordPlaceholder": "Ri-shkruani fjalëkalimin tuaj",
+      "licenseNumber": "Numri i Licencës",
+      "licenseNumberPlaceholder": "Shkruani numrin e licencës së pasurive të paluajtshme",
+      "taxId": "ID Tatimore",
+      "taxIdPlaceholder": "Shkruani numrin tuaj të identifikimit tatimor",
+      "agencySize": "Madhësia e Agjencisë",
+      "agencySizeOptions": {
+        "small": "E Vogël (1-5 agjentë)",
+        "medium": "E Mesme (6-20 agjentë)",
+        "large": "E Madhe (21+ agjentë)"
+      },
+      "logo": "Logoja e Agjencisë",
+      "uploadLogo": "Klikoni për të ngarkuar logon",
+      "description": "Përshkrimi i Agjencisë",
+      "descriptionPlaceholder": "Na tregoni për agjencinë tuaj, specialitetet dhe përvojën",
+      "specializations": "Fushat e Specializimit",
+      "agreeTerms": "Unë pranoj Kushtet e Shërbimit dhe Politikën e Privatësisë"
+    },
+    "buttons": {
+      "back": "Prapa",
+      "next": "Tjetër",
+      "submit": "Dërgo Regjistrimin"
+    },
+    "errors": {
+      "requiredFields": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
+      "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
+      "passwordLength": "Fjalëkalimi duhet të jetë të paktën 8 karaktere",
+      "passwordMismatch": "Fjalëkalimet nuk përputhen",
+      "agreeTerms": "Duhet të pranoni Kushtet e Shërbimit",
+      "unknown": "Ndodhi një gabim i papritur"
+    },
+    "benefits": {
+      "title": "Përfitimet e Bashkimit",
+      "items": {
+        "exposure": "Arrini mijëra klientë potencialë",
+        "tools": "Qasje në mjete profesionale të pasurive të paluajtshme",
+        "analytics": "Merrni analiza dhe njohuri të detajuara",
+        "support": "Mbështetje e dedikuar 24/7",
+        "marketing": "Mjete dhe burime falas për marketing",
+        "network": "Bashkohuni me një rrjet agjencish të nivelit të lartë"
+      }
+    }
+  },
+  "AgencyLogin": {
+    "title": "Hyrja e Agjencisë",
+    "subtitle": "Qasuni në panelin tuaj të kontrollit dhe menaxhoni pronat tuaja",
+    "form": {
+      "email": "Adresa e Emailit",
+      "emailPlaceholder": "Shkruani emailin tuaj të biznesit",
+      "password": "Fjalëkalimi",
+      "passwordPlaceholder": "Shkruani fjalëkalimin tuaj",
+      "rememberMe": "Më mbaj mend",
+      "forgotPassword": "Keni harruar fjalëkalimin?",
+      "login": "Hyni",
+      "loggingIn": "Duke hyrë...",
+      "noAccount": "Nuk keni llogari të agjencisë?",
+      "registerNow": "Regjistrohuni tani"
+    },
+    "errors": {
+      "requiredFields": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
+      "invalidCredentials": "Email ose fjalëkalim i pavlefshëm",
+      "unknown": "Ndodhi një gabim i papritur"
+    },
+    "benefits": {
+      "title": "Përfitimet e Portalit të Agjencisë",
+      "items": {
+        "dashboard": "Qasje në panelin tuaj të personalizuar",
+        "listings": "Menaxhoni të gjitha listat tuaja të pronave",
+        "analytics": "Shikoni analiza të detajuara të performancës",
+        "leads": "Gjurmoni dhe menaxhoni klientët potencialë",
+        "support": "Merrni mbështetje prioritare për klientët"
+      }
+    }
+  },
+  "PostProperty": {
+    "title": "Posto pronën",
+    "subtitle": "Plotësoni detajet për të listuar pronën tuaj",
+    "steps": {
+      "details": "Detajet",
+      "media": "Media",
+      "publish": "Publiko"
+    },
+    "contactInfo": {
+      "title": "Informacioni i kontaktit",
+      "fullName": "Emri i plotë",
+      "fullNamePlaceholder": "Shkruani emrin tuaj të plotë",
+      "email": "Adresa e emailit",
+      "emailPlaceholder": "Shkruani adresën tuaj të emailit",
+      "phone": "Numri i telefonit",
+      "phonePlaceholder": "Shkruani numrin tuaj të telefonit"
+    },
+    "propertyDetails": {
+      "title": "Detajet e pronës",
+      "listingTitle": "Titulli",
+      "listingTitlePlaceholder": "p.sh. Apartament i rehatshëm në Qendër",
+      "propertyType": "Lloji i pronës",
+      "types": {
+        "apartment": "Apartament",
+        "house": "Shtëpi",
+        "office": "Zyrë",
+        "land": "Tokë"
+      },
+      "listingType": "Lloji i listimit",
+      "listingTypes": {
+        "rent": "Me qira",
+        "buy": "Për shitje"
+      },
+      "price": "Çmimi",
+      "pricePlaceholder": "Çmimi (€)",
+      "size": "Sipërfaqja",
+      "sizePlaceholder": "Sipërfaqja (m²)",
+      "condition": "Gjendja",
+      "conditions": {
+        "new": "E re",
+        "renovated": "E rinovuar",
+        "needsRenovation": "Ka nevojë për rinovim"
+      },
+      "floor": "Kati",
+      "floorPlaceholder": "Numri i katit",
+      "totalFloors": "Totali i kateve",
+      "totalFloorsPlaceholder": "Numri total i kateve",
+      "rooms": "Dhomat",
+      "roomsPlaceholder": "Numri i dhomave",
+      "bathrooms": "Banjot",
+      "bathroomsPlaceholder": "Numri i banjove"
+    },
+    "location": {
+      "title": "Vendndodhja",
+      "city": "Qyteti",
+      "cities": {
+        "skopje": "Shkup",
+        "bitola": "Manastir",
+        "kumanovo": "Kumanovë",
+        "ohrid": "Ohër",
+        "tetovo": "Tetovë"
+      },
+      "address": "Adresa",
+      "addressPlaceholder": "Shkruani adresën e pronës"
+    },
+    "amenities": {
+      "title": "Pajisjet",
+      "balcony": "Ballkon",
+      "heating": "Ngrohje",
+      "airConditioning": "Kondicionim",
+      "furnished": "I mobiluar",
+      "elevator": "Ashensor",
+      "parking": "Parking"
+    },
+    "description": {
+      "title": "Përshkrimi",
+      "placeholder": "Përshkruani pronën tuaj në detaje..."
+    },
+    "media": {
+      "title": "Fotografitë",
+      "subtitle": "Shtoni fotografi të pronës suaj",
+      "dragDrop": "Tërhiqni dhe lëshoni fotografi këtu ose klikoni për të ngarkuar",
+      "maxSize": "Madhësia maksimale e skedarit: 5MB",
+      "formats": "Formatet e mbështetura: JPG, PNG"
+    },
+    "buttons": {
+      "back": "Prapa",
+      "next": "Tjetër",
+      "publish": "Publiko listimin"
+    },
+    "errors": {
+      "required": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
+      "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
+      "invalidPhone": "Ju lutemi shkruani një numër telefoni të vlefshëm",
+      "uploadFailed": "Ngarkimi i fotografive dështoi",
+      "maxPhotos": "Lejohen maksimum 10 fotografi",
+      "minPhotos": "Ju lutemi shtoni të paktën një fotografi"
     }
   }
 }
