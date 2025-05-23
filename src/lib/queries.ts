@@ -152,3 +152,55 @@ export const GET_ROOMMATES = gql`
     }
   }
 `;
+
+export const CREATE_ROOMMATE = gql`
+  mutation CreateRoommate($input: CreateRoommateInput!) {
+    createRoommate(input: $input) {
+      id
+      name
+      age
+      email
+      phone
+      profileImage
+      occupation
+      gender
+      isOnline
+      isVerified
+      description
+      city {
+        id
+        name_en
+        name_mk
+        name_sq
+      }
+      municipality {
+        id
+        name_en
+        name_mk
+        name_sq
+      }
+      isLocationFlexible
+      budgetMin
+      budgetMax
+      currency
+      housingType
+      preferredRoomType
+      moveInDate
+      smokingPolicy
+      petPolicy
+      guestPolicy
+      cleanlinessLevel
+      noiseLevel
+      isStudent
+      isProfessional
+      workFromHome
+      hasOwnFurniture
+      interests
+      languages
+      preferredContact
+      availableForCall
+      createdAt
+      expiresAt
+    }
+  }
+`;

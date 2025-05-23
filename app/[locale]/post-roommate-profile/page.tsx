@@ -1,26 +1,219 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FiArrowLeft, FiUpload, FiCheck, FiInfo } from "react-icons/fi";
 import { IoPersonOutline } from "react-icons/io5";
+import { useMutation, useQuery } from "@apollo/client";
+import { useRouter } from "next/navigation";
 import Menu from "@/components/Menu/page";
 import Link from "next/link";
 import Footer from "@/components/Footer/page";
+import { CREATE_ROOMMATE, GET_ALL_CITIES, GET_MUNICIPALITIES_BY_CITY_NAME } from "@/lib/queries";
+
+// Form data interface matching the database schema
+interface RoommateFormData {
+  name: string;
+  age: number;
+  email: string;
+  phone: string;
+  profileImage: string;
+  occupation: string;
+  gender: string;
+  description: string;
+  
+  // Location
+  cityId: string;
+  municipalityId: string;
+  isLocationFlexible: boolean;
+  
+  // Budget and housing
+  budgetMin: number;
+  budgetMax: number;
+  currency: string;
+  housingType: string;
+  preferredRoomType: string;
+  moveInDate: string;
+  
+  // Lifestyle
+  smokingPolicy: string;
+  petPolicy: string;
+  guestPolicy: string;
+  cleanlinessLevel: string;
+  noiseLevel: string;
+  
+  // Personal
+  isStudent: boolean;
+  isProfessional: boolean;
+  workFromHome: boolean;
+  hasOwnFurniture: boolean;
+  
+  // Arrays
+  interests: string[];
+  languages: string[];
+  
+  // Contact
+  preferredContact: string;
+  availableForCall: string;
+}
 
 export default function PostRoommateProfilePage() {
-  const [profilePicture, setProfilePicture] = useState(null);
+  const router = useRouter();
   const [formStep, setFormStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [selectedCity, setSelectedCity] = useState("");
+  
+  // Initial form data
+  const [formData, setFormData] = useState<RoommateFormData>({
+    name: "",
+    age: 18,
+    email: "",
+    phone: "",
+    profileImage: "",
+    occupation: "",
+    gender: "PREFER_NOT_TO_SAY",
+    description: "",
+    
+    // Location
+    cityId: "",
+    municipalityId: "",
+    isLocationFlexible: false,
+    
+    // Budget and housing
+    budgetMin: 0,
+    budgetMax: 0,
+    currency: "EUR",
+    housingType: "ROOM_IN_SHARED_APARTMENT",
+    preferredRoomType: "PRIVATE_ROOM",
+    moveInDate: "",
+    
+    // Lifestyle
+    smokingPolicy: "NO_PREFERENCE",
+    petPolicy: "NO_PREFERENCE",
+    guestPolicy: "OCCASIONALLY",
+    cleanlinessLevel: "AVERAGE",
+    noiseLevel: "MODERATE",
+    
+    // Personal
+    isStudent: false,
+    isProfessional: false,
+    workFromHome: false,
+    hasOwnFurniture: false,
+    
+    // Arrays
+    interests: [],
+    languages: [],
+    
+    // Contact
+    preferredContact: "EMAIL",
+    availableForCall: "",
+  });
 
-  const handleImageUpload = (e) => {
-    // This would normally handle file upload
-    setProfilePicture("/profile-placeholder.png");
+  // GraphQL queries and mutations
+  const { data: citiesData } = useQuery(GET_ALL_CITIES);
+  const { data: municipalitiesData } = useQuery(GET_MUNICIPALITIES_BY_CITY_NAME, {
+    variables: { name: selectedCity },
+    skip: !selectedCity,
+  });
+  
+  const [createRoommate] = useMutation(CREATE_ROOMMATE);
+
+  // Update selected city when city changes
+  useEffect(() => {
+    if (formData.cityId && citiesData?.city) {
+      const city = citiesData.city.find((c: any) => c.id === formData.cityId);
+      if (city) {
+        setSelectedCity(city.name_en);
+      }
+    }
+  }, [formData.cityId, citiesData]);
+
+  // Handle input changes
+  const handleInputChange = (field: string, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
-  const handleSubmit = (e) => {
+  // Handle array field changes (interests, languages)
+  const handleArrayChange = (field: 'interests' | 'languages', value: string) => {
+    const values = value.split(',').map(v => v.trim()).filter(v => v);
+    setFormData(prev => ({
+      ...prev,
+      [field]: values
+    }));
+  };
+
+  // Handle image upload
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // In a real app, you'd upload to a storage service
+      // For now, we'll just use a placeholder
+      handleInputChange('profileImage', '/default-avatar.jpg');
+    }
+  };
+
+  // Validate form
+  const validateForm = () => {
+    const required = ['name', 'age', 'email', 'cityId', 'gender', 'currency', 'housingType', 'preferredRoomType', 'smokingPolicy', 'petPolicy', 'guestPolicy', 'cleanlinessLevel', 'noiseLevel', 'preferredContact'];
+    
+    for (const field of required) {
+      if (!formData[field as keyof RoommateFormData]) {
+        alert(`Please fill in the ${field} field`);
+        return false;
+      }
+    }
+    
+    if (formData.age < 18 || formData.age > 99) {
+      alert('Age must be between 18 and 99');
+      return false;
+    }
+    
+    if (formData.budgetMin < 0 || formData.budgetMax < 0) {
+      alert('Budget values must be positive');
+      return false;
+    }
+    
+    if (formData.budgetMin > formData.budgetMax && formData.budgetMax > 0) {
+      alert('Minimum budget cannot be higher than maximum budget');
+      return false;
+    }
+    
+    return true;
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    setFormStep(2);
+    
+    if (!validateForm()) return;
+    
+    setLoading(true);
+    
+    try {
+      // Set expiration date to 30 days from now
+      const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+      
+      const result = await createRoommate({
+        variables: {
+          input: {
+            ...formData,
+            expiresAt,
+          }
+        }
+      });
+
+      if (result.data?.createRoommate) {
+        setFormStep(2); // Show success step
+      }
+    } catch (error) {
+      console.error('Error creating roommate profile:', error);
+      alert('Failed to create profile. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -34,7 +227,7 @@ export default function PostRoommateProfilePage() {
           </BackLink>
           <PageTitle>Create Your Roommate Profile</PageTitle>
           <PageSubtitle>
-            Share details about yourself to find the perfect match
+            Share details about yourself to find the perfect roommate match
           </PageSubtitle>
         </HeaderContent>
       </PageHeader>
@@ -42,11 +235,12 @@ export default function PostRoommateProfilePage() {
       <Main>
         {formStep === 1 ? (
           <FormContainer onSubmit={handleSubmit}>
+            {/* Profile Picture */}
             <FormSection>
               <SectionTitle>Profile Picture</SectionTitle>
               <ProfileUploadArea>
-                {profilePicture ? (
-                  <ProfilePreview src={profilePicture} alt="Profile Preview" />
+                {formData.profileImage ? (
+                  <ProfilePreview src={formData.profileImage} alt="Profile Preview" />
                 ) : (
                   <UploadPlaceholder>
                     <IoPersonOutline size={40} />
@@ -64,169 +258,408 @@ export default function PostRoommateProfilePage() {
               </ProfileUploadArea>
             </FormSection>
 
+            {/* Personal Information */}
             <FormSection>
               <SectionTitle>Personal Information</SectionTitle>
               <FormRow>
                 <FormGroup>
-                  <Label>First Name *</Label>
-                  <Input type="text" required />
+                  <Label>Full Name *</Label>
+                  <Input 
+                    type="text" 
+                    value={formData.name}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
+                    required 
+                  />
                 </FormGroup>
                 <FormGroup>
                   <Label>Age *</Label>
-                  <Input type="number" min="18" max="99" required />
+                  <Input 
+                    type="number" 
+                    min="18" 
+                    max="99" 
+                    value={formData.age}
+                    onChange={(e) => handleInputChange('age', parseInt(e.target.value))}
+                    required 
+                  />
                 </FormGroup>
               </FormRow>
-              <FormGroup>
-                <Label>Occupation *</Label>
-                <Input
-                  type="text"
-                  placeholder="Student, Professional, etc."
-                  required
-                />
-              </FormGroup>
+              
+              <FormRow>
+                <FormGroup>
+                  <Label>Gender *</Label>
+                  <Select 
+                    value={formData.gender}
+                    onChange={(e) => handleInputChange('gender', e.target.value)}
+                    required
+                  >
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="NON_BINARY">Non-binary</option>
+                    <option value="PREFER_NOT_TO_SAY">Prefer not to say</option>
+                  </Select>
+                </FormGroup>
+                <FormGroup>
+                  <Label>Occupation</Label>
+                  <Input 
+                    type="text" 
+                    placeholder="Student, Professional, etc."
+                    value={formData.occupation}
+                    onChange={(e) => handleInputChange('occupation', e.target.value)}
+                  />
+                </FormGroup>
+              </FormRow>
+              
               <FormGroup>
                 <Label>About Me *</Label>
                 <Textarea
-                  placeholder="Describe yourself, your lifestyle, and what you're looking for in a roommate or living arrangement..."
+                  placeholder="Describe yourself, your lifestyle, and what you're looking for in a roommate..."
                   rows={4}
+                  value={formData.description}
+                  onChange={(e) => handleInputChange('description', e.target.value)}
                   required
                 />
               </FormGroup>
             </FormSection>
 
+            {/* Location Preferences */}
             <FormSection>
-              <SectionTitle>Housing Preferences</SectionTitle>
+              <SectionTitle>Location Preferences</SectionTitle>
               <FormRow>
                 <FormGroup>
-                  <Label>I'm Looking For *</Label>
-                  <Select required>
-                    <option value="">Select an option</option>
-                    <option>Room in shared apartment</option>
-                    <option>Entire apartment with roommate</option>
-                    <option>Either option works for me</option>
+                  <Label>City *</Label>
+                  <Select 
+                    value={formData.cityId}
+                    onChange={(e) => handleInputChange('cityId', e.target.value)}
+                    required
+                  >
+                    <option value="">Select a city</option>
+                    {citiesData?.city?.map((city: any) => (
+                      <option key={city.id} value={city.id}>
+                        {city.name_en}
+                      </option>
+                    ))}
                   </Select>
                 </FormGroup>
                 <FormGroup>
-                  <Label>Budget Range (€/month) *</Label>
-                  <FormRow>
-                    <Input type="number" placeholder="Min" required />
-                    <Input type="number" placeholder="Max" required />
-                  </FormRow>
+                  <Label>Municipality</Label>
+                  <Select 
+                    value={formData.municipalityId}
+                    onChange={(e) => handleInputChange('municipalityId', e.target.value)}
+                    disabled={!selectedCity}
+                  >
+                    <option value="">Any municipality</option>
+                    {municipalitiesData?.municipalitiesByCityName?.map((municipality: any) => (
+                      <option key={municipality.id} value={municipality.id}>
+                        {municipality.name_en}
+                      </option>
+                    ))}
+                  </Select>
                 </FormGroup>
               </FormRow>
+              
+              <CheckboxGroup>
+                <CheckboxItem>
+                  <Checkbox
+                    type="checkbox"
+                    id="isLocationFlexible"
+                    checked={formData.isLocationFlexible}
+                    onChange={(e) => handleInputChange('isLocationFlexible', e.target.checked)}
+                  />
+                  <CheckboxLabel htmlFor="isLocationFlexible">I'm flexible with location</CheckboxLabel>
+                </CheckboxItem>
+              </CheckboxGroup>
+            </FormSection>
+
+            {/* Housing & Budget Preferences */}
+            <FormSection>
+              <SectionTitle>Housing & Budget Preferences</SectionTitle>
               <FormRow>
                 <FormGroup>
-                  <Label>Preferred Areas *</Label>
-                  <Select required>
-                    <option value="">Select area</option>
-                    <option>City Center</option>
-                    <option>Karpoš</option>
-                    <option>Aerodrom</option>
-                    <option>Gazi Baba</option>
-                    <option>Any area is fine</option>
+                  <Label>Housing Type *</Label>
+                  <Select 
+                    value={formData.housingType}
+                    onChange={(e) => handleInputChange('housingType', e.target.value)}
+                    required
+                  >
+                    <option value="ROOM_IN_SHARED_APARTMENT">Room in shared apartment</option>
+                    <option value="ENTIRE_APARTMENT_SHARED">Entire apartment with roommate</option>
+                    <option value="STUDIO_SHARED">Shared studio</option>
+                    <option value="HOUSE_SHARED">Shared house</option>
+                    <option value="ANY">Any housing type</option>
                   </Select>
                 </FormGroup>
                 <FormGroup>
-                  <Label>Move-in Date *</Label>
-                  <Input type="date" required />
+                  <Label>Preferred Room Type *</Label>
+                  <Select 
+                    value={formData.preferredRoomType}
+                    onChange={(e) => handleInputChange('preferredRoomType', e.target.value)}
+                    required
+                  >
+                    <option value="PRIVATE_ROOM">Private room</option>
+                    <option value="SHARED_ROOM">Shared room</option>
+                    <option value="MASTER_BEDROOM">Master bedroom</option>
+                    <option value="ANY">Any room type</option>
+                  </Select>
+                </FormGroup>
+              </FormRow>
+              
+              <FormRow>
+                <FormGroup>
+                  <Label>Budget Range *</Label>
+                  <BudgetRow>
+                    <BudgetInput
+                      type="number"
+                      placeholder="Min"
+                      value={formData.budgetMin || ''}
+                      onChange={(e) => handleInputChange('budgetMin', parseFloat(e.target.value) || 0)}
+                    />
+                    <BudgetSeparator>-</BudgetSeparator>
+                    <BudgetInput
+                      type="number"
+                      placeholder="Max"
+                      value={formData.budgetMax || ''}
+                      onChange={(e) => handleInputChange('budgetMax', parseFloat(e.target.value) || 0)}
+                    />
+                    <Select 
+                      value={formData.currency}
+                      onChange={(e) => handleInputChange('currency', e.target.value)}
+                      style={{ width: '100px', marginLeft: '0.5rem' }}
+                    >
+                      <option value="EUR">EUR</option>
+                      <option value="MKD">MKD</option>
+                      <option value="USD">USD</option>
+                    </Select>
+                  </BudgetRow>
+                </FormGroup>
+                <FormGroup>
+                  <Label>Move-in Date</Label>
+                  <Input 
+                    type="date" 
+                    value={formData.moveInDate}
+                    onChange={(e) => handleInputChange('moveInDate', e.target.value)}
+                  />
                 </FormGroup>
               </FormRow>
             </FormSection>
 
+            {/* Lifestyle Preferences */}
             <FormSection>
-              <SectionTitle>Lifestyle</SectionTitle>
+              <SectionTitle>Lifestyle Preferences</SectionTitle>
               <FormRow>
                 <FormGroup>
-                  <Label>I am a</Label>
-                  <Select>
-                    <option>Non-smoker</option>
-                    <option>Smoker (outdoors only)</option>
-                    <option>Smoker</option>
+                  <Label>Smoking Policy *</Label>
+                  <Select 
+                    value={formData.smokingPolicy}
+                    onChange={(e) => handleInputChange('smokingPolicy', e.target.value)}
+                    required
+                  >
+                    <option value="NON_SMOKER">Non-smoker</option>
+                    <option value="SMOKER_OK">Smoker OK</option>
+                    <option value="OUTDOOR_SMOKING_ONLY">Outdoor smoking only</option>
+                    <option value="NO_PREFERENCE">No preference</option>
                   </Select>
                 </FormGroup>
                 <FormGroup>
-                  <Label>Pets</Label>
-                  <Select>
-                    <option>No pets</option>
-                    <option>I have pets</option>
-                    <option>I'm pet friendly</option>
+                  <Label>Pet Policy *</Label>
+                  <Select 
+                    value={formData.petPolicy}
+                    onChange={(e) => handleInputChange('petPolicy', e.target.value)}
+                    required
+                  >
+                    <option value="NO_PETS">No pets</option>
+                    <option value="CATS_OK">Cats OK</option>
+                    <option value="DOGS_OK">Dogs OK</option>
+                    <option value="ALL_PETS_OK">All pets OK</option>
+                    <option value="NO_PREFERENCE">No preference</option>
                   </Select>
                 </FormGroup>
               </FormRow>
-              <Label>Lifestyle Habits</Label>
-              <CheckboxGrid>
-                <CheckboxLabel>
-                  <input type="checkbox" />
-                  <span>Early riser</span>
-                </CheckboxLabel>
-                <CheckboxLabel>
-                  <input type="checkbox" />
-                  <span>Night owl</span>
-                </CheckboxLabel>
-                <CheckboxLabel>
-                  <input type="checkbox" />
-                  <span>Work from home</span>
-                </CheckboxLabel>
-                <CheckboxLabel>
-                  <input type="checkbox" />
-                  <span>Frequently out</span>
-                </CheckboxLabel>
-                <CheckboxLabel>
-                  <input type="checkbox" />
-                  <span>Enjoy cooking</span>
-                </CheckboxLabel>
-                <CheckboxLabel>
-                  <input type="checkbox" />
-                  <span>Regular guests</span>
-                </CheckboxLabel>
-                <CheckboxLabel>
-                  <input type="checkbox" />
-                  <span>Quiet/private</span>
-                </CheckboxLabel>
-                <CheckboxLabel>
-                  <input type="checkbox" />
-                  <span>Social/outgoing</span>
-                </CheckboxLabel>
-              </CheckboxGrid>
+              
+              <FormRow>
+                <FormGroup>
+                  <Label>Guest Policy *</Label>
+                  <Select 
+                    value={formData.guestPolicy}
+                    onChange={(e) => handleInputChange('guestPolicy', e.target.value)}
+                    required
+                  >
+                    <option value="NO_GUESTS">No guests</option>
+                    <option value="OCCASIONALLY">Occasionally</option>
+                    <option value="FREQUENTLY">Frequently</option>
+                    <option value="ANYTIME">Anytime</option>
+                  </Select>
+                </FormGroup>
+                <FormGroup>
+                  <Label>Cleanliness Level *</Label>
+                  <Select 
+                    value={formData.cleanlinessLevel}
+                    onChange={(e) => handleInputChange('cleanlinessLevel', e.target.value)}
+                    required
+                  >
+                    <option value="VERY_CLEAN">Very clean</option>
+                    <option value="CLEAN">Clean</option>
+                    <option value="AVERAGE">Average</option>
+                    <option value="RELAXED">Relaxed</option>
+                  </Select>
+                </FormGroup>
+              </FormRow>
+              
+              <FormGroup>
+                <Label>Noise Level *</Label>
+                <Select 
+                  value={formData.noiseLevel}
+                  onChange={(e) => handleInputChange('noiseLevel', e.target.value)}
+                  required
+                >
+                  <option value="VERY_QUIET">Very quiet</option>
+                  <option value="QUIET">Quiet</option>
+                  <option value="MODERATE">Moderate</option>
+                  <option value="LIVELY">Lively</option>
+                </Select>
+              </FormGroup>
             </FormSection>
 
+            {/* Personal Details */}
+            <FormSection>
+              <SectionTitle>Personal Details</SectionTitle>
+              <CheckboxGroup>
+                <CheckboxItem>
+                  <Checkbox
+                    type="checkbox"
+                    id="isStudent"
+                    checked={formData.isStudent}
+                    onChange={(e) => handleInputChange('isStudent', e.target.checked)}
+                  />
+                  <CheckboxLabel htmlFor="isStudent">I am a student</CheckboxLabel>
+                </CheckboxItem>
+                
+                <CheckboxItem>
+                  <Checkbox
+                    type="checkbox"
+                    id="isProfessional"
+                    checked={formData.isProfessional}
+                    onChange={(e) => handleInputChange('isProfessional', e.target.checked)}
+                  />
+                  <CheckboxLabel htmlFor="isProfessional">I am a working professional</CheckboxLabel>
+                </CheckboxItem>
+                
+                <CheckboxItem>
+                  <Checkbox
+                    type="checkbox"
+                    id="workFromHome"
+                    checked={formData.workFromHome}
+                    onChange={(e) => handleInputChange('workFromHome', e.target.checked)}
+                  />
+                  <CheckboxLabel htmlFor="workFromHome">I work from home</CheckboxLabel>
+                </CheckboxItem>
+                
+                <CheckboxItem>
+                  <Checkbox
+                    type="checkbox"
+                    id="hasOwnFurniture"
+                    checked={formData.hasOwnFurniture}
+                    onChange={(e) => handleInputChange('hasOwnFurniture', e.target.checked)}
+                  />
+                  <CheckboxLabel htmlFor="hasOwnFurniture">I have my own furniture</CheckboxLabel>
+                </CheckboxItem>
+              </CheckboxGroup>
+              
+              <FormRow>
+                <FormGroup>
+                  <Label>Interests</Label>
+                  <Input 
+                    type="text" 
+                    placeholder="e.g., cooking, reading, sports (separate with commas)"
+                    value={formData.interests.join(', ')}
+                    onChange={(e) => handleArrayChange('interests', e.target.value)}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label>Languages</Label>
+                  <Input 
+                    type="text" 
+                    placeholder="e.g., English, Macedonian, Albanian (separate with commas)"
+                    value={formData.languages.join(', ')}
+                    onChange={(e) => handleArrayChange('languages', e.target.value)}
+                  />
+                </FormGroup>
+              </FormRow>
+            </FormSection>
+
+            {/* Contact Information */}
             <FormSection>
               <SectionTitle>Contact Information</SectionTitle>
               <FormRow>
                 <FormGroup>
                   <Label>Email *</Label>
-                  <Input type="email" required />
+                  <Input 
+                    type="email" 
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    required 
+                  />
                 </FormGroup>
                 <FormGroup>
-                  <Label>Phone Number *</Label>
-                  <Input type="tel" required />
+                  <Label>Phone Number</Label>
+                  <Input 
+                    type="tel" 
+                    value={formData.phone}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                  />
                 </FormGroup>
               </FormRow>
-              <FormGroup>
-                <PrivacyNote>
-                  <FiInfo />
-                  <span>
-                    Your contact details will only be visible to verified
-                    property owners/agents
-                  </span>
-                </PrivacyNote>
-              </FormGroup>
+              
+              <FormRow>
+                <FormGroup>
+                  <Label>Preferred Contact Method *</Label>
+                  <Select 
+                    value={formData.preferredContact}
+                    onChange={(e) => handleInputChange('preferredContact', e.target.value)}
+                    required
+                  >
+                    <option value="EMAIL">Email</option>
+                    <option value="PHONE">Phone</option>
+                    <option value="WHATSAPP">WhatsApp</option>
+                    <option value="TELEGRAM">Telegram</option>
+                  </Select>
+                </FormGroup>
+                <FormGroup>
+                  <Label>Available for calls</Label>
+                  <Input 
+                    type="text" 
+                    placeholder="e.g., 9 AM - 6 PM weekdays"
+                    value={formData.availableForCall}
+                    onChange={(e) => handleInputChange('availableForCall', e.target.value)}
+                  />
+                </FormGroup>
+              </FormRow>
+              
+              <PrivacyNote>
+                <FiInfo />
+                <span>
+                  Your contact details will only be visible to other verified users looking for roommates
+                </span>
+              </PrivacyNote>
             </FormSection>
 
-            <SubmitButton type="submit">Post My Roommate Profile</SubmitButton>
+            <SubmitButton type="submit" disabled={loading}>
+              {loading ? 'Creating Profile...' : 'Post My Roommate Profile'}
+            </SubmitButton>
           </FormContainer>
         ) : (
           <SuccessContainer>
             <SuccessIcon>
               <FiCheck size={50} />
             </SuccessIcon>
-            <SuccessTitle>Your profile has been posted!</SuccessTitle>
+            <SuccessTitle>Your roommate profile has been posted!</SuccessTitle>
             <SuccessMessage>
-              Your roommate profile is now live. Property owners and agents
-              looking for tenants can now contact you.
+              Your roommate profile is now live and visible to other users. 
+              People looking for roommates can now contact you based on your preferences.
             </SuccessMessage>
             <ButtonGroup>
-              <ViewProfileButton>View My Profile</ViewProfileButton>
+              <ViewProfileButton onClick={() => router.push('/find-roommate')}>
+                View All Roommates
+              </ViewProfileButton>
               <BackToListingButton href="/find-roommate">
                 Back to Roommate Finder
               </BackToListingButton>
@@ -390,6 +823,11 @@ const Input = styled.input`
     border-color: #6e8efb;
     box-shadow: 0 0 0 2px rgba(110, 142, 251, 0.2);
   }
+  
+  &:disabled {
+    background: #f5f5f5;
+    cursor: not-allowed;
+  }
 `;
 
 const Textarea = styled.textarea`
@@ -417,22 +855,59 @@ const Select = styled.select`
     border-color: #6e8efb;
     box-shadow: 0 0 0 2px rgba(110, 142, 251, 0.2);
   }
+  
+  &:disabled {
+    background: #f5f5f5;
+    cursor: not-allowed;
+  }
 `;
 
-const CheckboxGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-`;
-
-const CheckboxLabel = styled.label`
+const BudgetRow = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.9rem;
-  color: #444;
-  padding: 0.3rem 0;
+`;
+
+const BudgetInput = styled(Input)`
+  margin-bottom: 0;
+  flex: 1;
+`;
+
+const BudgetSeparator = styled.span`
+  color: #6b7280;
+  font-weight: 500;
+`;
+
+const CheckboxGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const CheckboxItem = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #f4f5f7;
+  }
+`;
+
+const Checkbox = styled.input`
+  margin-right: 8px;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: #6e8efb;
+`;
+
+const CheckboxLabel = styled.label`
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
 `;
 
 const PrivacyNote = styled.div`
@@ -445,6 +920,7 @@ const PrivacyNote = styled.div`
   padding: 0.7rem;
   border-radius: 8px;
   border-left: 3px solid #6e8efb;
+  margin-top: 1rem;
 `;
 
 const SubmitButton = styled.button`
@@ -452,61 +928,56 @@ const SubmitButton = styled.button`
   color: white;
   font-weight: 600;
   font-size: 1rem;
-  padding: 0.8rem 1.5rem;
+  padding: 1rem 2rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(110, 142, 251, 0.3);
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: #5a7de5;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(110, 142, 251, 0.4);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
   }
 `;
 
 const SuccessContainer = styled.div`
+  text-align: center;
+  padding: 3rem;
   background: white;
   border-radius: 12px;
-  padding: 3rem 2rem;
-  text-align: center;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
 `;
 
 const SuccessIcon = styled.div`
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: #e6f7ef;
-  color: #47c479;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #10b981;
+  margin-bottom: 1rem;
 `;
 
 const SuccessTitle = styled.h2`
-  font-size: 1.7rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
   color: #333;
 `;
 
 const SuccessMessage = styled.p`
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #666;
-  max-width: 500px;
-  margin: 0 auto;
+  margin-bottom: 2rem;
+  line-height: 1.5;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
   gap: 1rem;
-  margin-top: 1rem;
-
+  justify-content: center;
+  
   @media (max-width: 600px) {
     flex-direction: column;
   }
@@ -528,7 +999,7 @@ const ViewProfileButton = styled.button`
 `;
 
 const BackToListingButton = styled(Link)`
-  background: white;
+  background: transparent;
   color: #6e8efb;
   font-weight: 500;
   padding: 0.8rem 1.5rem;
@@ -536,8 +1007,12 @@ const BackToListingButton = styled(Link)`
   border-radius: 8px;
   text-decoration: none;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
-    background: #f0f4ff;
+    background: #6e8efb;
+    color: white;
   }
 `;
