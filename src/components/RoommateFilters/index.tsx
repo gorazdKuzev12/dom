@@ -35,7 +35,9 @@ export default function RoommateFilters({ cities }: RoommateFiltersProps) {
       params.delete(key);
     }
     
-    router.push(`${pathname}?${params.toString()}`);
+    router.replace(`${pathname}?${params.toString()}`, {
+      scroll: false
+    });
   };
 
   // Helper function to toggle boolean params
@@ -47,7 +49,9 @@ export default function RoommateFilters({ cities }: RoommateFiltersProps) {
 
   // Clear all filters
   const clearAllFilters = () => {
-    router.push(pathname);
+    router.replace(pathname, {
+      scroll: false
+    });
   };
 
   return (

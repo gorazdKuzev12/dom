@@ -133,11 +133,16 @@ const FooterContent = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 2rem;
+  text-align: center;
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    gap: 2rem;
     padding: 0 1rem;
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
@@ -145,6 +150,7 @@ const FooterSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  align-items: center;
 `;
 
 const SectionTitle = styled.h3`
@@ -152,12 +158,14 @@ const SectionTitle = styled.h3`
   font-weight: 600;
   color: white;
   margin: 0;
+  text-align: center;
 `;
 
 const ContactInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  align-items: center;
 `;
 
 const ContactItem = styled.div`
@@ -166,6 +174,7 @@ const ContactItem = styled.div`
   gap: 0.6rem;
   color: rgba(255, 255, 255, 0.8);
   font-size: 0.85rem;
+  justify-content: center;
 
   svg {
     color: #4fd1c5;
@@ -176,6 +185,7 @@ const SocialLinks = styled.div`
   display: flex;
   gap: 0.8rem;
   margin-top: 0.5rem;
+  justify-content: center;
 `;
 
 const SocialButton = styled.a`
@@ -199,6 +209,7 @@ const LinkList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  align-items: center;
 `;
 
 const LinkItem = styled.div`
@@ -207,6 +218,7 @@ const LinkItem = styled.div`
   gap: 0.4rem;
   color: rgba(255, 255, 255, 0.8);
   transition: all 0.2s ease;
+  justify-content: center;
 
   svg {
     color: #4fd1c5;
@@ -220,7 +232,7 @@ const LinkItem = styled.div`
 
   &:hover {
     color: white;
-    transform: translateX(4px);
+    transform: translateY(-2px);
   }
 `;
 
@@ -229,25 +241,29 @@ const FooterBottom = styled.div`
   padding: 1rem 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   color: rgba(255, 255, 255, 0.8);
   font-size: 0.8rem;
+  text-align: center;
+  flex-direction: column;
+  gap: 0.5rem;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 0.5rem;
-    text-align: center;
-    padding: 1rem;
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
   }
 `;
 
-const Copyright = styled.div``;
+const Copyright = styled.div`
+  text-align: center;
+`;
 
 const MadeWith = styled.div`
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  justify-content: center;
 
   svg {
     color: #ff6b6b;
