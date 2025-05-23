@@ -17,21 +17,20 @@ export const Wrapper = styled.div`
   position: relative;
   overflow: hidden;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url("/so.png") center center / cover no-repeat;
-    mix-blend-mode: overlay;
-  }
-
   /* reserve space for the fixed TopBar on small screens */
   @media (max-width: 768px) {
     padding-top: var(--space-2xl);
   }
+`;
+
+export const BackgroundVideo = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
 `;
 
 export const ContentWrapper = styled.div`
@@ -40,6 +39,7 @@ export const ContentWrapper = styled.div`
   max-width: 1280px;
   margin: 0 auto;
   padding: var(--space-xl);
+  z-index: 1;
   
   @media (max-width: 768px) {
     padding: var(--space-lg);
@@ -59,8 +59,9 @@ export const SearchBar = styled.div`
   /* Tablet↓ */
   @media (max-width: 768px) {
     flex-direction: column;
-    padding: 1.2rem;
+    padding: 3rem;
     width: 100%;
+    border-radius: 0px;
   }
 `;
 export const TopLink = styled.a`
@@ -130,6 +131,7 @@ export const Overlay = styled.div`
   /* keep it nicely contained on phones */
   width: calc(100% - 2rem);
   max-width: 400px;
+  z-index: 2;
 
   /* Mobile specific adjustments */
   @media (max-width: 480px) {
@@ -373,6 +375,7 @@ export const TopBar = styled.div`
   padding: 0.4rem 1.2rem;
   border-radius: 12px;
   min-width: 320px;
+  z-index: 3;
 
   /* phones & tablets */
   @media (max-width: 768px) {

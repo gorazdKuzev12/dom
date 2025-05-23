@@ -31,6 +31,7 @@ import {
   TopBar,
   TopLink as BaseTopLink,
   Wrapper,
+  BackgroundVideo,
 } from "@/styles/mainPage/styles";
 import styled from "styled-components";
 
@@ -61,7 +62,7 @@ type StylesBase = Record<string, unknown>;
 // Rename the imported TopLink to avoid naming conflict
 const TopLink = styled(BaseTopLink)`
   font-size: 0.9rem;
-
+      color:rgb(218, 230, 230);
   svg {
     width: 18px;
     height: 18px;
@@ -69,6 +70,7 @@ const TopLink = styled(BaseTopLink)`
 
   @media (max-width: 480px) {
     font-size: 0.85rem;
+    color:black;
   }
 `;
 
@@ -252,6 +254,7 @@ const AgencyDropdownButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
+      color:rgb(218, 230, 230);
 
   &:hover {
     background: rgba(0, 0, 0, 0.041);
@@ -402,6 +405,13 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
 
   return (
     <Wrapper>
+      <BackgroundVideo autoPlay loop muted playsInline>
+        <source src="/luxury1.mp4" type="video/mp4" />
+        <source src="/luxury.webm" type="video/webm" />
+        <source src="/luxury.mov" type="video/quicktime" />
+        Your browser does not support the video tag.
+      </BackgroundVideo>
+      
       <TopBar>
         <LinksDesktop>
           <TopLink href={`/${locale}/post-property`}>
