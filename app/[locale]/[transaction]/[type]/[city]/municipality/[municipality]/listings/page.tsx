@@ -14,9 +14,30 @@ const toAmenityEnum = (detail: string): string => {
     balcony: "BALCONY",
     heating: "HEATING",
     "air-conditioning": "AIR_CONDITIONING",
+    ac: "AIR_CONDITIONING", // Alternative mapping for AC
     furnished: "FURNISHED",
     elevator: "ELEVATOR",
     parking: "PARKING",
+    garden: "GARDEN",
+    "swimming-pool": "SWIMMING_POOL",
+    pool: "SWIMMING_POOL", // Alternative mapping
+    internet: "INTERNET",
+    wifi: "INTERNET", // Alternative mapping
+    laundry: "LAUNDRY",
+    dishwasher: "DISHWASHER",
+    security: "SECURITY",
+    storage: "STORAGE",
+    "pet-friendly": "PET_FRIENDLY",
+    "pet_friendly": "PET_FRIENDLY", // Alternative mapping
+    pets: "PET_FRIENDLY", // Alternative mapping
+    terrace: "TERRACE",
+    fireplace: "FIREPLACE",
+    "cable-tv": "CABLE_TV",
+    "cable_tv": "CABLE_TV", // Alternative mapping
+    tv: "CABLE_TV", // Alternative mapping
+    "washing-machine": "WASHING_MACHINE",
+    "washing_machine": "WASHING_MACHINE", // Alternative mapping
+    washer: "WASHING_MACHINE", // Alternative mapping
   };
   
   return amenityMap[detail.toLowerCase()] || detail.toUpperCase();

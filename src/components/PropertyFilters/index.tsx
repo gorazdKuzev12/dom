@@ -358,14 +358,24 @@ export default function PropertyFilters() {
         <FilterTitle>{t("Filters.features")}</FilterTitle>
         <CheckboxGroup>
           {[
-            { value: "ac", label: t("Filters.airConditioning") },
-            { value: "heating", label: "Heating" },
-            { value: "lift", label: t("Filters.elevator") },
-            { value: "parking", label: t("Filters.parking") },
             { value: "balcony", label: t("Filters.balcony") },
+            { value: "heating", label: t("Filters.heating") },
+            { value: "air-conditioning", label: t("Filters.airConditioning") },
+            { value: "furnished", label: t("Filters.furnished") },
+            { value: "elevator", label: t("Filters.elevator") },
+            { value: "parking", label: t("Filters.parking") },
             { value: "garden", label: t("Filters.garden") },
-            { value: "pool", label: "Swimming pool" },
-            { value: "accessible", label: "Accessible property" }
+            { value: "swimming-pool", label: t("Filters.swimmingPool") },
+            { value: "internet", label: t("Filters.internet") },
+            { value: "laundry", label: t("Filters.laundry") },
+            { value: "dishwasher", label: t("Filters.dishwasher") },
+            { value: "security", label: t("Filters.security") },
+            { value: "storage", label: t("Filters.storage") },
+            { value: "pet-friendly", label: t("Filters.petFriendly") },
+            { value: "terrace", label: t("Filters.terrace") },
+            { value: "fireplace", label: t("Filters.fireplace") },
+            { value: "cable-tv", label: t("Filters.cableTV") },
+            { value: "washing-machine", label: t("Filters.washingMachine") }
           ].map((item) => (
             <CheckboxItem key={`detail-${item.value}`}>
               <Checkbox
