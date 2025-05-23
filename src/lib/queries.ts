@@ -99,3 +99,56 @@ export const CREATE_LISTING = gql`
     }
   }
 `;
+
+export const GET_ROOMMATES = gql`
+  query GetRoommates($filter: RoommateFilterInput) {
+    roommates(filter: $filter) {
+      id
+      name
+      age
+      email
+      phone
+      profileImage
+      occupation
+      gender
+      isOnline
+      isVerified
+      description
+      city {
+        id
+        name_en
+        name_mk
+        name_sq
+      }
+      municipality {
+        id
+        name_en
+        name_mk
+        name_sq
+      }
+      isLocationFlexible
+      budgetMin
+      budgetMax
+      currency
+      housingType
+      preferredRoomType
+      moveInDate
+      smokingPolicy
+      petPolicy
+      guestPolicy
+      cleanlinessLevel
+      noiseLevel
+      isStudent
+      isProfessional
+      workFromHome
+      hasOwnFurniture
+      interests
+      languages
+      preferredContact
+      availableForCall
+      createdAt
+      expiresAt
+      lastSeenAt
+    }
+  }
+`;
