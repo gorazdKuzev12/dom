@@ -27,15 +27,27 @@ export default function PropertyFilters() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Filter states
-  const [listingType, setListingType] = useState<FilterState["listingType"]>("buy");
-  const [sortOption, setSortOption] = useState<FilterState["sortOption"]>("recent");
-  const [propertyType, setPropertyType] = useState<FilterState["propertyType"]>("apartment");
+  // Extract transaction and property type from URL path
+  const getUrlParams = () => {
+    const pathParts = pathname.split('/');
+    // Expected: /[locale]/[transaction]/[type]/[city]/municipality/[municipality]/listings
+    const locale = pathParts[1];
+    const transaction = pathParts[2]; // buy/rent
+    const type = pathParts[3]; // apartments/houses/etc
+    return { locale, transaction, type };
+  };
+
+  const { transaction: urlTransaction, type: urlType } = getUrlParams();
+
+  // Filter states - NO DEFAULT VALUES, extract from URL only
+  const [listingType, setListingType] = useState<FilterState["listingType"]>(urlTransaction || "");
+  const [sortOption, setSortOption] = useState<FilterState["sortOption"]>("");
+  const [propertyType, setPropertyType] = useState<FilterState["propertyType"]>(urlType || "");
   const [priceMin, setPriceMin] = useState<FilterState["priceMin"]>("");
   const [priceMax, setPriceMax] = useState<FilterState["priceMax"]>("");
   const [sizeMin, setSizeMin] = useState<FilterState["sizeMin"]>("");
   const [sizeMax, setSizeMax] = useState<FilterState["sizeMax"]>("");
-  const [bedrooms, setBedrooms] = useState<FilterState["bedrooms"]>(["1"]);
+  const [bedrooms, setBedrooms] = useState<FilterState["bedrooms"]>([]); // No default selection
   const [bathrooms, setBathrooms] = useState<FilterState["bathrooms"]>([]);
   const [condition, setCondition] = useState<FilterState["condition"]>([]);
   const [specificDetails, setSpecificDetails] = useState<FilterState["specificDetails"]>([]);
@@ -58,15 +70,20 @@ export default function PropertyFilters() {
   // Initialize filters from URL on component mount
   useEffect(() => {
     if (searchParams) {
-      setListingType(searchParams.get("listingType") || "buy");
-      setSortOption(searchParams.get("sort") || "recent");
-      setPropertyType(searchParams.get("propertyType") || "apartment");
+      // Only override transaction/type if explicitly set in search params, otherwise keep URL values
+      const searchListingType = searchParams.get("listingType");
+      const searchPropertyType = searchParams.get("propertyType");
+      
+      if (searchListingType) setListingType(searchListingType);
+      if (searchPropertyType) setPropertyType(searchPropertyType);
+      
+      setSortOption(searchParams.get("sort") || "");
       setPriceMin(searchParams.get("priceMin") || "");
       setPriceMax(searchParams.get("priceMax") || "");
       setSizeMin(searchParams.get("sizeMin") || "");
       setSizeMax(searchParams.get("sizeMax") || "");
       setBedrooms(
-        searchParams.get("bedrooms")?.split(",").filter(Boolean) || ["1"]
+        searchParams.get("bedrooms")?.split(",").filter(Boolean) || []
       );
       setBathrooms(
         searchParams.get("bathrooms")?.split(",").filter(Boolean) || []
@@ -80,7 +97,7 @@ export default function PropertyFilters() {
       setFloor(searchParams.get("floor")?.split(",").filter(Boolean) || []);
       setListingDate(searchParams.get("listingDate") || "");
     }
-  }, [searchParams]);
+  }, [searchParams, urlTransaction, urlType]);
 
   // Create a function to construct params object with current state values
   const createParamsWithCurrentState = (updatedValues = {}) => {
@@ -134,22 +151,59 @@ export default function PropertyFilters() {
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  // Handle change for various filter types with immediate application
+  // Handle transaction type change - this should change the URL path
   const handleListingTypeChange = (value: FilterState["listingType"]): void => {
     setListingType(value);
-    applyFilters({ listingType: value });
+    
+    // For transaction type, we need to update the URL path, not just query params
+    const pathParts = pathname.split('/');
+    const locale = pathParts[1];
+    const currentType = pathParts[3];
+    const city = pathParts[4];
+    const municipalityPart = pathParts.slice(5).join('/'); // municipality/[name]/listings if exists
+    
+    const newPath = `/${locale}/${value}/${currentType}/${city}${municipalityPart ? '/' + municipalityPart : ''}`;
+    const params = createParamsWithCurrentState({ listingType: value });
+    router.push(`${newPath}?${params.toString()}`, { scroll: false });
+  };
+
+  // Handle property type change - this should also change the URL path  
+  const handlePropertyTypeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
+    const value = e.target.value;
+    setPropertyType(value);
+    
+    // Map frontend property type to URL-friendly format
+    const propertyTypeMap: Record<string, string> = {
+      "APARTMENT": "apartments",
+      "HOUSE": "homes", 
+      "ROOM": "rooms",
+      "VILLA": "villas",
+      "STUDIO": "studio",
+      "OFFICE": "offices",
+      "GARAGE": "garages",
+      "STORAGE_ROOM": "storage-rooms",
+      "COMMERCIAL": "commercial-properties",
+      "LAND": "land",
+      "BUILDING": "buildings",
+    };
+    
+    const urlPropertyType = propertyTypeMap[value] || value.toLowerCase();
+    
+    const pathParts = pathname.split('/');
+    const locale = pathParts[1];
+    const currentTransaction = pathParts[2];
+    const city = pathParts[4];
+    const municipalityPart = pathParts.slice(5).join('/');
+    
+    const newPath = `/${locale}/${currentTransaction}/${urlPropertyType}/${city}${municipalityPart ? '/' + municipalityPart : ''}`;
+    const params = createParamsWithCurrentState({ propertyType: value });
+    router.push(`${newPath}?${params.toString()}`, { scroll: false });
   };
 
   const handleSortChange = (e: ChangeEvent<HTMLSelectElement>): void => {
     const value = e.target.value;
     setSortOption(value);
     applyFilters({ sort: value });
-  };
-
-  const handlePropertyTypeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
-    const value = e.target.value;
-    setPropertyType(value);
-    applyFilters({ propertyType: value });
   };
 
   const handlePriceMinChange = (e: ChangeEvent<HTMLInputElement>): void => {

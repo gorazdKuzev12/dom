@@ -39,21 +39,49 @@ import {
   ViewPropertiesButton,
 } from "@/styles/mapPage/styles";
 
-export default function NeighborhoodsClient({ cityName, neighborhoods }) {
+interface Neighborhood {
+  id: string;
+  name: string;
+  slug: string;
+  propertyCount: number;
+  avgPrice: string;
+  image: string;
+  isPopular: boolean;
+}
+
+interface NeighborhoodsClientProps {
+  cityName: string;
+  neighborhoods: Neighborhood[];
+}
+
+export default function NeighborhoodsClient({ cityName, neighborhoods }: NeighborhoodsClientProps) {
   const router = useRouter();
   const [mapView, setMapView] = useState("standard");
-  const [activeNeighborhood, setActiveNeighborhood] = useState(null);
+  const [activeNeighborhood, setActiveNeighborhood] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeNeighborhoodClicked, setActiveNeighborhoodClicked] =
     useState(false);
 
   console.log("Neighborhoods: ", neighborhoods);
 
+  // Extract transaction and property type from current URL
+  const getUrlParams = () => {
+    if (typeof window !== 'undefined') {
+      const pathParts = window.location.pathname.split('/');
+      // Expected: /[locale]/[transaction]/[type]/[city]
+      const locale = pathParts[1];
+      const transaction = pathParts[2]; // buy/rent
+      const type = pathParts[3]; // apartments/houses/etc
+      return { locale, transaction, type };
+    }
+    return { locale: 'en', transaction: 'buy', type: 'apartments' };
+  };
+
   // Define positions for markers in pixel coordinates based on a reference map size
   const mapReferenceWidth = 800;
   const mapReferenceHeight = 480;
 
-  const neighborhoodPositions = {};
+  const neighborhoodPositions: Record<string, { left: string; top: string }> = {};
   neighborhoods.forEach((neighborhood, index) => {
     const totalItems = neighborhoods.length;
     const angleStep = (2 * Math.PI) / totalItems;
@@ -80,13 +108,13 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }) {
     setSearchQuery("");
   };
 
-  const handleNeighborhoodHover = (id) => {
+  const handleNeighborhoodHover = (id: string) => {
     if (!activeNeighborhoodClicked) {
       setActiveNeighborhood(id);
     }
   };
 
-  const handleNeighborhoodClick = (id) => {
+  const handleNeighborhoodClick = (id: string) => {
     if (id === activeNeighborhood && activeNeighborhoodClicked) {
       setActiveNeighborhood(null);
       setActiveNeighborhoodClicked(false);
@@ -107,17 +135,19 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }) {
   };
 
   const viewAllProperties = () => {
-    router.push(`/city/${cityName}/listings`);
+    const { locale, transaction, type } = getUrlParams();
+    router.push(`/${locale}/${transaction}/${type}/${cityName.toLowerCase()}`);
   };
 
-  const viewNeighborhoodProperties = (neighborhood) => {
+  const viewNeighborhoodProperties = (neighborhood: string) => {
     if (!neighborhood) return;
     const activeNeighborhoodData = neighborhoods.find(
       (n) => n.id === neighborhood
     );
     if (activeNeighborhoodData) {
+      const { locale, transaction, type } = getUrlParams();
       router.push(
-        `/city/${cityName}/municipality/${activeNeighborhoodData.slug}/listings`
+        `/${locale}/${transaction}/${type}/${cityName.toLowerCase()}/municipality/${activeNeighborhoodData.slug}/listings`
       );
     }
   };
