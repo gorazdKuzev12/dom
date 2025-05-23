@@ -47,6 +47,8 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }) {
   const [activeNeighborhoodClicked, setActiveNeighborhoodClicked] =
     useState(false);
 
+  console.log("Neighborhoods: ", neighborhoods);
+
   // Define positions for markers in pixel coordinates based on a reference map size
   const mapReferenceWidth = 800;
   const mapReferenceHeight = 480;

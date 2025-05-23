@@ -12,8 +12,16 @@ export const GET_ALL_CITIES = gql`
   }
 `;
 export const GET_MUNICIPALITIES_BY_CITY_NAME = gql`
-  query GET_MUNICIPALITIES_BY_CITY_NAME($name: String!) {
-    municipalitiesByCityName(name: $name) {
+  query GET_MUNICIPALITIES_BY_CITY_NAME(
+    $name: String!
+    $transaction: TransactionType
+    $propertyType: PropertyType
+  ) {
+    municipalitiesByCityName(
+      name: $name
+      transaction: $transaction
+      propertyType: $propertyType
+    ) {
       id
       name_mk
       name_en
@@ -21,6 +29,7 @@ export const GET_MUNICIPALITIES_BY_CITY_NAME = gql`
       isPopular
       averagePrice
       image
+      propertyCount
     }
   }
 `;
