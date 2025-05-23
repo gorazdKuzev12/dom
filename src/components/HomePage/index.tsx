@@ -1,8 +1,20 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Select, { StylesConfig, ActionMeta, SingleValue, MultiValue, CSSObjectWithLabel } from "react-select";
-import { FiPlusSquare, FiUserPlus, FiGlobe, FiBriefcase, FiChevronDown } from "react-icons/fi";
+import Select, {
+  StylesConfig,
+  ActionMeta,
+  SingleValue,
+  MultiValue,
+  CSSObjectWithLabel,
+} from "react-select";
+import {
+  FiPlusSquare,
+  FiUserPlus,
+  FiGlobe,
+  FiBriefcase,
+  FiChevronDown,
+} from "react-icons/fi";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -49,7 +61,7 @@ type StylesBase = Record<string, unknown>;
 // Rename the imported TopLink to avoid naming conflict
 const TopLink = styled(BaseTopLink)`
   font-size: 0.9rem;
-  
+
   svg {
     width: 18px;
     height: 18px;
@@ -161,14 +173,14 @@ const LanguageButton = styled.button<{ active: boolean }>`
   border: none;
   padding: 0.15rem 0.3rem;
   font-size: 0.75rem;
-  font-weight: ${props => props.active ? '600' : '400'};
-  color: ${props => props.active ? '#0c4240' : '#666'};
+  font-weight: ${(props) => (props.active ? "600" : "400")};
+  color: ${(props) => (props.active ? "#0c4240" : "#666")};
   cursor: pointer;
   transition: all 0.2s ease;
   border-radius: 3px;
 
   &:hover {
-    background: ${props => props.active ? 'transparent' : '#e7f1f1'};
+    background: ${(props) => (props.active ? "transparent" : "#e7f1f1")};
     color: #0c4240;
   }
 
@@ -184,14 +196,14 @@ const MainTitle = styled.h1`
   margin-bottom: 1rem;
   text-transform: lowercase;
   letter-spacing: -3px;
-  font-family: 'Playfair Display', serif;
-  background: linear-gradient(135deg, #ffffff 0%, #FFD700 50%, #a8e6cf 100%);
+  font-family: "Playfair Display", serif;
+  background: linear-gradient(135deg, #ffffff 0%, #ffd700 50%, #a8e6cf 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   position: relative;
   display: inline-block;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-  
+
   &::after {
     content: attr(data-text);
     position: absolute;
@@ -297,29 +309,31 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [selectedCity, setSelectedCity] = useState<SelectOption | null>(null);
-  const [selectedPropertyType, setSelectedPropertyType] = useState<SelectOption | null>(null);
-  const [searchMode, setSearchMode] = useState("buy");
+  const [selectedPropertyType, setSelectedPropertyType] =
+    useState<SelectOption | null>(null);
+  const [searchMode, setSearchMode] = useState("SALE");
   const [open, setOpen] = useState(false);
   const [agencyDropdownOpen, setAgencyDropdownOpen] = useState(false);
 
-  // Property type options
+  // Property type options with correct mappings to GraphQL schema
   const propertyTypeOptions: SelectOption[] = [
-    { value: "apartments", label: searchT("apartments") },
-    { value: "homes", label: searchT("homes") },
-    { value: "rooms", label: searchT("rooms") },
-    { value: "villas", label: searchT("villas") },
-    { value: "offices", label: searchT("offices") },
-    { value: "garages", label: searchT("garages") },
-    { value: "storageRooms", label: searchT("storageRooms") },
-    { value: "commercialProperties", label: searchT("commercialProperties") },
-    { value: "land", label: searchT("land") },
-    { value: "buildings", label: searchT("buildings") },
+    { value: "APARTMENT", label: searchT("apartments") },
+    { value: "HOUSE", label: searchT("homes") },
+    { value: "ROOM", label: searchT("rooms") },
+    { value: "VILLA", label: searchT("villas") },
+    { value: "STUDIO", label: searchT("studio") },
+    { value: "OFFICE", label: searchT("offices") },
+    { value: "GARAGE", label: searchT("garages") },
+    { value: "STORAGE_ROOM", label: searchT("storageRooms") },
+    { value: "COMMERCIAL", label: searchT("commercialProperties") },
+    { value: "LAND", label: searchT("land") },
+    { value: "BUILDING", label: searchT("buildings") },
   ];
 
-  // City options
-  const cityOptions: SelectOption[] = initialCities.map(city => ({
-    value: city.id,
-    label: getCityName(city)
+  // City options - always use English name for value but display in current locale
+  const cityOptions: SelectOption[] = initialCities.map((city) => ({
+    value: city.name_en,
+    label: getCityName(city),
   }));
 
   const handleLocaleChange = (newLocale: string) => {
@@ -340,18 +354,26 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
     newValue: SingleValue<SelectOption> | MultiValue<SelectOption>,
     actionMeta: ActionMeta<SelectOption>
   ) => {
+    console.log("Property type changed:", newValue);
     setSelectedPropertyType(newValue as SelectOption | null);
   };
 
   const handleSearch = () => {
-    if (!selectedCity || !selectedCity.value) return; // nothing chosen -> stay put
+    if (!selectedCity || !selectedPropertyType) return; // need both city and property type
 
-    // keep the current locale prefix in the URL (mk / en / sq)
-    router.push(`/${locale}/map/skopje`);
+    const cityName = selectedCity.value.toLowerCase();
+
+    const propertyType = selectedPropertyType.value;
+
+    const transactionLabel = searchMode === "SALE" ? "buy" : "rent";
+    const propertyLabel = getPropertyTypeLabel(propertyType);
+
+    router.push(`/${locale}/${transactionLabel}/${propertyLabel}/${cityName}`);
   };
 
   const handleSearchModeChange = (mode: string) => {
-    setSearchMode(mode);
+    const enumMode = mode === "buy" ? "SALE" : "RENT";
+    setSearchMode(enumMode);
   };
 
   function getCityName(city: City): string {
@@ -360,6 +382,23 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
     if (locale === "sq") return city.name_sq;
     return city.name_en; // fallback to English
   }
+
+  const getPropertyTypeLabel = (propertyType: string): string => {
+    const labelMap: Record<string, string> = {
+      "APARTMENT": "apartments",
+      "HOUSE": "homes", 
+      "ROOM": "rooms",
+      "VILLA": "villas",
+      "STUDIO": "studio",
+      "OFFICE": "offices",
+      "GARAGE": "garages",
+      "STORAGE_ROOM": "storage-rooms",
+      "COMMERCIAL": "commercial-properties",
+      "LAND": "land",
+      "BUILDING": "buildings",
+    };
+    return labelMap[propertyType] || propertyType.toLowerCase();
+  };
 
   return (
     <Wrapper>
@@ -383,7 +422,7 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
               {t("agency")}
               <FiChevronDown size={14} />
             </AgencyDropdownButton>
-            
+
             {agencyDropdownOpen && (
               <AgencyDropdownMenu>
                 <AgencyDropdownItem href={`/${locale}/register-agency`}>
@@ -444,7 +483,7 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
           <FiBriefcase size={16} />
           {t("myAgency")}
         </TopLink>
-        
+
         <LanguageContainer>
           <FiGlobe />
           {languages.map((lang) => (
@@ -468,13 +507,13 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
         <SearchBar>
           <ToggleGroup>
             <ToggleButton
-              active={searchMode === "buy"}
+              active={searchMode === "SALE"}
               onClick={() => handleSearchModeChange("buy")}
             >
               {searchT("buy")}
             </ToggleButton>
             <ToggleButton
-              active={searchMode === "rent"}
+              active={searchMode === "RENT"}
               onClick={() => handleSearchModeChange("rent")}
             >
               {searchT("rent")}
