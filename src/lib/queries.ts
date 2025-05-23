@@ -70,3 +70,32 @@ export const LISTINGS_BY_MUNICIPALITY_FILTER = gql`
     }
   }
 `;
+
+export const CREATE_LISTING = gql`
+  mutation CreateListing($input: CreateListingInput!) {
+    createListing(input: $input) {
+      id
+      title
+      description
+      type
+      transaction
+      price
+      size
+      condition
+      floor
+      totalFloors
+      rooms
+      bathrooms
+      amenities
+      address
+      images
+      contactName
+      contactEmail
+      contactPhone
+      createdAt
+      expiresAt
+      cityId
+      municipalityId
+    }
+  }
+`;

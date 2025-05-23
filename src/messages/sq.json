@@ -280,6 +280,7 @@
     "location": {
       "title": "Vendndodhja",
       "city": "Qyteti",
+      "selectCity": "Zgjidhni qytetin",
       "cities": {
         "skopje": "Shkup",
         "bitola": "Manastir",
@@ -294,10 +295,22 @@
       "title": "Pajisjet",
       "balcony": "Ballkon",
       "heating": "Ngrohje",
-      "airConditioning": "Kondicionim",
+      "air_conditioning": "Kondicionim",
       "furnished": "I mobiluar",
       "elevator": "Ashensor",
-      "parking": "Parking"
+      "parking": "Parking",
+      "garden": "Kopsht",
+      "swimming_pool": "Pishinë",
+      "internet": "Internet/WiFi",
+      "laundry": "Dhomë larjeje",
+      "dishwasher": "Makinë larëse enësh",
+      "security": "Siguri",
+      "storage": "Hapësirë ruajtjeje",
+      "pet_friendly": "Miqësor ndaj kafshëve",
+      "terrace": "Terrasë",
+      "fireplace": "Oxhak",
+      "cable_tv": "TV kabllore",
+      "washing_machine": "Makinë larëse"
     },
     "description": {
       "title": "Përshkrimi",

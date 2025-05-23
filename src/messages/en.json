@@ -265,6 +265,7 @@
     "location": {
       "title": "Location",
       "city": "City",
+      "selectCity": "Select a city",
       "cities": {
         "skopje": "Skopje",
         "bitola": "Bitola",
@@ -279,10 +280,22 @@
       "title": "Amenities",
       "balcony": "Balcony",
       "heating": "Heating",
-      "airConditioning": "Air conditioning",
+      "air_conditioning": "Air conditioning",
       "furnished": "Furnished",
       "elevator": "Elevator",
-      "parking": "Parking"
+      "parking": "Parking",
+      "garden": "Garden",
+      "swimming_pool": "Swimming Pool",
+      "internet": "Internet/WiFi",
+      "laundry": "Laundry Room",
+      "dishwasher": "Dishwasher",
+      "security": "Security System",
+      "storage": "Storage Space",
+      "pet_friendly": "Pet Friendly",
+      "terrace": "Terrace",
+      "fireplace": "Fireplace",
+      "cable_tv": "Cable TV",
+      "washing_machine": "Washing Machine"
     },
     "description": {
       "title": "Description",
@@ -306,7 +319,8 @@
       "invalidPhone": "Please enter a valid phone number",
       "uploadFailed": "Failed to upload photos",
       "maxPhotos": "Maximum 10 photos allowed",
-      "minPhotos": "Please add at least one photo"
+      "minPhotos": "Please add at least one photo",
+      "unknown": "An unexpected error occurred"
     }
   },
   "MyAgency": {

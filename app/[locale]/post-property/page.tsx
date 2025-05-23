@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import styled from "styled-components";
+import { useMutation, useQuery, ApolloProvider } from "@apollo/client";
 import {
   Home,
   Mail,
@@ -26,6 +27,8 @@ import {
 } from "lucide-react";
 import Menu from "@/components/Menu/page";
 import Footer from "@/components/Footer/page";
+import { CREATE_LISTING, GET_ALL_CITIES } from "@/lib/queries";
+import { getClient } from "@/lib/client";
 
 interface FormData {
   name: string;
@@ -41,9 +44,9 @@ interface FormData {
   totalFloors: string;
   rooms: string;
   bathrooms: string;
-  parking: boolean;
   description: string;
   city: string;
+  municipality: string;
   address: string;
   images: File[];
   amenities: string[];
@@ -58,28 +61,33 @@ interface FormGridProps {
   columns?: number;
 }
 
-export default function PostPropertyPage() {
+function PostPropertyForm() {
   const t = useTranslations("PostProperty");
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  
+  // GraphQL hooks
+  const [createListing] = useMutation(CREATE_LISTING);
+  const { data: citiesData } = useQuery(GET_ALL_CITIES);
+  
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     phone: "",
     title: "",
-    type: "apartment",
-    listingType: "rent",
+    type: "APARTMENT",
+    listingType: "RENT",
     price: "",
     size: "",
-    condition: "new",
+    condition: "NEW",
     floor: "",
     totalFloors: "",
     rooms: "",
     bathrooms: "",
-    parking: false,
     description: "",
-    city: "skopje",
+    city: "",
+    municipality: "",
     address: "",
     images: [],
     amenities: [],
@@ -126,7 +134,7 @@ export default function PostPropertyPage() {
         }
         break;
       case 2:
-        if (!formData.title || !formData.price || !formData.size || !formData.description) {
+        if (!formData.title || !formData.price || !formData.size || !formData.description || !formData.city) {
           setError(t("errors.required"));
           return false;
         }
@@ -157,6 +165,12 @@ export default function PostPropertyPage() {
     setError("");
   };
 
+  // Upload images to a service (placeholder - replace with your image upload service)
+  const uploadImages = async (images: File[]): Promise<string[]> => {
+    // This is a placeholder. In a real app, you'd upload to cloudinary, AWS S3, etc.
+    return images.map((_, index) => `/placeholder-image-${index + 1}.jpg`);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateStep(step)) return;
@@ -165,44 +179,76 @@ export default function PostPropertyPage() {
     setError("");
 
     try {
-      const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        if (key === "images") {
-          value.forEach((file: File) => {
-            formDataToSend.append("images", file);
-          });
-        } else if (key === "amenities") {
-          formDataToSend.append(key, JSON.stringify(value));
-        } else {
-          formDataToSend.append(key, String(value));
-        }
-      });
-
-      const response = await fetch("/api/properties", {
-        method: "POST",
-        body: formDataToSend,
-      });
-
-      if (!response.ok) {
-        throw new Error(await response.text());
+      // Upload images first
+      const imageUrls = await uploadImages(formData.images);
+      
+      // Find the selected city
+      const selectedCity = citiesData?.city?.find(
+        (city: any) => city.name_en.toLowerCase() === formData.city.toLowerCase()
+      );
+      
+      if (!selectedCity) {
+        throw new Error("Selected city not found");
       }
 
-      // Redirect to success page or listing
-      window.location.href = "/my-properties";
+      // Prepare the input for GraphQL mutation
+      const input = {
+        title: formData.title,
+        description: formData.description,
+        type: formData.type,
+        transaction: formData.listingType,
+        price: parseFloat(formData.price),
+        size: parseFloat(formData.size),
+        condition: formData.condition,
+        floor: formData.floor ? parseInt(formData.floor) : null,
+        totalFloors: formData.totalFloors ? parseInt(formData.totalFloors) : null,
+        rooms: formData.rooms ? parseInt(formData.rooms) : null,
+        bathrooms: formData.bathrooms ? parseInt(formData.bathrooms) : null,
+        amenities: formData.amenities,
+        address: formData.address,
+        images: imageUrls,
+        contactName: formData.name,
+        contactEmail: formData.email,
+        contactPhone: formData.phone,
+        cityId: selectedCity.id,
+        municipalityId: formData.municipality || null,
+      };
+
+      // Create the listing
+      const { data } = await createListing({ variables: { input } });
+      
+      if (data?.createListing) {
+        // Redirect to success page or listing
+        window.location.href = `/listing/${data.createListing.id}`;
+      }
     } catch (err) {
+      console.error("Error creating listing:", err);
       setError(err instanceof Error ? err.message : t("errors.unknown"));
     } finally {
       setLoading(false);
     }
   };
 
-  const amenitiesList = [
-    { icon: <Home size={16} />, label: "Balcony" },
-    { icon: <Ruler size={16} />, label: "Heating" },
-    { icon: <Check size={16} />, label: "Air conditioning" },
-    { icon: <BedDouble size={16} />, label: "Furnished" },
-    { icon: <Building2 size={16} />, label: "Elevator" },
-    { icon: <BedDouble size={16} />, label: "Parking" },
+  // All 18 amenities matching the backend
+  const allAmenities = [
+    "BALCONY",
+    "HEATING", 
+    "AIR_CONDITIONING",
+    "FURNISHED",
+    "ELEVATOR",
+    "PARKING",
+    "GARDEN",
+    "SWIMMING_POOL",
+    "INTERNET",
+    "LAUNDRY",
+    "DISHWASHER", 
+    "SECURITY",
+    "STORAGE",
+    "PET_FRIENDLY",
+    "TERRACE",
+    "FIREPLACE",
+    "CABLE_TV",
+    "WASHING_MACHINE"
   ];
 
   return (
@@ -338,10 +384,18 @@ export default function PostPropertyPage() {
                           onChange={handleChange}
                           required
                         >
-                          <option value="apartment">{t("propertyDetails.types.apartment")}</option>
-                          <option value="house">{t("propertyDetails.types.house")}</option>
-                          <option value="office">{t("propertyDetails.types.office")}</option>
-                          <option value="land">{t("propertyDetails.types.land")}</option>
+                          <option value="APARTMENT">{t("propertyDetails.types.apartment")}</option>
+                          <option value="HOUSE">{t("propertyDetails.types.house")}</option>
+                          <option value="ROOM">Room</option>
+                          <option value="OFFICE">{t("propertyDetails.types.office")}</option>
+                          <option value="VILLA">Villa</option>
+                          <option value="GARAGE">Garage</option>
+                          <option value="STORAGE_ROOM">Storage Room</option>
+                          <option value="COMMERCIAL">Commercial</option>
+                          <option value="LAND">{t("propertyDetails.types.land")}</option>
+                          <option value="BUILDING">Building</option>
+                          <option value="HOLIDAY">Holiday Property</option>
+                          <option value="STUDIO">Studio</option>
                         </Select>
                       </FormGroup>
 
@@ -356,8 +410,8 @@ export default function PostPropertyPage() {
                           onChange={handleChange}
                           required
                         >
-                          <option value="rent">{t("propertyDetails.listingTypes.rent")}</option>
-                          <option value="buy">{t("propertyDetails.listingTypes.buy")}</option>
+                          <option value="RENT">{t("propertyDetails.listingTypes.rent")}</option>
+                          <option value="SALE">{t("propertyDetails.listingTypes.buy")}</option>
                         </Select>
                       </FormGroup>
                     </FormGrid>
@@ -406,9 +460,9 @@ export default function PostPropertyPage() {
                           onChange={handleChange}
                           required
                         >
-                          <option value="new">{t("propertyDetails.conditions.new")}</option>
-                          <option value="renovated">{t("propertyDetails.conditions.renovated")}</option>
-                          <option value="needsRenovation">{t("propertyDetails.conditions.needsRenovation")}</option>
+                          <option value="NEW">{t("propertyDetails.conditions.new")}</option>
+                          <option value="RENOVATED">{t("propertyDetails.conditions.renovated")}</option>
+                          <option value="NEEDS_RENOVATION">{t("propertyDetails.conditions.needsRenovation")}</option>
                         </Select>
                       </FormGroup>
 
@@ -441,6 +495,36 @@ export default function PostPropertyPage() {
                       </FormGroup>
                     </FormGrid>
 
+                    <FormGrid>
+                      <FormGroup>
+                        <Label>
+                          <BedDouble size={16} />
+                          {t("propertyDetails.rooms")}
+                        </Label>
+                        <Input
+                          type="number"
+                          name="rooms"
+                          value={formData.rooms}
+                          onChange={handleChange}
+                          placeholder={t("propertyDetails.roomsPlaceholder")}
+                        />
+                      </FormGroup>
+
+                      <FormGroup>
+                        <Label>
+                          <Bath size={16} />
+                          {t("propertyDetails.bathrooms")}
+                        </Label>
+                        <Input
+                          type="number"
+                          name="bathrooms"
+                          value={formData.bathrooms}
+                          onChange={handleChange}
+                          placeholder={t("propertyDetails.bathroomsPlaceholder")}
+                        />
+                      </FormGroup>
+                    </FormGrid>
+
                     <FormGroup>
                       <Label>
                         <FileText size={16} />
@@ -459,17 +543,65 @@ export default function PostPropertyPage() {
 
                   <CardSection>
                     <SectionTitle>
+                      <MapPin size={18} /> {t("location.title")}
+                    </SectionTitle>
+                    <FormGrid>
+                      <FormGroup>
+                        <Label>
+                          <MapPin size={16} />
+                          {t("location.city")}
+                        </Label>
+                        <Select
+                          name="city"
+                          value={formData.city}
+                          onChange={handleChange}
+                          required
+                        >
+                          <option value="">{t("location.selectCity")}</option>
+                          {citiesData?.city?.map((city: any) => (
+                            <option key={city.id} value={city.name_en}>
+                              {city.name_en}
+                            </option>
+                          ))}
+                        </Select>
+                      </FormGroup>
+
+                      <FormGroup>
+                        <Label>
+                          <Building2 size={16} />
+                          Municipality (Optional)
+                        </Label>
+                        <Input
+                          type="text"
+                          name="municipality"
+                          value={formData.municipality}
+                          onChange={handleChange}
+                          placeholder="Enter municipality"
+                        />
+                      </FormGroup>
+                    </FormGrid>
+
+                    <FormGroup>
+                      <Label>
+                        <MapPin size={16} />
+                        {t("location.address")}
+                      </Label>
+                      <Input
+                        type="text"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        placeholder={t("location.addressPlaceholder")}
+                      />
+                    </FormGroup>
+                  </CardSection>
+
+                  <CardSection>
+                    <SectionTitle>
                       <Check size={18} /> {t("amenities.title")}
                     </SectionTitle>
                     <AmenitiesGrid>
-                      {[
-                        "balcony",
-                        "heating",
-                        "airConditioning",
-                        "furnished",
-                        "elevator",
-                        "parking"
-                      ].map((amenity) => (
+                      {allAmenities.map((amenity) => (
                         <AmenityItem key={amenity}>
                           <Checkbox
                             type="checkbox"
@@ -480,7 +612,7 @@ export default function PostPropertyPage() {
                             onChange={handleChange}
                           />
                           <AmenityLabel htmlFor={amenity}>
-                            {t(`amenities.${amenity}`)}
+                            {t(`amenities.${amenity.toLowerCase()}`)}
                           </AmenityLabel>
                         </AmenityItem>
                       ))}
@@ -926,3 +1058,13 @@ const UploadButton = styled.label`
     transform: translateY(-1px);
   }
 `;
+
+export default function PostPropertyPage() {
+  const client = getClient();
+  
+  return (
+    <ApolloProvider client={client}>
+      <PostPropertyForm />
+    </ApolloProvider>
+  );
+}

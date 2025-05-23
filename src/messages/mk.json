@@ -280,6 +280,7 @@
     "location": {
       "title": "Локација",
       "city": "Град",
+      "selectCity": "Избери град",
       "cities": {
         "skopje": "Скопје",
         "bitola": "Битола",
@@ -294,10 +295,22 @@
       "title": "Карактеристики",
       "balcony": "Тераса",
       "heating": "Греење",
-      "airConditioning": "Клима",
+      "air_conditioning": "Клима",
       "furnished": "Наместен",
       "elevator": "Лифт",
-      "parking": "Паркинг"
+      "parking": "Паркинг",
+      "garden": "Градина",
+      "swimming_pool": "Базен",
+      "internet": "Интернет/WiFi",
+      "laundry": "Перална",
+      "dishwasher": "Машина за садови",
+      "security": "Сигурност",
+      "storage": "Складишен простор",
+      "pet_friendly": "Дозволени миленици",
+      "terrace": "Тераса",
+      "fireplace": "Камин",
+      "cable_tv": "Кабелска ТВ",
+      "washing_machine": "Машина за перење"
     },
     "description": {
       "title": "Опис",
