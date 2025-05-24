@@ -704,7 +704,7 @@ const AnimatedBadge = styled.div<{ count: number }>`
   position: absolute;
   top: -2px;
   right: -2px;
-  background: #dc2626;
+  background:rgb(28, 137, 134);
   color: white;
   font-size: 0.6rem;
   font-weight: 600;

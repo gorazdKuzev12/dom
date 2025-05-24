@@ -584,7 +584,7 @@ const ToggleButton = styled.button<ToggleButtonProps>`
   flex: 1;
   padding: 12px 0;
   text-align: center;
-  background: ${(props) => (props.active ? "#1a1a1a" : "transparent")};
+  background: ${(props) => (props.active ? "#0c4240" : "transparent")};
   color: ${(props) => (props.active ? "#ffffff" : "#4b5563")};
   border: none;
   cursor: pointer;

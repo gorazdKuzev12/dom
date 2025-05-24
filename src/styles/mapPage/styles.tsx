@@ -193,7 +193,7 @@ export const AvgPrice = styled.div`
 export const ViewAllButton = styled.button`
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, #134e3e 0%, #1e6b56 100%);
+  background: #0c4240;
   border: none;
   color: white;
   font-size: 0.9rem;
@@ -634,7 +634,7 @@ export const ViewPropertiesButton = styled.button`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #134e3e 0%, #1e6b56 100%);
+  background: #0c4240;
   color: white;
   border: none;
   border-radius: 8px;
