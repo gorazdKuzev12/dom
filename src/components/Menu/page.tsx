@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect } from "react";
 import styled from "styled-components";
-import { FiHome, FiPlusSquare, FiUserPlus, FiMenu, FiX, FiHeart, FiGlobe, FiLogIn, FiBriefcase, FiChevronDown, FiLogOut } from "react-icons/fi";
+import { FiHome, FiPlusSquare, FiUserPlus, FiMenu, FiX, FiHeart, FiGlobe, FiLogIn, FiBriefcase, FiChevronDown, FiLogOut, FiEdit } from "react-icons/fi";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -116,6 +116,10 @@ export default function Menu() {
               <FiUserPlus size={16} />
               <span>{t("roommates")}</span>
             </ActionButton>
+            <ActionButton href={`/${locale}/blog`}>
+              <FiEdit size={16} />
+              <span>Blog</span>
+            </ActionButton>
           </MainActions>
 
           <SecondaryActions>
@@ -194,6 +198,10 @@ export default function Menu() {
           <MobileLink href={`/${locale}/find-roommate`}>
             <FiUserPlus size={18} />
             {t("roommates")}
+          </MobileLink>
+          <MobileLink href={`/${locale}/blog`}>
+            <FiEdit size={18} />
+            Blog
           </MobileLink>
           
           {!isLoggedIn ? (
