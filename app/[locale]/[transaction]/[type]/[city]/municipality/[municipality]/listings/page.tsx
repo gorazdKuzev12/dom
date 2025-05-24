@@ -152,6 +152,7 @@ export default async function MunicipalityListingsPage({
       <ZoneListingsPage
         listings={data?.listingsByMunicipalityFilter ?? []}
         municipalityName={municipalityName}
+        citySlug={city}
       />
     );
   } catch (error) {

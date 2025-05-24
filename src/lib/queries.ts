@@ -65,8 +65,53 @@ export const LISTINGS_BY_MUNICIPALITY_FILTER = gql`
       bathrooms
       size
       images
+      createdAt 
+      type
+      transaction
+      cityId
+      municipalityId
+    }
+  }
+`;
+
+export const GET_LISTING_BY_ID = gql`
+  query GetListingById($id: ID!) {
+    listingById(id: $id) {
+      id
+      title
+      description
+      type
+      transaction
+      price
+      size
+      condition
+      floor
+      totalFloors
+      rooms
+      bathrooms
+      amenities
+      address
+      images
+      contactName
+      contactEmail
+      contactPhone
       createdAt
-      # …any other fields your card needs
+      expiresAt
+      cityId
+      municipalityId
+      city {
+        id
+        name_en
+        name_mk
+        name_sq
+        slug
+      }
+      municipality {
+        id
+        name_en
+        name_mk
+        name_sq
+      }
     }
   }
 `;

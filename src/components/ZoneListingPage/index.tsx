@@ -22,29 +22,31 @@ import PropertyFilters from "../PropertyFilters";
 interface Listing {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   price: number;
-  sizeM2: number;
-  bedrooms?: number;
+  size: number;
+  rooms?: number;
   bathrooms?: number;
   floor?: number;
   totalFloors?: number;
   type: string;
-  status: string;
-  verified: boolean;
-  featured: boolean;
+  transaction: string;
   images: string[];
   createdAt: string;
+  cityId: string;
+  municipalityId: string;
 }
 
 interface ZoneListingsPageProps {
   listings: Listing[];
   municipalityName: string;
+  citySlug: string;
 }
 
 export default function ZoneListingsPage({
   listings,
   municipalityName,
+  citySlug,
 }: ZoneListingsPageProps) {
   const locale = useLocale();
   const router = useRouter();
@@ -98,19 +100,31 @@ export default function ZoneListingsPage({
       return false;
     }
 
-    if (sizeMin && listing.sizeM2 < parseInt(sizeMin)) {
+    if (sizeMin && listing.size < parseInt(sizeMin)) {
       return false;
     }
 
-    if (sizeMax && listing.sizeM2 > parseInt(sizeMax)) {
+    if (sizeMax && listing.size > parseInt(sizeMax)) {
       return false;
     }
 
     return true;
   });
+  console.log(citySlug);
 
-  const handleListingClick = (id: string) => {
-    router.push(`/${locale}/apartment`);
+  const handleListingClick = (listing: Listing) => {
+    console.log(listing);
+
+    console.log(citySlug);
+    // Build the URL format: [transaction]/[type]/[city]/municipality/[municipality]/listing/[listingId]
+    const transaction = listing.transaction === 'SALE' ? 'buy' : 'rent';
+    const propertyType = listing.type.toLowerCase().replace('_', '-'); // e.g., apartment (singular)
+    const city = citySlug;
+    const municipality = municipalityName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+    
+    const url = `/${locale}/${transaction}/${propertyType}/${city}/municipality/${municipality}/listing/${listing.id}`;
+    console.log(url);
+    router.push(url);
   };
 
   const formatPrice = (price: number) => {
@@ -190,16 +204,13 @@ export default function ZoneListingsPage({
                 {filteredListings.map((listing) => (
                   <PropertyCard
                     key={listing.id}
-                    onClick={() => handleListingClick(listing.id)}
+                    onClick={() => handleListingClick(listing)}
                   >
                     <CardImageContainer>
                       {listing.images && listing.images.length > 0 ? (
                         <CardImage src="/so.png" alt="Property placeholder" />
                       ) : (
                         <CardImage src="/so.png" alt="Property placeholder" />
-                      )}
-                      {listing.featured && (
-                        <FeaturedBadge>Featured</FeaturedBadge>
                       )}
                     </CardImageContainer>
 
@@ -210,8 +221,8 @@ export default function ZoneListingsPage({
                       <Price>{formatPrice(listing.price)}</Price>
                       <Title>{listing.title}</Title>
                       <InfoRow>
-                        {listing.sizeM2} m²
-                        {listing.bedrooms && ` · ${listing.bedrooms} bedrooms`}
+                        {listing.size} m²
+                        {listing.rooms && ` · ${listing.rooms} rooms`}
                         {listing.bathrooms &&
                           ` · ${listing.bathrooms} bathrooms`}
                         {listing.floor &&
@@ -516,19 +527,6 @@ const CardImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-`;
-
-const FeaturedBadge = styled.div`
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: linear-gradient(135deg, #ff9800 0%, #ff7300 100%);
-  color: white;
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  box-shadow: 0 2px 4px rgba(255, 152, 0, 0.3);
 `;
 
 const CardContent = styled.div`
