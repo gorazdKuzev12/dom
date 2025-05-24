@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect } from "react";
 import styled from "styled-components";
-import { FiHome, FiPlusSquare, FiUserPlus, FiMenu, FiX, FiHeart, FiGlobe, FiLogIn, FiBriefcase, FiChevronDown } from "react-icons/fi";
+import { FiHome, FiPlusSquare, FiUserPlus, FiMenu, FiX, FiHeart, FiGlobe, FiLogIn, FiBriefcase, FiChevronDown, FiLogOut } from "react-icons/fi";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -17,6 +17,8 @@ export default function Menu() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [savedCount, setSavedCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [agencyData, setAgencyData] = useState<any>(null);
 
   useEffect(() => {
     const updateSavedCount = () => {
@@ -26,9 +28,33 @@ export default function Menu() {
       }
     };
 
+    // Check authentication status
+    const checkAuthStatus = () => {
+      if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('agencyToken') || sessionStorage.getItem('agencyToken');
+        const storedAgencyData = localStorage.getItem('agencyData') || sessionStorage.getItem('agencyData');
+        
+        if (token && storedAgencyData) {
+          setIsLoggedIn(true);
+          setAgencyData(JSON.parse(storedAgencyData));
+        } else {
+          setIsLoggedIn(false);
+          setAgencyData(null);
+        }
+      }
+    };
+
     updateSavedCount();
+    checkAuthStatus();
+    
+    // Listen for storage changes to update auth status across tabs
     window.addEventListener('storage', updateSavedCount);
-    return () => window.removeEventListener('storage', updateSavedCount);
+    window.addEventListener('storage', checkAuthStatus);
+    
+    return () => {
+      window.removeEventListener('storage', updateSavedCount);
+      window.removeEventListener('storage', checkAuthStatus);
+    };
   }, []);
 
   const handleLocaleChange = (newLocale: string) => {
@@ -36,6 +62,30 @@ export default function Menu() {
       const stripped = pathname.replace(`/${locale}`, "");
       router.push(`/${newLocale}${stripped}`);
     });
+  };
+
+  const handleAgencyClick = () => {
+    if (isLoggedIn) {
+      router.push(`/${locale}/my-agency`);
+    } else {
+      router.push(`/${locale}/agency-login`);
+    }
+    setDropdownOpen(false);
+  };
+
+  const handleLogout = () => {
+    // Clear all authentication data
+    localStorage.removeItem('agencyToken');
+    localStorage.removeItem('agencyData');
+    sessionStorage.removeItem('agencyToken');
+    sessionStorage.removeItem('agencyData');
+    
+    setIsLoggedIn(false);
+    setAgencyData(null);
+    setDropdownOpen(false);
+    
+    // Redirect to login page
+    router.push(`/${locale}/agency-login`);
   };
 
   const languages = [
@@ -77,15 +127,32 @@ export default function Menu() {
               </DropdownButton>
               {dropdownOpen && (
                 <DropdownMenu>
-                  <DropdownItem href={`/${locale}/register-agency`}>
-                    {t("registerAgency")}
-                  </DropdownItem>
-                  <DropdownItem href={`/${locale}/agency-login`}>
-                    {t("agencyLogin")}
-                  </DropdownItem>
-                  <DropdownItem href={`/${locale}/my-agency`}>
-                    {t("myAgency")}
-                  </DropdownItem>
+                  {!isLoggedIn ? (
+                    <>
+                      <DropdownItem href={`/${locale}/register-agency`}>
+                        {t("registerAgency")}
+                      </DropdownItem>
+                      <DropdownItem href={`/${locale}/agency-login`}>
+                        {t("agencyLogin")}
+                      </DropdownItem>
+                    </>
+                  ) : (
+                    <>
+                      <DropdownItem href={`/${locale}/my-agency`}>
+                        <FiBriefcase size={14} />
+                        {t("myAgency")}
+                      </DropdownItem>
+                      <AgencyInfo>
+                        <AgencyName>{agencyData?.companyName}</AgencyName>
+                        <AgencyEmail>{agencyData?.email}</AgencyEmail>
+                      </AgencyInfo>
+                      <DropdownDivider />
+                      <LogoutButton onClick={handleLogout}>
+                        <FiLogOut size={14} />
+                        Logout
+                      </LogoutButton>
+                    </>
+                  )}
                 </DropdownMenu>
               )}
             </DropdownWrapper>
@@ -128,18 +195,35 @@ export default function Menu() {
             <FiUserPlus size={18} />
             {t("roommates")}
           </MobileLink>
-          <MobileLink href={`/${locale}/register-agency`}>
-            <FiBriefcase size={18} />
-            {t("registerAgency")}
-          </MobileLink>
-          <MobileLink href={`/${locale}/agency-login`}>
-            <FiLogIn size={18} />
-            {t("agencyLogin")}
-          </MobileLink>
-          <MobileLink href={`/${locale}/my-agency`}>
-            <FiBriefcase size={18} />
-            {t("myAgency")}
-          </MobileLink>
+          
+          {!isLoggedIn ? (
+            <>
+              <MobileLink href={`/${locale}/register-agency`}>
+                <FiBriefcase size={18} />
+                {t("registerAgency")}
+              </MobileLink>
+              <MobileLink href={`/${locale}/agency-login`}>
+                <FiLogIn size={18} />
+                {t("agencyLogin")}
+              </MobileLink>
+            </>
+          ) : (
+            <>
+              <MobileLink href={`/${locale}/my-agency`}>
+                <FiBriefcase size={18} />
+                {t("myAgency")}
+              </MobileLink>
+              <MobileAgencyInfo>
+                <AgencyName>{agencyData?.companyName}</AgencyName>
+                <AgencyEmail>{agencyData?.email}</AgencyEmail>
+              </MobileAgencyInfo>
+              <MobileLogoutButton onClick={handleLogout}>
+                <FiLogOut size={18} />
+                Logout
+              </MobileLogoutButton>
+            </>
+          )}
+          
           <MobileLink href={`/${locale}/favorites`}>
             <FiHeart size={18} />
             {t("favorites")}
@@ -468,4 +552,78 @@ const SavedCountMobile = styled(SavedCount)`
   position: static;
   margin-left: 8px;
   margin-right: -4px;
+`;
+
+const AgencyInfo = styled.div`
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+`;
+
+const AgencyName = styled.div`
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+`;
+
+const AgencyEmail = styled.div`
+  font-size: 0.8rem;
+  color: #666;
+`;
+
+const DropdownDivider = styled.div`
+  height: 1px;
+  background: #eee;
+  margin: 0.5rem 0;
+`;
+
+const LogoutButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  color: #dc2626;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+
+  &:hover {
+    background: #fee2e2;
+    color: #b91c1c;
+  }
+`;
+
+const MobileAgencyInfo = styled.div`
+  background: #f5f9f9;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  border-radius: 6px;
+  border-left: 3px solid #0c4240;
+`;
+
+const MobileLogoutButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  color: #dc2626;
+  background: #fee2e2;
+  border: none;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  width: 100%;
+  cursor: pointer;
+  
+  &:hover {
+    background: #fecaca;
+    color: #b91c1c;
+  }
 `;
