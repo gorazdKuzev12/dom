@@ -6,6 +6,8 @@ import styled from "styled-components";
 import { FiMail, FiPhone, FiGlobe, FiMapPin, FiUser, FiLock, FiBriefcase, FiUpload, FiCheck, FiInfo, FiArrowRight } from "react-icons/fi";
 import Menu from "@/components/Menu/page";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@apollo/client";
+import { REGISTER_AGENCY } from "@/lib/queries";
 
 interface FormData {
   companyName: string;
@@ -19,10 +21,8 @@ interface FormData {
   contactRole: string;
   password: string;
   confirmPassword: string;
-  licenseNumber: string;
-  taxId: string;
-  agencySize: "small" | "medium" | "large";
-  logo: File | null;
+  agencySize: "SMALL" | "MEDIUM" | "LARGE";
+  logo: string;
   description: string;
   specializations: string[];
   agreeTerms: boolean;
@@ -34,6 +34,8 @@ export default function RegisterAgencyPage() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [registerAgency] = useMutation(REGISTER_AGENCY);
+  
   const [formData, setFormData] = useState<FormData>({
     companyName: "",
     email: "",
@@ -46,10 +48,8 @@ export default function RegisterAgencyPage() {
     contactRole: "",
     password: "",
     confirmPassword: "",
-    licenseNumber: "",
-    taxId: "",
-    agencySize: "small",
-    logo: null,
+    agencySize: "SMALL",
+    logo: "",
     description: "",
     specializations: [],
     agreeTerms: false,
@@ -66,7 +66,8 @@ export default function RegisterAgencyPage() {
     } else if (type === "file") {
       const fileInput = e.target as HTMLInputElement;
       if (fileInput.files && fileInput.files[0]) {
-        setFormData(prev => ({ ...prev, [name]: fileInput.files![0] }));
+        // In a real app, you'd upload to a storage service here
+        setFormData(prev => ({ ...prev, [name]: "/default-agency-logo.jpg" }));
       }
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
@@ -87,35 +88,35 @@ export default function RegisterAgencyPage() {
     switch (currentStep) {
       case 1:
         if (!formData.companyName || !formData.email || !formData.phone || !formData.address || !formData.city || !formData.zipCode) {
-          setError(t("errors.requiredFields"));
+          setError("Please fill in all required fields");
           return false;
         }
         if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-          setError(t("errors.invalidEmail"));
+          setError("Please enter a valid email address");
           return false;
         }
         break;
       case 2:
-        if (!formData.contactPerson || !formData.contactRole || !formData.password || !formData.confirmPassword || !formData.licenseNumber || !formData.taxId) {
-          setError(t("errors.requiredFields"));
+        if (!formData.contactPerson || !formData.contactRole || !formData.password || !formData.confirmPassword) {
+          setError("Please fill in all required fields");
           return false;
         }
         if (formData.password.length < 8) {
-          setError(t("errors.passwordLength"));
+          setError("Password must be at least 8 characters long");
           return false;
         }
         if (formData.password !== formData.confirmPassword) {
-          setError(t("errors.passwordMismatch"));
+          setError("Passwords do not match");
           return false;
         }
         break;
       case 3:
         if (!formData.description || formData.specializations.length === 0) {
-          setError(t("errors.requiredFields"));
+          setError("Please fill in all required fields");
           return false;
         }
         if (!formData.agreeTerms) {
-          setError(t("errors.agreeTerms"));
+          setError("Please agree to the terms and conditions");
           return false;
         }
         break;
@@ -143,32 +144,38 @@ export default function RegisterAgencyPage() {
     setError("");
 
     try {
-      // Create FormData for file upload
-      const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        if (key === "logo" && value instanceof File) {
-          formDataToSend.append(key, value);
-        } else if (key === "specializations") {
-          formDataToSend.append(key, JSON.stringify(value));
-        } else {
-          formDataToSend.append(key, String(value));
+      const result = await registerAgency({
+        variables: {
+          input: {
+            companyName: formData.companyName,
+            email: formData.email,
+            password: formData.password,
+            phone: formData.phone,
+            website: formData.website || null,
+            address: formData.address,
+            city: formData.city,
+            zipCode: formData.zipCode,
+            contactPerson: formData.contactPerson,
+            contactRole: formData.contactRole,
+            agencySize: formData.agencySize,
+            logo: formData.logo || null,
+            description: formData.description,
+            specializations: formData.specializations,
+          }
         }
       });
 
-      const response = await fetch("/api/register-agency", {
-        method: "POST",
-        body: formDataToSend,
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Registration failed");
+      if (result.data?.registerAgency) {
+        // Store the token in localStorage for future use
+        localStorage.setItem('agencyToken', result.data.registerAgency.token);
+        localStorage.setItem('agencyData', JSON.stringify(result.data.registerAgency.agency));
+        
+        // Redirect to login page with success message
+        router.push('/agency-login?registered=true');
       }
-
-      // Redirect to success page or dashboard
-      router.push("/agency-dashboard");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t("errors.unknown"));
+    } catch (err: any) {
+      console.error('Registration error:', err);
+      setError(err.message || "Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -386,32 +393,6 @@ export default function RegisterAgencyPage() {
                       required
                     />
                   </FormGroup>
-
-                  <FormRow>
-                    <FormGroup>
-                      <Label>{t("form.licenseNumber")}</Label>
-                      <Input
-                        type="text"
-                        name="licenseNumber"
-                        value={formData.licenseNumber}
-                        onChange={handleChange}
-                        placeholder={t("form.licenseNumberPlaceholder")}
-                        required
-                      />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <Label>{t("form.taxId")}</Label>
-                      <Input
-                        type="text"
-                        name="taxId"
-                        value={formData.taxId}
-                        onChange={handleChange}
-                        placeholder={t("form.taxIdPlaceholder")}
-                        required
-                      />
-                    </FormGroup>
-                  </FormRow>
                 </StepContent>
               )}
 
@@ -425,9 +406,9 @@ export default function RegisterAgencyPage() {
                       onChange={handleChange}
                       required
                     >
-                      <option value="small">{t("form.agencySizeOptions.small")}</option>
-                      <option value="medium">{t("form.agencySizeOptions.medium")}</option>
-                      <option value="large">{t("form.agencySizeOptions.large")}</option>
+                      <option value="SMALL">{t("form.agencySizeOptions.small")}</option>
+                      <option value="MEDIUM">{t("form.agencySizeOptions.medium")}</option>
+                      <option value="LARGE">{t("form.agencySizeOptions.large")}</option>
                     </Select>
                   </FormGroup>
 

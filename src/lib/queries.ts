@@ -204,3 +204,109 @@ export const CREATE_ROOMMATE = gql`
     }
   }
 `;
+
+export const REGISTER_AGENCY = gql`
+  mutation RegisterAgency($input: CreateAgencyInput!) {
+    registerAgency(input: $input) {
+      token
+      agency {
+        id
+        companyName
+        email
+        phone
+        website
+        address
+        city
+        zipCode
+        contactPerson
+        contactRole
+        agencySize
+        logo
+        description
+        specializations
+        isVerified
+        isActive
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const LOGIN_AGENCY = gql`
+  mutation LoginAgency($input: AgencyLoginInput!) {
+    loginAgency(input: $input) {
+      token
+      agency {
+        id
+        companyName
+        email
+        phone
+        website
+        address
+        city
+        zipCode
+        contactPerson
+        contactRole
+        agencySize
+        logo
+        description
+        specializations
+        isVerified
+        isActive
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const GET_AGENCIES = gql`
+  query GetAgencies {
+    agencies {
+      id
+      companyName
+      email
+      phone
+      website
+      address
+      city
+      zipCode
+      contactPerson
+      contactRole
+      agencySize
+      logo
+      description
+      specializations
+      isVerified
+      isActive
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_AGENCY = gql`
+  query GetAgency($id: ID!) {
+    agency(id: $id) {
+      id
+      companyName
+      email
+      phone
+      website
+      address
+      city
+      zipCode
+      contactPerson
+      contactRole
+      agencySize
+      logo
+      description
+      specializations
+      isVerified
+      isActive
+      createdAt
+      updatedAt
+    }
+  }
+`;
