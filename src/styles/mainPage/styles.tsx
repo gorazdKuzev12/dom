@@ -80,7 +80,6 @@ export const SearchBar = styled.div`
   }
   
   &:hover {
-    transform: translateY(-3px);
     box-shadow: 
       0 16px 48px rgba(0, 0, 0, 0.15),
       0 4px 16px rgba(0, 0, 0, 0.1),
