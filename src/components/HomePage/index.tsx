@@ -77,18 +77,27 @@ const TopLink = styled(BaseTopLink)`
 const customSelectStyles: StylesConfig<SelectOption> = {
   control: (base: CSSObjectWithLabel, state: SelectStylesProps) => ({
     ...base,
-    borderRadius: "10px",
-    border: "1px solid #ddd",
-    padding: "0.3rem 0.5rem",
+    borderRadius: "12px",
+    border: "1px solid rgba(221, 221, 221, 0.6)",
+    padding: "0.4rem 0.6rem",
     fontSize: "1rem",
     minWidth: "200px",
-    boxShadow: state.isFocused ? "0 0 0 1px #0c4240" : "none",
+    background: "rgba(255, 255, 255, 0.95)",
+    backdropFilter: "blur(8px)",
+    boxShadow: state.isFocused 
+      ? "0 0 0 3px rgba(12, 66, 64, 0.1), 0 4px 12px rgba(12, 66, 64, 0.15)" 
+      : "0 2px 8px rgba(0, 0, 0, 0.08)",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    transform: state.isFocused ? "translateY(-1px)" : "translateY(0)",
     "&:hover": {
-      borderColor: "#0c4240",
+      borderColor: "rgba(12, 66, 64, 0.4)",
+      boxShadow: "0 4px 12px rgba(12, 66, 64, 0.12)",
+      transform: "translateY(-1px)",
     },
     "@media (max-width: 480px)": {
       width: "360px",
       minWidth: "0",
+      padding: "0.5rem 0.7rem",
     },
   }),
   option: (base: CSSObjectWithLabel, state: SelectStylesProps) => ({
@@ -96,16 +105,25 @@ const customSelectStyles: StylesConfig<SelectOption> = {
     backgroundColor: state.isSelected
       ? "#0c4240"
       : state.isFocused
-      ? "#f2f2f2"
+      ? "rgba(12, 66, 64, 0.08)"
       : "white",
     color: state.isSelected ? "white" : "#333",
-    padding: "0.6rem 1.3rem",
+    padding: "0.7rem 1.4rem",
+    transition: "all 0.2s ease",
+    position: "relative",
+    "&:hover": {
+      transform: "translateX(4px)",
+    },
   }),
   menu: (base: CSSObjectWithLabel) => ({
     ...base,
-    borderRadius: "8px",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+    borderRadius: "12px",
+    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08)",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    backdropFilter: "blur(12px)",
+    background: "rgba(255, 255, 255, 0.98)",
     zIndex: 9999,
+    overflow: "hidden",
   }),
   menuPortal: (base: CSSObjectWithLabel) => ({
     ...base,
@@ -113,7 +131,13 @@ const customSelectStyles: StylesConfig<SelectOption> = {
   }),
   placeholder: (base: CSSObjectWithLabel) => ({
     ...base,
-    color: "#888",
+    color: "#999",
+    fontWeight: "500",
+  }),
+  singleValue: (base: CSSObjectWithLabel) => ({
+    ...base,
+    color: "#333",
+    fontWeight: "500",
   }),
 };
 
