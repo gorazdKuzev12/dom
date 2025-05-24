@@ -89,6 +89,22 @@ export default function BlogPostClient({ blogPost, locale, error }: BlogPostClie
     // You could add a toast notification here
   };
 
+  const processContent = (content: string) => {
+    // Split content by double newlines to create paragraphs
+    const paragraphs = content.split(/\n\s*\n/);
+    
+    return paragraphs
+      .map(paragraph => {
+        const trimmed = paragraph.trim().replace(/\n/g, ' ');
+        if (trimmed) {
+          return `<p>${trimmed}</p>`;
+        }
+        return '';
+      })
+      .filter(p => p)
+      .join('');
+  };
+
   if (error || !blogPost) {
     return (
       <PageWrapper>
@@ -199,7 +215,7 @@ export default function BlogPostClient({ blogPost, locale, error }: BlogPostClie
             <ArticleContent>
               <ContentText
                 dangerouslySetInnerHTML={{
-                  __html: getLocalizedContent(blogPost, 'content').replace(/\n/g, '<br>')
+                  __html: processContent(getLocalizedContent(blogPost, 'content'))
                 }}
               />
             </ArticleContent>
@@ -289,11 +305,11 @@ const MainContent = styled.main`
   flex: 1;
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   width: 100%;
 
   @media (max-width: 768px) {
-    padding: 1rem;
+    padding: 0.75rem;
   }
 `;
 
@@ -301,16 +317,16 @@ const BackToButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.6rem 1rem;
+  padding: 0.5rem 1rem;
   background: white;
   color: #0c4240;
   border: 1px solid #e1e5e9;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 
   &:hover {
     background: #f5f9f9;
@@ -320,55 +336,56 @@ const BackToButton = styled.button`
 
 const ArticleContainer = styled.article`
   background: white;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 `;
 
 const ArticleHeader = styled.header`
-  padding: 3rem 3rem 2rem;
+  padding: 2rem 2rem 1rem;
 
   @media (max-width: 768px) {
-    padding: 2rem 1.5rem 1rem;
+    padding: 1.5rem 1rem 0.75rem;
   }
 `;
 
 const CategoryTags = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
 `;
 
 const CategoryTag = styled.span`
   background: #0c4240;
   color: white;
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
   font-weight: 500;
 `;
 
 const ArticleTitle = styled.h1`
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #333;
   line-height: 1.2;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 1.6rem;
   }
 `;
 
 const ArticleExcerpt = styled.p`
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #666;
-  line-height: 1.6;
-  margin-bottom: 2rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
 
   @media (max-width: 768px) {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    margin-bottom: 1rem;
   }
 `;
 
@@ -376,12 +393,12 @@ const ArticleMeta = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 1.5rem;
+  padding-top: 1rem;
   border-top: 1px solid #e1e5e9;
 
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
     align-items: flex-start;
   }
 `;
@@ -389,53 +406,60 @@ const ArticleMeta = styled.div`
 const MetaGroup = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 1rem;
 
   @media (max-width: 768px) {
-    gap: 1rem;
+    gap: 0.75rem;
   }
 `;
 
 const MetaItem = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   color: #666;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 
   svg {
     color: #0c4240;
+    width: 14px;
+    height: 14px;
   }
 `;
 
 const ShareButtons = styled.div`
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
 `;
 
 const ShareButton = styled.button`
   display: flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.5rem;
+  gap: 0.25rem;
+  padding: 0.4rem 0.6rem;
   background: #f5f9f9;
   color: #0c4240;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 
   &:hover {
     background: #0c4240;
     color: white;
     transform: translateY(-1px);
   }
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
 `;
 
 const FeaturedImage = styled.div`
   width: 100%;
-  height: 400px;
+  height: 300px;
   overflow: hidden;
 
   img {
@@ -445,56 +469,59 @@ const FeaturedImage = styled.div`
   }
 
   @media (max-width: 768px) {
-    height: 250px;
+    height: 200px;
   }
 `;
 
 const ArticleContent = styled.div`
-  padding: 3rem;
+  padding: 1.5rem 2rem;
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
+    padding: 1rem;
   }
 `;
 
 const ContentText = styled.div`
-  font-size: 1.1rem;
-  line-height: 1.8;
+  font-size: 1rem;
+  line-height: 1.6;
   color: #333;
+
+  p {
+    margin-bottom: 1rem;
+  }
 
   h1, h2, h3, h4, h5, h6 {
     color: #0c4240;
-    margin: 2rem 0 1rem;
+    margin: 1.5rem 0 0.75rem;
     font-weight: 600;
   }
 
   h2 {
-    font-size: 1.8rem;
-  }
-
-  h3 {
     font-size: 1.5rem;
   }
 
-  p {
-    margin-bottom: 1.5rem;
+  h3 {
+    font-size: 1.25rem;
   }
 
   blockquote {
-    border-left: 4px solid #0c4240;
-    padding-left: 1.5rem;
-    margin: 2rem 0;
+    border-left: 3px solid #0c4240;
+    padding-left: 1rem;
+    margin: 1rem 0;
     font-style: italic;
     color: #666;
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 4px;
   }
 
   ul, ol {
-    margin: 1.5rem 0;
-    padding-left: 2rem;
+    margin: 1rem 0;
+    padding-left: 1.5rem;
   }
 
   li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
   }
 
   a {
@@ -509,14 +536,14 @@ const ContentText = styled.div`
   img {
     max-width: 100%;
     height: auto;
-    border-radius: 8px;
-    margin: 1.5rem 0;
+    border-radius: 6px;
+    margin: 1rem 0;
   }
 
   code {
     background: #f5f9f9;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
+    padding: 0.15rem 0.3rem;
+    border-radius: 3px;
     font-family: 'Monaco', 'Menlo', monospace;
     font-size: 0.9rem;
   }
@@ -524,9 +551,9 @@ const ContentText = styled.div`
   pre {
     background: #f5f9f9;
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: 6px;
     overflow-x: auto;
-    margin: 1.5rem 0;
+    margin: 1rem 0;
 
     code {
       background: none;
@@ -537,12 +564,12 @@ const ContentText = styled.div`
   table {
     width: 100%;
     border-collapse: collapse;
-    margin: 1.5rem 0;
+    margin: 1rem 0;
     font-size: 0.9rem;
 
     th, td {
       border: 1px solid #e1e5e9;
-      padding: 0.8rem;
+      padding: 0.6rem;
       text-align: left;
     }
 
@@ -559,36 +586,37 @@ const ContentText = styled.div`
 `;
 
 const ArticleFooter = styled.footer`
-  padding: 2rem 3rem 3rem;
+  padding: 1rem 2rem 2rem;
   border-top: 1px solid #e1e5e9;
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
+    padding: 0.75rem 1rem 1.5rem;
   }
 `;
 
 const TagsSection = styled.div`
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 `;
 
 const TagsLabel = styled.div`
   font-weight: 600;
   color: #333;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
 `;
 
 const TagsList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.4rem;
 `;
 
 const Tag = styled.span`
   background: #f5f9f9;
   color: #0c4240;
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
   font-weight: 500;
 `;
 
@@ -597,5 +625,6 @@ const ShareSection = styled.div``;
 const ShareLabel = styled.div`
   font-weight: 600;
   color: #333;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
 `; 
