@@ -20,6 +20,8 @@ import {
   Grid,
   Coffee,
   Wind,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import Menu from "@/components/Menu/page";
 import { FaFacebookMessenger, FaViber, FaInstagram, FaWhatsapp, FaTelegram, FaCopy } from 'react-icons/fa';
@@ -71,12 +73,48 @@ export default function ListingClient({ listing, locale }: ListingClientProps) {
   const router = useRouter();
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [showImageGallery, setShowImageGallery] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Create array of all images (we'll use so.png for all since that's what we're using)
+  const allImages = Array(8).fill('/so.png'); // Creating 8 placeholder images
 
   // Check if listing is saved in localStorage on component mount
   useEffect(() => {
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     setSaved(favorites.some((fav: any) => fav.id === listing.id));
   }, [listing.id]);
+
+  // Keyboard navigation for image gallery
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!showImageGallery) return;
+      
+      if (e.key === 'Escape') {
+        setShowImageGallery(false);
+      } else if (e.key === 'ArrowLeft') {
+        goToPrevImage();
+      } else if (e.key === 'ArrowRight') {
+        goToNextImage();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [showImageGallery, currentImageIndex]);
+
+  // Prevent body scroll when gallery is open
+  useEffect(() => {
+    if (showImageGallery) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showImageGallery]);
 
   const handleSave = () => {
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
@@ -172,6 +210,19 @@ export default function ListingClient({ listing, locale }: ListingClientProps) {
     setShowShareMenu(false);
   };
 
+  const openImageGallery = (index: number) => {
+    setCurrentImageIndex(index);
+    setShowImageGallery(true);
+  };
+
+  const goToNextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
+  };
+
+  const goToPrevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
+  };
+
   const getCityName = () => {
     if (locale === 'mk') return listing.city.name_mk;
     if (locale === 'sq') return listing.city.name_sq;
@@ -215,15 +266,36 @@ export default function ListingClient({ listing, locale }: ListingClientProps) {
 
       <Gallery>
         <ImageGrid>
-          <MainImage src="/so.png" />
+          <MainImage 
+            src="/so.png" 
+            onClick={() => openImageGallery(0)}
+            style={{ cursor: 'pointer' }}
+          />
           <SubImagesGrid>
-            <SubImage src="/so.png" />
-            <SubImage src="/so.png" />
-            <SubImage src="/so.png" />
-            <SubImage src="/so.png" overlay>
+            <SubImage 
+              src="/so.png" 
+              onClick={() => openImageGallery(1)}
+              style={{ cursor: 'pointer' }}
+            />
+            <SubImage 
+              src="/so.png" 
+              onClick={() => openImageGallery(2)}
+              style={{ cursor: 'pointer' }}
+            />
+            <SubImage 
+              src="/so.png" 
+              onClick={() => openImageGallery(3)}
+              style={{ cursor: 'pointer' }}
+            />
+            <SubImage 
+              src="/so.png" 
+              overlay
+              onClick={() => openImageGallery(4)}
+              style={{ cursor: 'pointer' }}
+            >
               <SeeMoreOverlay>
                 <Grid size={20} />
-                <span>See all photos</span>
+                <span>See all {allImages.length} photos</span>
               </SeeMoreOverlay>
             </SubImage>
           </SubImagesGrid>
@@ -403,6 +475,65 @@ export default function ListingClient({ listing, locale }: ListingClientProps) {
 
       <Footer />
 
+      {/* Image Gallery Modal */}
+      {showImageGallery && (
+        <GalleryOverlay onClick={() => setShowImageGallery(false)}>
+          <GalleryModal onClick={(e) => e.stopPropagation()}>
+            <GalleryHeader>
+              <GalleryTitle>
+                Property Photos ({currentImageIndex + 1} of {allImages.length})
+              </GalleryTitle>
+              <GalleryCloseButton onClick={() => setShowImageGallery(false)}>
+                <X size={24} />
+              </GalleryCloseButton>
+            </GalleryHeader>
+
+            <GalleryContent>
+              <GalleryNavButton 
+                direction="left" 
+                onClick={goToPrevImage}
+                disabled={allImages.length <= 1}
+              >
+                <ChevronLeft size={32} />
+              </GalleryNavButton>
+
+              <GalleryImageContainer>
+                <GalleryImage 
+                  src={allImages[currentImageIndex]} 
+                  alt={`Property photo ${currentImageIndex + 1}`}
+                />
+              </GalleryImageContainer>
+
+              <GalleryNavButton 
+                direction="right" 
+                onClick={goToNextImage}
+                disabled={allImages.length <= 1}
+              >
+                <ChevronRight size={32} />
+              </GalleryNavButton>
+            </GalleryContent>
+
+            <GalleryThumbnails>
+              {allImages.map((image, index) => (
+                <GalleryThumbnail
+                  key={index}
+                  src={image}
+                  alt={`Thumbnail ${index + 1}`}
+                  active={index === currentImageIndex}
+                  onClick={() => setCurrentImageIndex(index)}
+                />
+              ))}
+            </GalleryThumbnails>
+
+            <GalleryFooter>
+              <GalleryInfo>
+                Use arrow keys to navigate • Press ESC to close
+              </GalleryInfo>
+            </GalleryFooter>
+          </GalleryModal>
+        </GalleryOverlay>
+      )}
+
       {showShareMenu && (
         <ShareMenuOverlay onClick={() => setShowShareMenu(false)}>
           <ShareMenuContent onClick={e => e.stopPropagation()}>
@@ -468,6 +599,11 @@ const MainImage = styled.img`
   height: 500px;
   object-fit: cover;
   border-radius: 8px;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
 
   @media (max-width: 768px) {
     height: 250px;
@@ -487,7 +623,12 @@ const SubImagesGrid = styled.div`
   }
 `;
 
-const SubImage = styled.div`
+interface SubImageProps {
+  src: string;
+  overlay?: boolean;
+}
+
+const SubImage = styled.div<SubImageProps>`
   position: relative;
   width: 100%;
   height: 100%;
@@ -495,6 +636,13 @@ const SubImage = styled.div`
   background-size: cover;
   background-position: center;
   border-radius: 8px;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
   ${(props) =>
     props.overlay &&
     `
@@ -538,6 +686,199 @@ const SeeMoreOverlay = styled.div`
     flex-direction: row;
     gap: 0.25rem;
   }
+`;
+
+// Image Gallery Modal Styles
+const GalleryOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10002;
+  backdrop-filter: blur(4px);
+`;
+
+const GalleryModal = styled.div`
+  width: 95vw;
+  height: 95vh;
+  max-width: 1400px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+`;
+
+const GalleryHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+`;
+
+const GalleryTitle = styled.h3`
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+`;
+
+const GalleryCloseButton = styled.button`
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+`;
+
+const GalleryContent = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 0;
+`;
+
+interface GalleryNavButtonProps {
+  direction: 'left' | 'right';
+  disabled?: boolean;
+}
+
+const GalleryNavButton = styled.button<GalleryNavButtonProps>`
+  position: absolute;
+  ${props => props.direction}: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 1rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+  opacity: ${props => props.disabled ? 0.3 : 1};
+  pointer-events: ${props => props.disabled ? 'none' : 'auto'};
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.75rem;
+    ${props => props.direction}: 0.5rem;
+  }
+`;
+
+const GalleryImageContainer = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  max-height: 100%;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+`;
+
+const GalleryImage = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+`;
+
+const GalleryThumbnails = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.75rem 1rem;
+    gap: 0.25rem;
+  }
+`;
+
+interface GalleryThumbnailProps {
+  active: boolean;
+}
+
+const GalleryThumbnail = styled.img<GalleryThumbnailProps>`
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: ${props => props.active ? 1 : 0.6};
+  border: ${props => props.active ? '2px solid #27795b' : '2px solid transparent'};
+  flex-shrink: 0;
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    width: 45px;
+    height: 45px;
+  }
+`;
+
+const GalleryFooter = styled.div`
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+`;
+
+const GalleryInfo = styled.div`
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  text-align: center;
 `;
 
 const ContentContainer = styled.div`
@@ -622,7 +963,11 @@ const AgentCompany = styled.div`
   color: #666;
 `;
 
-const ContactButton = styled.button`
+interface ContactButtonProps {
+  secondary?: boolean;
+}
+
+const ContactButton = styled.button<ContactButtonProps>`
   background: ${(props) => (props.secondary ? "white" : "#27795b")};
   color: ${(props) => (props.secondary ? "#27795b" : "white")};
   border: ${(props) => (props.secondary ? "1px solid #27795b" : "none")};
@@ -724,7 +1069,11 @@ const ButtonRow = styled.div`
   gap: 0.8rem;
 `;
 
-const ActionButton = styled.button`
+interface ActionButtonProps {
+  primary?: boolean;
+}
+
+const ActionButton = styled.button<ActionButtonProps>`
   background: ${(props) => (props.primary ? "#3c3c3c" : "#f5f5f5")};
   color: ${(props) => (props.primary ? "white" : "#444")};
   padding: 0.6rem 1.2rem;
