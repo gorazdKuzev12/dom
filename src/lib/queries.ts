@@ -95,6 +95,50 @@ export const GET_LISTING_BY_ID = gql`
       contactName
       contactEmail
       contactPhone
+      bookingNumber
+      createdAt
+      expiresAt
+      cityId
+      municipalityId
+      city {
+        id
+        name_en
+        name_mk
+        name_sq
+        slug
+      }
+      municipality {
+        id
+        name_en
+        name_mk
+        name_sq
+      }
+    }
+  }
+`;
+
+export const GET_LISTING_BY_BOOKING_NUMBER = gql`
+  query GetListingByBookingNumber($bookingNumber: String!) {
+    listingByBookingNumber(bookingNumber: $bookingNumber) {
+      id
+      title
+      description
+      type
+      transaction
+      price
+      size
+      condition
+      floor
+      totalFloors
+      rooms
+      bathrooms
+      amenities
+      address
+      images
+      contactName
+      contactEmail
+      contactPhone
+      bookingNumber
       createdAt
       expiresAt
       cityId
@@ -137,6 +181,7 @@ export const CREATE_LISTING = gql`
       contactName
       contactEmail
       contactPhone
+      bookingNumber
       createdAt
       expiresAt
       cityId
@@ -297,6 +342,42 @@ export const LOGIN_AGENCY = gql`
         logo
         description
         specializations
+        isVerified
+        isActive
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const REGISTER_USER = gql`
+  mutation RegisterUser($input: CreateUserInput!) {
+    registerUser(input: $input) {
+      token
+      user {
+        id
+        name
+        email
+        phone
+        isVerified
+        isActive
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const LOGIN_USER = gql`
+  mutation LoginUser($input: UserLoginInput!) {
+    loginUser(input: $input) {
+      token
+      user {
+        id
+        name
+        email
+        phone
         isVerified
         isActive
         createdAt

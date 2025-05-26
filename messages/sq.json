@@ -46,5 +46,140 @@
       "email": "Email",
       "address": "Adresa"
     }
+  },
+  "Home": {
+    "hero": {
+      "title": "Gjeni shtëpinë tuaj të përkryer",
+      "subtitle": "Zbuloni mijëra prona për shitje dhe me qira në të gjithë Maqedoninë"
+    },
+    "search": {
+      "placeholder": "Kërkoni sipas vendndodhjes, llojit të pronës...",
+      "allLocations": "Të gjitha vendndodhjet",
+      "button": "Kërko prona"
+    },
+    "filters": {
+      "buy": "Bli",
+      "rent": "Me qira",
+      "find_roommate": "Gjej shok dhome"
+    },
+    "featured": {
+      "title": "Prona të zgjedhura",
+      "type": "Apartament",
+      "propertyTitle": "Apartament modern në qendër të qytetit",
+      "location": "Shkup, Maqedoni"
+    }
+  },
+  "PostProperty": {
+    "title": "Posto pronën",
+    "subtitle": "Nuk kërkohet hyrje - Posto menjëherë! Lajme të mira! Mund ta postoni pronën tuaj tani pa krijuar llogari. Do t'ju japim një numër rezervimi për të menaxhuar gjithçka. Por nëse dëshironi edhe më shumë kontroll, krijimi i llogarisë ju jep: ✓ Redaktoni dhe përditësoni listimet tuaja në çdo kohë nga paneli",
+    "steps": {
+      "details": "Detajet",
+      "media": "Media",
+      "publish": "Publiko"
+    },
+    "contactInfo": {
+      "title": "Informacioni i kontaktit",
+      "fullName": "Emri i plotë",
+      "fullNamePlaceholder": "Shkruani emrin tuaj të plotë",
+      "email": "Adresa e emailit",
+      "emailPlaceholder": "Shkruani adresën tuaj të emailit",
+      "phone": "Numri i telefonit",
+      "phonePlaceholder": "Shkruani numrin tuaj të telefonit"
+    },
+    "propertyDetails": {
+      "title": "Detajet e pronës",
+      "listingTitle": "Titulli",
+      "listingTitlePlaceholder": "p.sh. Apartament i rehatshëm në Qendër",
+      "propertyType": "Lloji i pronës",
+      "types": {
+        "apartment": "Apartament",
+        "house": "Shtëpi",
+        "office": "Zyrë",
+        "land": "Tokë"
+      },
+      "listingType": "Lloji i listimit",
+      "listingTypes": {
+        "rent": "Me qira",
+        "buy": "Për shitje"
+      },
+      "price": "Çmimi",
+      "pricePlaceholder": "Çmimi (€)",
+      "size": "Sipërfaqja",
+      "sizePlaceholder": "Sipërfaqja (m²)",
+      "condition": "Gjendja",
+      "conditions": {
+        "new": "E re",
+        "renovated": "E rinovuar",
+        "needsRenovation": "Ka nevojë për rinovim"
+      },
+      "floor": "Kati",
+      "floorPlaceholder": "Numri i katit",
+      "totalFloors": "Totali i kateve",
+      "totalFloorsPlaceholder": "Numri total i kateve",
+      "rooms": "Dhomat",
+      "roomsPlaceholder": "Numri i dhomave",
+      "bathrooms": "Banjot",
+      "bathroomsPlaceholder": "Numri i banjove"
+    },
+    "location": {
+      "title": "Vendndodhja",
+      "city": "Qyteti",
+      "selectCity": "Zgjidhni qytetin",
+      "cities": {
+        "skopje": "Shkup",
+        "bitola": "Manastir",
+        "kumanovo": "Kumanovë",
+        "ohrid": "Ohër",
+        "tetovo": "Tetovë"
+      },
+      "address": "Adresa",
+      "addressPlaceholder": "Shkruani adresën e pronës"
+    },
+    "amenities": {
+      "title": "Pajisjet",
+      "balcony": "Ballkon",
+      "heating": "Ngrohje",
+      "air_conditioning": "Kondicionim",
+      "furnished": "I mobiluar",
+      "elevator": "Ashensor",
+      "parking": "Parking",
+      "garden": "Kopsht",
+      "swimming_pool": "Pishinë",
+      "internet": "Internet/WiFi",
+      "laundry": "Dhomë larjeje",
+      "dishwasher": "Makinë larëse enësh",
+      "security": "Siguri",
+      "storage": "Hapësirë ruajtjeje",
+      "pet_friendly": "Miqësor ndaj kafshëve",
+      "terrace": "Terrasë",
+      "fireplace": "Oxhak",
+      "cable_tv": "TV kabllore",
+      "washing_machine": "Makinë larëse"
+    },
+    "description": {
+      "title": "Përshkrimi",
+      "placeholder": "Përshkruani pronën tuaj në detaje..."
+    },
+    "media": {
+      "title": "Fotografitë",
+      "subtitle": "Shtoni fotografi të pronës suaj",
+      "dragDrop": "Tërhiqni dhe lëshoni fotografi këtu ose klikoni për të ngarkuar",
+      "maxSize": "Madhësia maksimale e skedarit: 5MB",
+      "formats": "Formatet e mbështetura: JPG, PNG"
+    },
+    "buttons": {
+      "back": "Prapa",
+      "next": "Tjetër",
+      "publish": "Publiko listimin"
+    },
+    "errors": {
+      "required": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
+      "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
+      "invalidPhone": "Ju lutemi shkruani një numër telefoni të vlefshëm",
+      "uploadFailed": "Ngarkimi i fotografive dështoi",
+      "maxPhotos": "Lejohen maksimum 10 fotografi",
+      "minPhotos": "Ju lutemi shtoni të paktën një fotografi",
+      "unknown": "Ndodhi një gabim i papritur"
+    }
   }
 } 

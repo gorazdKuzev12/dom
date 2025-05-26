@@ -6,7 +6,7 @@
     "roommates": "Connect with roommates",
     "favorites": "Saved properties",
     "registerAgency": "Register as Agency",
-    "postWithoutLogin": "Post Property (No Login)",
+    "postWithoutLogin": "Post Property (No Login required)",
     "agencyLogin": "Agency Login",
     "myAgency": "My Agency",
         "agency": " Agencies"
@@ -177,6 +177,57 @@
     "verification": {
       "title": "Before you submit",
       "message": "Your application will be reviewed by our team. The verification process usually takes 1-2 business days. We'll notify you by email once your agency account is approved."
+    }
+  },
+  "UserRegistration": {
+    "title": "Create Your Account",
+    "subtitle": "Join dom.mk to save favorites and manage your listings",
+    "form": {
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "email": "Email Address",
+      "emailPlaceholder": "Enter your email address",
+      "phone": "Phone Number (Optional)",
+      "phonePlaceholder": "Enter your phone number",
+      "password": "Password",
+      "passwordPlaceholder": "Create a password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "agreeTerms": "I agree to dom.mk's Terms of Service and Privacy Policy",
+      "submit": "Create Account",
+      "creating": "Creating Account...",
+      "alreadyHaveAccount": "Already have an account?",
+      "signInHere": "Sign in here"
+    },
+    "errors": {
+      "requiredFields": "Please fill in all required fields",
+      "invalidEmail": "Please enter a valid email address",
+      "passwordTooShort": "Password must be at least 8 characters long",
+      "passwordMismatch": "Passwords do not match",
+      "agreeTermsRequired": "Please agree to the terms and conditions",
+      "unknown": "Registration failed. Please try again."
+    }
+  },
+  "UserLogin": {
+    "title": "Welcome Back",
+    "subtitle": "Sign in to your dom.mk account",
+    "form": {
+      "email": "Email Address",
+      "emailPlaceholder": "Enter your email",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "rememberMe": "Remember me for 7 days",
+      "forgotPassword": "Forgot password?",
+      "login": "Sign In",
+      "loggingIn": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "createOne": "Create one here"
+    },
+    "errors": {
+      "requiredFields": "Please fill in all required fields",
+      "invalidEmail": "Please enter a valid email address",
+      "invalidCredentials": "Login failed. Please check your credentials.",
+      "unknown": "An unexpected error occurred"
     }
   },
   "AgencyLogin": {

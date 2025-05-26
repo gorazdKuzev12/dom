@@ -68,5 +68,130 @@
       "propertyTitle": "Modern Apartment in City Center",
       "location": "Skopje, Macedonia"
     }
+  },
+  "Navigation": {
+    "postProperty": "Post property",
+    "home": "Home",
+    "about": "About",
+    "roommates": "Connect with roommates",
+    "favorites": "Saved properties",
+    "registerAgency": "Register as Agency",
+    "postWithoutLogin": "Post Property (No Login required)",
+    "agencyLogin": "Agency Login",
+    "myAgency": "My Agency",
+    "agency": " Agencies"
+  },
+  "PostProperty": {
+    "title": "Post Your Property",
+    "subtitle": "No Login Required - Post Instantly! Good news! You can post your property right now without creating an account. We'll give you a booking number to manage everything. But if you want even more control, creating an account gives you: ✓ Edit and update your listings anytime from dashboard",
+    "steps": {
+      "details": "Details",
+      "media": "Media",
+      "publish": "Publish"
+    },
+    "contactInfo": {
+      "title": "Contact Information",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "email": "Email Address",
+      "emailPlaceholder": "Enter your email address",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number"
+    },
+    "propertyDetails": {
+      "title": "Property Details",
+      "listingTitle": "Title",
+      "listingTitlePlaceholder": "e.g. Cozy Studio in Centar",
+      "propertyType": "Property Type",
+      "types": {
+        "apartment": "Apartment",
+        "house": "House",
+        "office": "Office",
+        "land": "Land"
+      },
+      "listingType": "Listing Type",
+      "listingTypes": {
+        "rent": "Rent",
+        "buy": "Buy"
+      },
+      "price": "Price",
+      "pricePlaceholder": "Price (€)",
+      "size": "Size",
+      "sizePlaceholder": "Size (m²)",
+      "condition": "Condition",
+      "conditions": {
+        "new": "New",
+        "renovated": "Renovated",
+        "needsRenovation": "Needs renovation"
+      },
+      "floor": "Floor",
+      "floorPlaceholder": "Floor number",
+      "totalFloors": "Total Floors",
+      "totalFloorsPlaceholder": "Total number of floors",
+      "rooms": "Rooms",
+      "roomsPlaceholder": "Number of rooms",
+      "bathrooms": "Bathrooms",
+      "bathroomsPlaceholder": "Number of bathrooms"
+    },
+    "location": {
+      "title": "Location",
+      "city": "City",
+      "selectCity": "Select a city",
+      "cities": {
+        "skopje": "Skopje",
+        "bitola": "Bitola",
+        "kumanovo": "Kumanovo",
+        "ohrid": "Ohrid",
+        "tetovo": "Tetovo"
+      },
+      "address": "Address",
+      "addressPlaceholder": "Enter the property address"
+    },
+    "amenities": {
+      "title": "Amenities",
+      "balcony": "Balcony",
+      "heating": "Heating",
+      "air_conditioning": "Air conditioning",
+      "furnished": "Furnished",
+      "elevator": "Elevator",
+      "parking": "Parking",
+      "garden": "Garden",
+      "swimming_pool": "Swimming Pool",
+      "internet": "Internet/WiFi",
+      "laundry": "Laundry Room",
+      "dishwasher": "Dishwasher",
+      "security": "Security System",
+      "storage": "Storage Space",
+      "pet_friendly": "Pet Friendly",
+      "terrace": "Terrace",
+      "fireplace": "Fireplace",
+      "cable_tv": "Cable TV",
+      "washing_machine": "Washing Machine"
+    },
+    "description": {
+      "title": "Description",
+      "placeholder": "Describe your property in detail..."
+    },
+    "media": {
+      "title": "Photos",
+      "subtitle": "Add photos of your property",
+      "dragDrop": "Drag and drop photos here or click to upload",
+      "maxSize": "Maximum file size: 5MB",
+      "formats": "Supported formats: JPG, PNG"
+    },
+    "buttons": {
+      "back": "Back",
+      "next": "Next",
+      "publish": "Publish Listing"
+    },
+    "errors": {
+      "required": "Please fill in all required fields",
+      "invalidEmail": "Please enter a valid email address",
+      "invalidPhone": "Please enter a valid phone number",
+      "uploadFailed": "Failed to upload photos",
+      "maxPhotos": "Maximum 10 photos allowed",
+      "minPhotos": "Please add at least one photo",
+      "unknown": "An unexpected error occurred"
+    }
   }
 } 

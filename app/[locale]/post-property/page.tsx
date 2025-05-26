@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import styled from "styled-components";
 import { useMutation, useQuery, ApolloProvider } from "@apollo/client";
@@ -52,6 +52,12 @@ interface FormData {
   amenities: string[];
 }
 
+interface ListingResult {
+  id: string;
+  bookingNumber?: string;
+  title: string;
+}
+
 interface StyledProps {
   active?: boolean;
   completed?: boolean;
@@ -61,11 +67,18 @@ interface FormGridProps {
   columns?: number;
 }
 
+interface InputProps {
+  autoFilled?: boolean;
+}
+
 function PostPropertyForm() {
   const t = useTranslations("PostProperty");
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [listingResult, setListingResult] = useState<ListingResult | null>(null);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
   
   // GraphQL hooks
   const [createListing] = useMutation(CREATE_LISTING);
@@ -92,6 +105,31 @@ function PostPropertyForm() {
     images: [],
     amenities: [],
   });
+
+  // Check for user authentication and populate form data
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const userToken = localStorage.getItem('userToken') || sessionStorage.getItem('userToken');
+      const storedUserData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
+      
+      if (userToken && storedUserData) {
+        const user = JSON.parse(storedUserData);
+        setIsUserLoggedIn(true);
+        setUserData(user);
+        
+        // Auto-populate contact information
+        setFormData(prev => ({
+          ...prev,
+          name: user.name || "",
+          email: user.email || "",
+          phone: user.phone || "",
+        }));
+      } else {
+        setIsUserLoggedIn(false);
+        setUserData(null);
+      }
+    }
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -218,8 +256,13 @@ function PostPropertyForm() {
       const { data } = await createListing({ variables: { input } });
       
       if (data?.createListing) {
-        // Redirect to success page or listing
-        window.location.href = `/listing/${data.createListing.id}`;
+        // Store the result and show success page
+        setListingResult({
+          id: data.createListing.id,
+          bookingNumber: data.createListing.bookingNumber,
+          title: data.createListing.title,
+        });
+        setStep(4); // Move to success step
       }
     } catch (err) {
       console.error("Error creating listing:", err);
@@ -263,6 +306,55 @@ function PostPropertyForm() {
         </Header>
 
         <ContentContainer>
+          {/* Full Control Section */}
+          <FullControlSection>
+            {isUserLoggedIn ? (
+              <LoggedInCard>
+                <ControlHeader>
+                  <ControlIcon>👤</ControlIcon>
+                  <ControlInfo>
+                    <ControlTitle>Full Control Mode</ControlTitle>
+                    <ControlSubtitle>Logged in as {userData?.name}</ControlSubtitle>
+                  </ControlInfo>
+                  <ControlBadge>✓ Verified</ControlBadge>
+                </ControlHeader>
+                <ControlFeatures>
+                  <FeatureItem>✓ Contact info auto-filled</FeatureItem>
+                  <FeatureItem>✓ Edit listings anytime</FeatureItem>
+                  <FeatureItem>✓ View analytics</FeatureItem>
+                  <FeatureItem>✓ Manage all properties</FeatureItem>
+                </ControlFeatures>
+              </LoggedInCard>
+            ) : (
+                             <GuestCard>
+                 <ControlHeader>
+                   <ControlIcon>🔓</ControlIcon>
+                   <ControlInfo>
+                     <ControlTitle>Post Without Login - No Account Required!</ControlTitle>
+                     <ControlSubtitle>
+                       You can post your property instantly without creating an account. 
+                       We'll give you a unique booking number to access and manage your listing anytime.
+                     </ControlSubtitle>
+                   </ControlInfo>
+                 </ControlHeader>
+                 <GuestFeatures>
+                   <GuestFeatureItem>✓ Post immediately - no registration needed</GuestFeatureItem>
+                   <GuestFeatureItem>✓ Get a unique booking number for access</GuestFeatureItem>
+                   <GuestFeatureItem>✓ Manage your listing with the booking number</GuestFeatureItem>
+                   <GuestFeatureItem>✓ Upgrade to full account anytime later</GuestFeatureItem>
+                 </GuestFeatures>
+                 <GuestActions>
+                   <LoginForControlButton href="/login">
+                     Login for Full Control
+                   </LoginForControlButton>
+                   <CreateAccountForControlButton href="/register">
+                     Create Account
+                   </CreateAccountForControlButton>
+                 </GuestActions>
+               </GuestCard>
+            )}
+          </FullControlSection>
+
           <FormContainer>
             <ProgressBar>
               <ProgressStep active={step >= 1} completed={step > 1}>
@@ -299,6 +391,7 @@ function PostPropertyForm() {
                   <CardSection>
                     <SectionTitle>
                       <User size={18} /> {t("contactInfo.title")}
+                      {isUserLoggedIn && <AutoFilledBadge>Auto-filled</AutoFilledBadge>}
                     </SectionTitle>
                     <FormGrid>
                       <FormGroup>
@@ -313,6 +406,8 @@ function PostPropertyForm() {
                           onChange={handleChange}
                           placeholder={t("contactInfo.fullNamePlaceholder")}
                           required
+                          disabled={isUserLoggedIn}
+                          autoFilled={isUserLoggedIn}
                         />
                       </FormGroup>
                       <FormGroup>
@@ -327,6 +422,8 @@ function PostPropertyForm() {
                           onChange={handleChange}
                           placeholder={t("contactInfo.emailPlaceholder")}
                           required
+                          disabled={isUserLoggedIn}
+                          autoFilled={isUserLoggedIn}
                         />
                       </FormGroup>
                       <FormGroup>
@@ -341,10 +438,40 @@ function PostPropertyForm() {
                           onChange={handleChange}
                           placeholder={t("contactInfo.phonePlaceholder")}
                           required
+                          disabled={isUserLoggedIn}
+                          autoFilled={isUserLoggedIn}
                         />
                       </FormGroup>
                     </FormGrid>
                   </CardSection>
+
+                  {/* Login Benefits Section */}
+                  <LoginBenefitsCard>
+                    <BenefitsHeader>
+                      <BenefitsIcon>🚀</BenefitsIcon>
+                      <BenefitsTitle>No Login Required - Post Instantly!</BenefitsTitle>
+                    </BenefitsHeader>
+                    <BenefitsText>
+                      <strong>Good news!</strong> You can post your property right now without creating an account. 
+                      We'll give you a booking number to manage everything. But if you want even more control, 
+                      creating an account gives you:
+                    </BenefitsText>
+                    <BenefitsList>
+                      <BenefitItem>✓ Edit and update your listings anytime from dashboard</BenefitItem>
+                      <BenefitItem>✓ View detailed analytics and visitor statistics</BenefitItem>
+                      <BenefitItem>✓ Save and organize favorite properties</BenefitItem>
+                      <BenefitItem>✓ Manage multiple listings in one place</BenefitItem>
+                      <BenefitItem>✓ Get priority support and notifications</BenefitItem>
+                      <BenefitItem>✓ No need to remember booking numbers</BenefitItem>
+                    </BenefitsList>
+                    <BenefitsNote>
+                      💡 <em>You can always create an account later and link your existing listings!</em>
+                    </BenefitsNote>
+                    <BenefitsActions>
+                      <LoginButton href="/login">Login</LoginButton>
+                      <RegisterButton href="/register">Create Account</RegisterButton>
+                    </BenefitsActions>
+                  </LoginBenefitsCard>
                 </StepContent>
               )}
 
@@ -657,24 +784,88 @@ function PostPropertyForm() {
                 </StepContent>
               )}
 
-              <ButtonGroup>
-                {step > 1 && (
-                  <SecondaryButton type="button" onClick={prevStep}>
-                    {t("buttons.back")}
-                  </SecondaryButton>
-                )}
-                {step < 3 ? (
-                  <PrimaryButton type="button" onClick={nextStep}>
-                    {t("buttons.next")}
-                    <ArrowRight size={16} />
-                  </PrimaryButton>
-                ) : (
-                  <PrimaryButton type="submit" disabled={loading}>
-                    {loading ? "..." : t("buttons.publish")}
-                    <Check size={16} />
-                  </PrimaryButton>
-                )}
-              </ButtonGroup>
+              {/* Step 4: Success */}
+              {step === 4 && listingResult && (
+                <StepContent>
+                  <SuccessCard>
+                    <SuccessIcon>🎉</SuccessIcon>
+                    <SuccessTitle>Property Posted Successfully!</SuccessTitle>
+                    <SuccessSubtitle>Your listing "{listingResult.title}" is now live</SuccessSubtitle>
+                    
+                    {isUserLoggedIn ? (
+                      <LoggedInSuccessCard>
+                        <LoggedInSuccessTitle>✓ Full Control Active</LoggedInSuccessTitle>
+                        <LoggedInSuccessText>
+                          Your listing is linked to your account. You can edit, update, and manage it anytime from your dashboard.
+                        </LoggedInSuccessText>
+                        <ManageListingButton href={`/my-listings`}>
+                          Manage My Listings
+                        </ManageListingButton>
+                      </LoggedInSuccessCard>
+                    ) : (
+                      listingResult.bookingNumber && (
+                        <BookingNumberCard>
+                          <BookingNumberLabel>🎫 Your Unique Booking Number:</BookingNumberLabel>
+                          <BookingNumber>{listingResult.bookingNumber}</BookingNumber>
+                          <BookingNumberNote>
+                            <strong>Important:</strong> Save this booking number! You posted without creating an account, 
+                            so this number is your key to access and manage your listing. You can:
+                          </BookingNumberNote>
+                          <BookingNumberFeatures>
+                            <BookingFeatureItem>• View your listing anytime at /booking/{listingResult.bookingNumber}</BookingFeatureItem>
+                            <BookingFeatureItem>• Share this number with others to help manage your property</BookingFeatureItem>
+                            <BookingFeatureItem>• Use it to prove ownership of the listing</BookingFeatureItem>
+                            <BookingFeatureItem>• Keep it safe - no password recovery needed!</BookingFeatureItem>
+                          </BookingNumberFeatures>
+                        </BookingNumberCard>
+                      )
+                    )}
+
+                    <SuccessActions>
+                      <ViewListingButton href={`/listing/${listingResult.id}`}>
+                        View Your Listing
+                      </ViewListingButton>
+                      <PostAnotherButton onClick={() => window.location.reload()}>
+                        Post Another Property
+                      </PostAnotherButton>
+                    </SuccessActions>
+
+                    {!isUserLoggedIn && (
+                      <AccountPrompt>
+                        <AccountPromptTitle>Want to manage your listings easily?</AccountPromptTitle>
+                        <AccountPromptText>
+                          Create an account to edit, update, and track all your properties in one place.
+                        </AccountPromptText>
+                        <AccountPromptActions>
+                          <CreateAccountButton href="/register">Create Free Account</CreateAccountButton>
+                          <LoginPromptButton href="/login">I Already Have an Account</LoginPromptButton>
+                        </AccountPromptActions>
+                      </AccountPrompt>
+                    )}
+                  </SuccessCard>
+                </StepContent>
+              )}
+
+              {step < 4 && (
+                <ButtonGroup>
+                  {step > 1 && (
+                    <SecondaryButton type="button" onClick={prevStep}>
+                      {t("buttons.back")}
+                    </SecondaryButton>
+                  )}
+                  {step < 3 ? (
+                    <PrimaryButton type="button" onClick={nextStep}>
+                      {t("buttons.next")}
+                      <ArrowRight size={16} />
+                    </PrimaryButton>
+                  ) : (
+                    <PrimaryButton type="submit" disabled={loading}>
+                      {loading ? "..." : t("buttons.publish")}
+                      <Check size={16} />
+                    </PrimaryButton>
+                  )}
+                </ButtonGroup>
+              )}
             </Form>
           </FormContainer>
         </ContentContainer>
@@ -857,18 +1048,31 @@ const Label = styled.label`
   }
 `;
 
-const Input = styled.input`
+const Input = styled.input<InputProps>`
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #e1e5eb;
   border-radius: 6px;
   font-size: 0.95rem;
   transition: all 0.2s ease;
+  background: ${props => props.autoFilled ? '#f0f9ff' : 'white'};
+  position: relative;
 
   &:focus {
     outline: none;
     border-color: #0c4240;
     box-shadow: 0 0 0 2px rgba(12, 66, 64, 0.1);
+  }
+
+  &:disabled {
+    background: #f0f9ff;
+    border-color: #86efac;
+    color: #16a34a;
+    cursor: not-allowed;
+    
+    &::placeholder {
+      color: #16a34a;
+    }
   }
 
   &::placeholder {
@@ -1055,6 +1259,464 @@ const UploadButton = styled.label`
 
   &:hover {
     background: #e7f1f1;
+    transform: translateY(-1px);
+  }
+`;
+
+// Login Benefits Card Styles
+const LoginBenefitsCard = styled.div`
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+`;
+
+const BenefitsHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+`;
+
+const BenefitsIcon = styled.div`
+  font-size: 1.5rem;
+`;
+
+const BenefitsTitle = styled.h3`
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0c4240;
+  margin: 0;
+`;
+
+const BenefitsText = styled.p`
+  color: #475569;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+`;
+
+const BenefitsList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+`;
+
+const BenefitItem = styled.li`
+  color: #475569;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+`;
+
+const BenefitsNote = styled.div`
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin: 1rem 0;
+  font-size: 0.85rem;
+  color: #1e40af;
+`;
+
+const BenefitsActions = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+`;
+
+const LoginButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: #0c4240;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #0a3533;
+    transform: translateY(-1px);
+  }
+`;
+
+const RegisterButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: white;
+  color: #0c4240;
+  text-decoration: none;
+  border: 1px solid #0c4240;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f0f9ff;
+    transform: translateY(-1px);
+  }
+`;
+
+// Success Page Styles
+const SuccessCard = styled.div`
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+`;
+
+const SuccessIcon = styled.div`
+  font-size: 3rem;
+  margin-bottom: 1rem;
+`;
+
+const SuccessTitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0c4240;
+  margin: 0 0 0.5rem 0;
+`;
+
+const SuccessSubtitle = styled.p`
+  color: #666;
+  margin: 0 0 2rem 0;
+  font-size: 1rem;
+`;
+
+const BookingNumberCard = styled.div`
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+`;
+
+const BookingNumberLabel = styled.div`
+  font-size: 0.9rem;
+  color: #475569;
+  margin-bottom: 0.5rem;
+`;
+
+const BookingNumber = styled.div`
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0c4240;
+  font-family: monospace;
+  letter-spacing: 2px;
+  margin-bottom: 0.75rem;
+`;
+
+const BookingNumberNote = styled.div`
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+`;
+
+const BookingNumberFeatures = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const BookingFeatureItem = styled.div`
+  font-size: 0.8rem;
+  color: #475569;
+  line-height: 1.4;
+`;
+
+const SuccessActions = styled.div`
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+`;
+
+const ViewListingButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: #0c4240;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #0a3533;
+    transform: translateY(-1px);
+  }
+`;
+
+const PostAnotherButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: white;
+  color: #0c4240;
+  border: 1px solid #e1e5eb;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f5f9f9;
+    transform: translateY(-1px);
+  }
+`;
+
+const AccountPrompt = styled.div`
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+`;
+
+const AccountPromptTitle = styled.h3`
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0c4240;
+  margin: 0 0 0.5rem 0;
+`;
+
+const AccountPromptText = styled.p`
+  color: #64748b;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+`;
+
+const AccountPromptActions = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+`;
+
+const CreateAccountButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: #0c4240;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #0a3533;
+    transform: translateY(-1px);
+  }
+`;
+
+const LoginPromptButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: white;
+  color: #0c4240;
+  text-decoration: none;
+  border: 1px solid #e1e5eb;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f5f9f9;
+    transform: translateY(-1px);
+  }
+`;
+
+// Full Control Section Styles
+const FullControlSection = styled.div`
+  margin-bottom: 2rem;
+`;
+
+const LoggedInCard = styled.div`
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border: 1px solid #86efac;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+`;
+
+const GuestCard = styled.div`
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 1px solid #fbbf24;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+`;
+
+const ControlHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const ControlIcon = styled.div`
+  font-size: 2rem;
+  line-height: 1;
+`;
+
+const ControlInfo = styled.div`
+  flex: 1;
+`;
+
+const ControlTitle = styled.h3`
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0c4240;
+  margin: 0 0 0.25rem 0;
+`;
+
+const ControlSubtitle = styled.p`
+  font-size: 0.9rem;
+  color: #475569;
+  margin: 0;
+`;
+
+const ControlBadge = styled.div`
+  background: #22c55e;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+`;
+
+const ControlFeatures = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+  margin-top: 1rem;
+`;
+
+const FeatureItem = styled.div`
+  color: #16a34a;
+  font-size: 0.9rem;
+  font-weight: 500;
+`;
+
+const GuestFeatures = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+`;
+
+const GuestFeatureItem = styled.div`
+  color: #d97706;
+  font-size: 0.9rem;
+  font-weight: 500;
+`;
+
+const GuestActions = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+`;
+
+const LoginForControlButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: #0c4240;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(12, 66, 64, 0.2);
+
+  &:hover {
+    background: #0a3533;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(12, 66, 64, 0.3);
+  }
+`;
+
+const CreateAccountForControlButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: white;
+  color: #0c4240;
+  text-decoration: none;
+  border: 2px solid #0c4240;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #0c4240;
+    color: white;
+    transform: translateY(-2px);
+  }
+`;
+
+const AutoFilledBadge = styled.span`
+  background: #22c55e;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
+
+// Logged-in Success Styles
+const LoggedInSuccessCard = styled.div`
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  text-align: left;
+`;
+
+const LoggedInSuccessTitle = styled.h3`
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #16a34a;
+  margin: 0 0 0.5rem 0;
+`;
+
+const LoggedInSuccessText = styled.p`
+  color: #15803d;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+`;
+
+const ManageListingButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: #16a34a;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #15803d;
     transform: translateY(-1px);
   }
 `;

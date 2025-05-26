@@ -194,6 +194,57 @@
       }
     }
   },
+  "UserRegistration": {
+    "title": "Krijoni Llogarinë Tuaj",
+    "subtitle": "Bashkohuni me dom.mk për të ruajtur të preferuarat dhe menaxhuar listimet tuaja",
+    "form": {
+      "fullName": "Emri i Plotë",
+      "fullNamePlaceholder": "Shkruani emrin tuaj të plotë",
+      "email": "Adresa e Emailit",
+      "emailPlaceholder": "Shkruani adresën tuaj të emailit",
+      "phone": "Numri i Telefonit (Opsional)",
+      "phonePlaceholder": "Shkruani numrin tuaj të telefonit",
+      "password": "Fjalëkalimi",
+      "passwordPlaceholder": "Krijoni një fjalëkalim",
+      "confirmPassword": "Konfirmoni Fjalëkalimin",
+      "confirmPasswordPlaceholder": "Konfirmoni fjalëkalimin tuaj",
+      "agreeTerms": "Unë pajtohem me Kushtet e Shërbimit dhe Politikën e Privatësisë së dom.mk",
+      "submit": "Krijo Llogari",
+      "creating": "Duke krijuar llogarinë...",
+      "alreadyHaveAccount": "Keni tashmë një llogari?",
+      "signInHere": "Hyni këtu"
+    },
+    "errors": {
+      "requiredFields": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
+      "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
+      "passwordTooShort": "Fjalëkalimi duhet të ketë të paktën 8 karaktere",
+      "passwordMismatch": "Fjalëkalimet nuk përputhen",
+      "agreeTermsRequired": "Ju lutemi pajtohuni me kushtet dhe kushtet",
+      "unknown": "Regjistrimi dështoi. Ju lutemi provoni përsëri."
+    }
+  },
+  "UserLogin": {
+    "title": "Mirë se erdhët përsëri",
+    "subtitle": "Hyni në llogarinë tuaj dom.mk",
+    "form": {
+      "email": "Adresa e Emailit",
+      "emailPlaceholder": "Shkruani emailin tuaj",
+      "password": "Fjalëkalimi",
+      "passwordPlaceholder": "Shkruani fjalëkalimin tuaj",
+      "rememberMe": "Më mbaj mend për 7 ditë",
+      "forgotPassword": "Keni harruar fjalëkalimin?",
+      "login": "Hyni",
+      "loggingIn": "Duke hyrë...",
+      "noAccount": "Nuk keni llogari?",
+      "createOne": "Krijoni një këtu"
+    },
+    "errors": {
+      "requiredFields": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
+      "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
+      "invalidCredentials": "Hyrja dështoi. Ju lutemi kontrolloni kredencialet tuaja.",
+      "unknown": "Ndodhi një gabim i papritur"
+    }
+  },
   "AgencyLogin": {
     "title": "Hyrja e Agjencisë",
     "subtitle": "Qasuni në panelin tuaj të kontrollit dhe menaxhoni pronat tuaja",

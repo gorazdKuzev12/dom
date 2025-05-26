@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect, useRef } from "react";
 import styled, { keyframes, css } from "styled-components";
-import { FiHome, FiPlusSquare, FiUserPlus, FiMenu, FiX, FiHeart, FiGlobe, FiLogIn, FiBriefcase, FiChevronDown, FiLogOut, FiEdit } from "react-icons/fi";
+import { FiHome, FiPlusSquare, FiUserPlus, FiMenu, FiX, FiHeart, FiGlobe, FiLogIn, FiBriefcase, FiChevronDown, FiLogOut, FiEdit, FiUser } from "react-icons/fi";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -17,12 +17,16 @@ export default function Menu() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [savedCount, setSavedCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [agencyData, setAgencyData] = useState<any>(null);
+  const [userData, setUserData] = useState<any>(null);
   const [scrolled, setScrolled] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
   const langDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,6 +40,9 @@ export default function Menu() {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
+      }
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setUserDropdownOpen(false);
       }
       if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
         setLangDropdownOpen(false);
@@ -54,15 +61,28 @@ export default function Menu() {
 
     const checkAuthStatus = () => {
       if (typeof window !== 'undefined') {
-        const token = localStorage.getItem('agencyToken') || sessionStorage.getItem('agencyToken');
+        // Check agency authentication
+        const agencyToken = localStorage.getItem('agencyToken') || sessionStorage.getItem('agencyToken');
         const storedAgencyData = localStorage.getItem('agencyData') || sessionStorage.getItem('agencyData');
         
-        if (token && storedAgencyData) {
+        if (agencyToken && storedAgencyData) {
           setIsLoggedIn(true);
           setAgencyData(JSON.parse(storedAgencyData));
         } else {
           setIsLoggedIn(false);
           setAgencyData(null);
+        }
+
+        // Check user authentication
+        const userToken = localStorage.getItem('userToken') || sessionStorage.getItem('userToken');
+        const storedUserData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
+        
+        if (userToken && storedUserData) {
+          setIsUserLoggedIn(true);
+          setUserData(JSON.parse(storedUserData));
+        } else {
+          setIsUserLoggedIn(false);
+          setUserData(null);
         }
       }
     };
@@ -109,6 +129,19 @@ export default function Menu() {
     setDropdownOpen(false);
     
     router.push(`/${locale}/agency-login`);
+  };
+
+  const handleUserLogout = () => {
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('userData');
+    sessionStorage.removeItem('userToken');
+    sessionStorage.removeItem('userData');
+    
+    setIsUserLoggedIn(false);
+    setUserData(null);
+    setUserDropdownOpen(false);
+    
+    router.push(`/${locale}/login`);
   };
 
   const languages = [
@@ -174,6 +207,49 @@ export default function Menu() {
             </MainActions>
 
             <SecondaryActions>
+              <DropdownWrapper ref={userDropdownRef}>
+                <AnimatedDropdownButton 
+                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                  isOpen={userDropdownOpen}
+                >
+                  <ButtonIcon>
+                    <FiUser size={18} />
+                  </ButtonIcon>
+                  <span>Account</span>
+                  <DropdownArrow isOpen={userDropdownOpen}>
+                    <FiChevronDown size={16} />
+                  </DropdownArrow>
+                  <ButtonRipple />
+                </AnimatedDropdownButton>
+                
+                <AnimatedDropdownMenu isOpen={userDropdownOpen}>
+                  {!isUserLoggedIn ? (
+                    <>
+                      <DropdownItem href={`/${locale}/register`}>
+                        <FiUser size={16} />
+                        <span>Register</span>
+                      </DropdownItem>
+                      <DropdownItem href={`/${locale}/login`}>
+                        <FiLogIn size={16} />
+                        <span>Login</span>
+                      </DropdownItem>
+                    </>
+                  ) : (
+                    <>
+                      <AgencyInfo>
+                        <AgencyName>{userData?.name}</AgencyName>
+                        <AgencyEmail>{userData?.email}</AgencyEmail>
+                      </AgencyInfo>
+                      <DropdownDivider />
+                      <LogoutButton onClick={handleUserLogout}>
+                        <FiLogOut size={16} />
+                        <span>Logout</span>
+                      </LogoutButton>
+                    </>
+                  )}
+                </AnimatedDropdownMenu>
+              </DropdownWrapper>
+
               <DropdownWrapper ref={dropdownRef}>
                 <AnimatedDropdownButton 
                   onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -300,6 +376,30 @@ export default function Menu() {
           <MobileDivider />
           
           <MobileSecondaryActions>
+            {!isUserLoggedIn ? (
+              <>
+                <MobileLink href={`/${locale}/register`}>
+                  <FiUser size={20} />
+                  <span>Register</span>
+                </MobileLink>
+                <MobileLink href={`/${locale}/login`}>
+                  <FiLogIn size={20} />
+                  <span>Login</span>
+                </MobileLink>
+              </>
+            ) : (
+              <>
+                <MobileAgencyInfo>
+                  <AgencyName>{userData?.name}</AgencyName>
+                  <AgencyEmail>{userData?.email}</AgencyEmail>
+                </MobileAgencyInfo>
+                <MobileLogoutButton onClick={handleUserLogout}>
+                  <FiLogOut size={20} />
+                  <span>Logout</span>
+                </MobileLogoutButton>
+              </>
+            )}
+
             {!isLoggedIn ? (
               <>
                 <MobileLink href={`/${locale}/register-agency`}>
