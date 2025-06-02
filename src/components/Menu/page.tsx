@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect, useRef } from "react";
 import styled, { keyframes, css } from "styled-components";
-import { FiHome, FiPlusSquare, FiUserPlus, FiMenu, FiX, FiHeart, FiGlobe, FiLogIn, FiBriefcase, FiChevronDown, FiLogOut, FiEdit, FiUser } from "react-icons/fi";
+import { FiHome, FiPlusSquare, FiUserPlus, FiMenu, FiX, FiHeart, FiGlobe, FiLogIn, FiBriefcase, FiChevronDown, FiLogOut, FiEdit, FiUser, FiUsers } from "react-icons/fi";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -204,6 +204,17 @@ export default function Menu() {
                 </ButtonText>
                 <ButtonRipple />
               </AnimatedActionButton>
+              
+              <AnimatedActionButton href={`/${locale}/architects`}>
+                <ButtonIcon>
+                  <FiUsers size={18} />
+                </ButtonIcon>
+                <ButtonText>
+                  <ButtonLabel>Architects</ButtonLabel>
+                  <ButtonSubtitle>Find professionals</ButtonSubtitle>
+                </ButtonText>
+                <ButtonRipple />
+              </AnimatedActionButton>
             </MainActions>
 
             <SecondaryActions>
@@ -370,6 +381,10 @@ export default function Menu() {
             <MobileLink href={`/${locale}/blog`}>
               <FiEdit size={20} />
               <span>Blog</span>
+            </MobileLink>
+            <MobileLink href={`/${locale}/architects`}>
+              <FiUsers size={20} />
+              <span>Architects</span>
             </MobileLink>
           </MobileMainActions>
           

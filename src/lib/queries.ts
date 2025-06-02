@@ -436,3 +436,158 @@ export const GET_AGENCY = gql`
     }
   }
 `;
+
+export const CREATE_BLOG_POST = gql`
+  mutation CreateBlogPost($input: CreateBlogPostInput!) {
+    createBlogPost(input: $input) {
+      id
+      title_en
+      title_mk
+      title_sq
+      slug_en
+      slug_mk
+      slug_sq
+      isPublished
+      createdAt
+    }
+  }
+`;
+
+export const GET_ALL_ARCHITECTS = gql`
+  query GetAllArchitects($filter: ArchitectFilterInput) {
+    architects(filter: $filter) {
+      id
+      firstName
+      lastName
+      email
+      phone
+      website
+      profileImage
+      portfolioImages
+      bio_en
+      bio_mk
+      bio_sq
+      specializations
+      services
+      projectTypes
+      city {
+        id
+        name_en
+        name_mk
+        name_sq
+        slug
+      }
+      municipality {
+        id
+        name_en
+        name_mk
+        name_sq
+      }
+      consultationFee
+      projectFeeMin
+      projectFeeMax
+      currency
+      isAvailable
+      isVerified
+      isPremium
+      averageRating
+      totalReviews
+      yearsExperience
+      companyName
+      position
+      licenseNumber
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_ARCHITECT_BY_ID = gql`
+  query GetArchitectById($id: ID!) {
+    architectById(id: $id) {
+      id
+      firstName
+      lastName
+      email
+      phone
+      website
+      linkedIn
+      instagram
+      facebook
+      profileImage
+      portfolioImages
+      bio_en
+      bio_mk
+      bio_sq
+      specializations
+      services
+      projectTypes
+      city {
+        id
+        name_en
+        name_mk
+        name_sq
+        slug
+      }
+      municipality {
+        id
+        name_en
+        name_mk
+        name_sq
+      }
+      address
+      consultationFee
+      projectFeeMin
+      projectFeeMax
+      currency
+      isAvailable
+      education
+      certifications
+      awards
+      featuredProjects {
+        id
+        title_en
+        title_mk
+        title_sq
+        description_en
+        description_mk
+        description_sq
+        projectType
+        year
+        location
+        area
+        budget
+        currency
+        images
+        videos
+        isPublished
+        isFeatured
+        createdAt
+      }
+      isVerified
+      isActive
+      isPremium
+      averageRating
+      totalReviews
+      yearsExperience
+      companyName
+      position
+      licenseNumber
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const CREATE_ARCHITECT = gql`
+  mutation CreateArchitect($input: CreateArchitectInput!) {
+    createArchitect(input: $input) {
+      id
+      firstName
+      lastName
+      email
+      isActive
+      createdAt
+    }
+  }
+`;
