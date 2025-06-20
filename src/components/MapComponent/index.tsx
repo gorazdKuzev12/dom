@@ -55,11 +55,16 @@ interface NeighborhoodsClientProps {
   neighborhoods: Neighborhood[];
 }
 
-export default function NeighborhoodsClient({ cityName, neighborhoods }: NeighborhoodsClientProps) {
+export default function NeighborhoodsClient({
+  cityName,
+  neighborhoods,
+}: NeighborhoodsClientProps) {
   const t = useTranslations("mapPage");
   const router = useRouter();
   const [mapView, setMapView] = useState("standard");
-  const [activeNeighborhood, setActiveNeighborhood] = useState<string | null>(null);
+  const [activeNeighborhood, setActiveNeighborhood] = useState<string | null>(
+    null
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [activeNeighborhoodClicked, setActiveNeighborhoodClicked] =
     useState(false);
@@ -68,38 +73,103 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }: Neighbo
 
   // Extract transaction and property type from current URL
   const getUrlParams = () => {
-    if (typeof window !== 'undefined') {
-      const pathParts = window.location.pathname.split('/');
+    if (typeof window !== "undefined") {
+      const pathParts = window.location.pathname.split("/");
       // Expected: /[locale]/[transaction]/[type]/[city]
       const locale = pathParts[1];
       const transaction = pathParts[2]; // buy/rent
       const type = pathParts[3]; // apartments/houses/etc
       return { locale, transaction, type };
     }
-    return { locale: 'en', transaction: 'buy', type: 'apartments' };
+    return { locale: "en", transaction: "buy", type: "apartments" };
   };
 
   // Define positions for markers in pixel coordinates based on a reference map size
   const mapReferenceWidth = 800;
   const mapReferenceHeight = 480;
 
-  const neighborhoodPositions: Record<string, { left: string; top: string }> = {};
+  // Define actual geographical positions for Skopje municipalities
+  const skopjeMunicipalityPositions: Record<string, { left: string; top: string }> = {
+    "Centar": { left: "50%", top: "55%" },
+    "Центар": { left: "50%", top: "55%" },
+    "Qendër": { left: "50%", top: "55%" },
+    
+    "Čair": { left: "65%", top: "45%" },
+    "Чаир": { left: "65%", top: "45%" },
+    "Çair": { left: "65%", top: "45%" },
+    
+    "Karpoš": { left: "35%", top: "50%" },
+    "Карпош": { left: "35%", top: "50%" },
+    "Karposh": { left: "35%", top: "50%" },
+    
+    "Aerodrom": { left: "60%", top: "70%" },
+    "Аеродром": { left: "60%", top: "70%" },
+    "Aerodromi": { left: "60%", top: "70%" },
+    
+    "Butel": { left: "45%", top: "25%" },
+    "Бутел": { left: "45%", top: "25%" },
+    
+    "Gazi Baba": { left: "75%", top: "55%" },
+    "Гази Баба": { left: "75%", top: "55%" },
+    
+    "Gjorče Petrov": { left: "25%", top: "45%" },
+    "Ѓорче Петров": { left: "25%", top: "45%" },
+    "Gjorce Petrov": { left: "25%", top: "45%" },
+    
+    "Kisela Voda": { left: "55%", top: "85%" },
+    "Кисела Вода": { left: "55%", top: "85%" },
+    "Kisela Vodë": { left: "55%", top: "85%" },
+    
+    "Saraj": { left: "20%", top: "60%" },
+    "Сарај": { left: "20%", top: "60%" },
+    
+    "Šuto Orizari": { left: "55%", top: "35%" },
+    "Шуто Оризари": { left: "55%", top: "35%" },
+    "Shuto Orizari": { left: "55%", top: "35%" }
+  };
+
+  const neighborhoodPositions: Record<string, { left: string; top: string }> =
+    {};
   neighborhoods.forEach((neighborhood, index) => {
     const totalItems = neighborhoods.length;
-    const angleStep = (2 * Math.PI) / totalItems;
-    const angle = index * angleStep;
+    
+    // If there's only one neighborhood, center it
+    if (totalItems === 1) {
+      neighborhoodPositions[neighborhood.id] = {
+        left: "50%",
+        top: "50%",
+      };
+    } else if (cityName.toLowerCase() === "skopje") {
+      // For Skopje, use actual geographical positions
+      const municipalityName = neighborhood.name;
+      const position = skopjeMunicipalityPositions[municipalityName];
+      
+      if (position) {
+        neighborhoodPositions[neighborhood.id] = position;
+      } else {
+        // Fallback to center if municipality not found in our mapping
+        neighborhoodPositions[neighborhood.id] = {
+          left: "50%",
+          top: "50%",
+        };
+      }
+    } else {
+      // For other cities with multiple neighborhoods, use circular positioning
+      const angleStep = (2 * Math.PI) / totalItems;
+      const angle = index * angleStep;
 
-    const radius = 150; // pixel distance from center
-    const centerX = mapReferenceWidth / 2;
-    const centerY = mapReferenceHeight / 2;
+      const radius = 150; // pixel distance from center
+      const centerX = mapReferenceWidth / 2;
+      const centerY = mapReferenceHeight / 2;
 
-    const x = centerX + radius * Math.cos(angle);
-    const y = centerY + radius * Math.sin(angle);
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
 
-    neighborhoodPositions[neighborhood.id] = {
-      left: `${(x / mapReferenceWidth) * 100}%`,
-      top: `${(y / mapReferenceHeight) * 100}%`,
-    };
+      neighborhoodPositions[neighborhood.id] = {
+        left: `${(x / mapReferenceWidth) * 100}%`,
+        top: `${(y / mapReferenceHeight) * 100}%`,
+      };
+    }
   });
 
   const filteredNeighborhoods = neighborhoods.filter((n) =>
@@ -149,13 +219,15 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }: Neighbo
     if (activeNeighborhoodData) {
       const { locale, transaction, type } = getUrlParams();
       router.push(
-        `/${locale}/${transaction}/${type}/${cityName.toLowerCase()}/municipality/${activeNeighborhoodData.slug}/listings`
+        `/${locale}/${transaction}/${type}/${cityName.toLowerCase()}/municipality/${
+          activeNeighborhoodData.slug
+        }/listings`
       );
     }
   };
 
   const mapImages = {
-    standard: `/skopje-maps2.png`,
+    standard: `/maps/${cityName.toLowerCase()}-standart.png`,
     satellite: `/maps/${cityName.toLowerCase()}/satellite.png`,
   };
 
@@ -285,7 +357,7 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }: Neighbo
                 <DetailStat>
                   <strong>{t("averagePrice")}</strong>{" "}
                   {getActiveNeighborhood()?.avgPrice ||
-                    t("priceDataUnavailable")}
+                    t("noProperties")}
                 </DetailStat>
 
                 <DetailDivider />
@@ -315,13 +387,13 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }: Neighbo
               >
                 <CardImage style={{ backgroundImage: `url(/skopje.jpg)` }} />{" "}
                 <AvgPrice>
-                  {neighborhood.avgPrice || "Price data unavailable"}
+                  {neighborhood.avgPrice || t("noProperties")}
                 </AvgPrice>
                 <CardContent>
                   <NeighborhoodName>{neighborhood.name}</NeighborhoodName>
                   <PropertiesCount>
                     <Home size={16} color="#1e6b56" />
-                    {neighborhood.propertyCount} properties
+                    {neighborhood.propertyCount} {t("properties")}
                   </PropertiesCount>
                 </CardContent>
               </NeighborhoodCard>

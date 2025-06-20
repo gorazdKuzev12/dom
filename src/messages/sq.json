@@ -437,6 +437,7 @@
     "popularNeighborhoods": "Lagjet populore në {cityName}",
     "averagePrice": "Çmimi mesatar:",
     "priceDataUnavailable": "Të dhënat për çmimin nuk janë të disponueshme",
+    "noProperties": "Nuk ka prona",
     "viewProperties": "Shikoni pronat"
   }
 }

@@ -575,9 +575,9 @@ export const MarkerTooltip = styled.div`
 
 export const NeighborhoodDetailOverlay = styled.div<{ $visible: boolean }>`
   position: absolute;
-  top: 15px;
+  top: 65px;
   right: 15px;
-  width: 280px;
+  width: 250px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: 12px;

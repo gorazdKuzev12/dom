@@ -437,6 +437,7 @@
     "popularNeighborhoods": "Популарни населби во {cityName}",
     "averagePrice": "Просечна цена:",
     "priceDataUnavailable": "Нема податоци за цена",
+    "noProperties": "Нема имоти",
     "viewProperties": "Види имоти"
   }
 }

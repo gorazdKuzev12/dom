@@ -423,6 +423,7 @@
     "popularNeighborhoods": "Popular neighborhoods in {cityName}",
     "averagePrice": "Average price:",
     "priceDataUnavailable": "Price data unavailable",
+    "noProperties": "No properties",
     "viewProperties": "View properties"
   }
 }

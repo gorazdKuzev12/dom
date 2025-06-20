@@ -114,7 +114,7 @@ const slugToMunicipalityName = (slug: string): string => {
     "gjorce-petrov": "Gjorče Petrov",
     "kisela-voda": "Kisela Voda",
     "saraj": "Saraj",
-    "suto-orizari": "Šuto Orizari",
+    "shuto-orizari": "Šuto Orizari",
     "bitola": "Bitola",
     "kumanovo": "Kumanovo",
     "prilep": "Prilep",
