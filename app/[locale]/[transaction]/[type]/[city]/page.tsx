@@ -253,15 +253,19 @@ export default async function PropertyListingPage({ params }: { params: PagePara
       }
     );
 
-    return (
-      <div>
-        <NeighborhoodsClient 
-          cityName={city} 
-          neighborhoods={municipalities}
-        />
-        <Footer />
-      </div>
-    );
+    // Get localized city name for display
+    const localizedCityName = getLocalizedCityName(city, params.locale);
+
+          return (
+        <div>
+          <NeighborhoodsClient 
+            cityName={localizedCityName}
+            citySlug={city}
+            neighborhoods={municipalities}
+          />
+          <Footer />
+        </div>
+      );
   } catch (error) {
     console.error("Error fetching municipalities:", error);
     return (

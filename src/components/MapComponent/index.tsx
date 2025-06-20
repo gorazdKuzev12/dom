@@ -52,11 +52,13 @@ interface Neighborhood {
 
 interface NeighborhoodsClientProps {
   cityName: string;
+  citySlug?: string; // English name for URLs and images
   neighborhoods: Neighborhood[];
 }
 
 export default function NeighborhoodsClient({
   cityName,
+  citySlug,
   neighborhoods,
 }: NeighborhoodsClientProps) {
   const t = useTranslations("mapPage");
@@ -139,7 +141,7 @@ export default function NeighborhoodsClient({
         left: "50%",
         top: "50%",
       };
-    } else if (cityName.toLowerCase() === "skopje") {
+    } else if ((citySlug || cityName).toLowerCase() === "skopje") {
       // For Skopje, use actual geographical positions
       const municipalityName = neighborhood.name;
       const position = skopjeMunicipalityPositions[municipalityName];
@@ -208,7 +210,8 @@ export default function NeighborhoodsClient({
 
   const viewAllProperties = () => {
     const { locale, transaction, type } = getUrlParams();
-    router.push(`/${locale}/${transaction}/${type}/${cityName.toLowerCase()}`);
+    const urlCity = citySlug || cityName;
+    router.push(`/${locale}/${transaction}/${type}/${urlCity.toLowerCase()}`);
   };
 
   const viewNeighborhoodProperties = (neighborhood: string) => {
@@ -218,17 +221,20 @@ export default function NeighborhoodsClient({
     );
     if (activeNeighborhoodData) {
       const { locale, transaction, type } = getUrlParams();
+      const urlCity = citySlug || cityName;
       router.push(
-        `/${locale}/${transaction}/${type}/${cityName.toLowerCase()}/municipality/${
+        `/${locale}/${transaction}/${type}/${urlCity.toLowerCase()}/municipality/${
           activeNeighborhoodData.slug
         }/listings`
       );
     }
   };
 
+  // Use citySlug for image paths (English name), fallback to cityName if not provided
+  const imageCity = citySlug || cityName;
   const mapImages = {
-    standard: `/maps/${cityName.toLowerCase()}-standart.png`,
-    satellite: `/maps/${cityName.toLowerCase()}/satellite.png`,
+    standard: `/maps/${imageCity.toLowerCase()}-standart.png`,
+    satellite: `/maps/${imageCity.toLowerCase()}/satellite.png`,
   };
 
   return (

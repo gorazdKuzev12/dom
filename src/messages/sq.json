@@ -1,14 +1,15 @@
 {
   "Navigation": {
-    "postProperty": "Posto pronë",
-    "home": "Ballina",
-    "about": "Rreth neshk",
-    "roommates": "Lidhuni me shokët e dhomës",
+    "postProperty": "Publiko pronën",
+    "home": "Shtëpia",
+    "about": "Rreth nesh",
+    "roommates": "Lidhu me bashkëbanuesit",
     "favorites": "Pronat e ruajtura",
     "registerAgency": "Regjistrohu si agjenci",
-    "postWithoutLogin": "Posto pronë (pa hyrje)",
-    "agencyLogin": "Hyrje për agjenci",
-    "myAgency": "Agjencia Ime"
+    "postWithoutLogin": "Publiko pronën (pa hyrje)",
+    "agencyLogin": "Hyrja për agjencitë",
+    "myAgency": "Agjencia Ime",
+    "agency": "Agjencia"
   },
   "Roommates": {
     "title": "Gjeni shokun tuaj të dhomës perfekt",
