@@ -3,6 +3,7 @@ import NeighborhoodsClient from "@/components/MapComponent";
 import Footer from "@/components/Footer/page";
 import { notFound } from "next/navigation";
 import { GET_MUNICIPALITIES_BY_CITY_NAME } from "@/lib/queries";
+import { Metadata } from "next";
 
 interface PageParams {
   locale: string;
@@ -61,6 +62,142 @@ const createSlug = (text: string): string => {
     .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
     .trim(); // Remove leading/trailing whitespace
 };
+
+// Helper function to format transaction type for display
+const formatTransactionType = (transaction: string, locale: string): string => {
+  const transactionMap: Record<string, Record<string, string>> = {
+    buy: {
+      en: "for Sale",
+      mk: "за Продажба",
+      sq: "për Shitje"
+    },
+    rent: {
+      en: "for Rent",
+      mk: "за Изнајмување", 
+      sq: "për Qira"
+    }
+  };
+  return transactionMap[transaction]?.[locale] || transactionMap[transaction]?.en || "for Sale";
+};
+
+// Helper function to format property type for display
+const formatPropertyType = (type: string, locale: string): string => {
+  const propertyMap: Record<string, Record<string, string>> = {
+    apartments: { en: "Apartments", mk: "Станови", sq: "Apartamente" },
+    apartment: { en: "Apartments", mk: "Станови", sq: "Apartamente" },
+    house: { en: "Houses", mk: "Куќи", sq: "Shtëpi" },
+    homes: { en: "Houses", mk: "Куќи", sq: "Shtëpi" },
+    rooms: { en: "Rooms", mk: "Соби", sq: "Dhoma" },
+    room: { en: "Rooms", mk: "Соби", sq: "Dhoma" },
+    villas: { en: "Villas", mk: "Вили", sq: "Vila" },
+    villa: { en: "Villas", mk: "Вили", sq: "Vila" },
+    studios: { en: "Studios", mk: "Студија", sq: "Studio" },
+    studio: { en: "Studios", mk: "Студија", sq: "Studio" },
+    land: { en: "Land", mk: "Земјиште", sq: "Tokë" },
+    offices: { en: "Offices", mk: "Канцеларии", sq: "Zyra" },
+    office: { en: "Offices", mk: "Канцеларии", sq: "Zyra" },
+    garages: { en: "Garages", mk: "Гаражи", sq: "Garazhe" },
+    garage: { en: "Garages", mk: "Гаражи", sq: "Garazhe" },
+    "storage-rooms": { en: "Storage Rooms", mk: "Остави", sq: "Depot" },
+    "storage-room": { en: "Storage Rooms", mk: "Остави", sq: "Depot" },
+    "commercial-properties": { en: "Commercial Properties", mk: "Комерцијални Простории", sq: "Prona Komerciale" },
+    "commercial-property": { en: "Commercial Properties", mk: "Комерцијални Простории", sq: "Prona Komerciale" },
+    commercial: { en: "Commercial Properties", mk: "Комерцијални Простории", sq: "Prona Komerciale" },
+    buildings: { en: "Buildings", mk: "Згради", sq: "Ndërtesa" },
+    building: { en: "Buildings", mk: "Згради", sq: "Ndërtesa" }
+  };
+  return propertyMap[type]?.[locale] || propertyMap[type]?.en || "Properties";
+};
+
+// Helper function to get localized city name
+const getLocalizedCityName = (city: string, locale: string): string => {
+  const cityMap: Record<string, Record<string, string>> = {
+    skopje: { en: "Skopje", mk: "Скопје", sq: "Shkup" },
+    bitola: { en: "Bitola", mk: "Битола", sq: "Manastir" },
+    kumanovo: { en: "Kumanovo", mk: "Куманово", sq: "Kumanovë" },
+    tetovo: { en: "Tetovo", mk: "Тетово", sq: "Tetovë" },
+    veles: { en: "Veles", mk: "Велес", sq: "Velesi" },
+    prilep: { en: "Prilep", mk: "Прилеп", sq: "Prilep" },
+    stip: { en: "Štip", mk: "Штип", sq: "Shtip" }
+  };
+  
+  const cityKey = city.toLowerCase();
+  return cityMap[cityKey]?.[locale] || cityMap[cityKey]?.en || city.charAt(0).toUpperCase() + city.slice(1);
+};
+
+// Generate metadata for SEO
+export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
+  const { city, transaction, type, locale } = params;
+  
+  // Get localized city name
+  const cityName = getLocalizedCityName(city, locale);
+  const transactionText = formatTransactionType(transaction, locale);
+  const propertyText = formatPropertyType(type, locale);
+  
+  // Create SEO-friendly title and description
+  const inPreposition = locale === 'mk' ? 'во' : locale === 'sq' ? 'në' : 'in';
+  const title = `${propertyText} ${transactionText} ${inPreposition} ${cityName} | DOM Real Estate`;
+  const description = `Find the best ${propertyText.toLowerCase()} ${transactionText.toLowerCase()} ${inPreposition} ${cityName}. Browse neighborhoods, compare prices, and discover your perfect property with DOM Real Estate.`;
+  
+  // Create canonical URL
+  const canonicalUrl = `https://dom.mk/${locale}/${transaction}/${type}/${city}`;
+  
+  return {
+    title,
+    description,
+    keywords: `${cityName}, ${propertyText}, ${transactionText}, real estate, property, Macedonia, ${cityName} real estate, ${cityName} properties`,
+    authors: [{ name: "DOM Real Estate" }],
+    creator: "DOM Real Estate",
+    publisher: "DOM Real Estate",
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "DOM Real Estate",
+      locale: locale === 'mk' ? 'mk_MK' : locale === 'sq' ? 'sq_AL' : 'en_US',
+      type: "website",
+      images: [
+        {
+          url: `/maps/${city.toLowerCase()}-standart.png`,
+          width: 1200,
+          height: 630,
+          alt: `${cityName} neighborhood map`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`/maps/${city.toLowerCase()}-standart.png`],
+      creator: "@DOMRealEstate",
+    },
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        'en': `https://dom.mk/en/${transaction}/${type}/${city}`,
+        'mk': `https://dom.mk/mk/${transaction}/${type}/${city}`,
+        'sq': `https://dom.mk/sq/${transaction}/${type}/${city}`,
+      },
+    },
+    other: {
+      'geo.region': 'MK',
+      'geo.placename': cityName,
+      ...(cityName === 'Skopje' && { 'geo.position': '41.9973;21.4280' }),
+    },
+  };
+}
 
 export default async function PropertyListingPage({ params }: { params: PageParams }) {
   const { city, transaction, type } = params;
