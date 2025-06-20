@@ -134,7 +134,7 @@ export async function generateMetadata({
         listing.images && listing.images.length > 0
           ? [listing.images[0]]
           : ["/so.png"],
-      url: `https://dom.mk/${locale}/${params.transaction}/${params.type}/${params.city}/municipality/${params.municipality}/listing/${params.listingId}`,
+      url: `https://dom.mk/${locale}/${params.transaction}/${params.type}/${params.city}/${params.municipality}/listing/${params.listingId}`,
     },
     twitter: {
       card: "summary_large_image",

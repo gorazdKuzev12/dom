@@ -223,7 +223,7 @@ export default function NeighborhoodsClient({
       const { locale, transaction, type } = getUrlParams();
       const urlCity = citySlug || cityName;
       router.push(
-        `/${locale}/${transaction}/${type}/${urlCity.toLowerCase()}/municipality/${
+        `/${locale}/${transaction}/${type}/${urlCity.toLowerCase()}/${
           activeNeighborhoodData.slug
         }/listings`
       );

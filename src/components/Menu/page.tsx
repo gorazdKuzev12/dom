@@ -205,16 +205,7 @@ export default function Menu() {
                 <ButtonRipple />
               </AnimatedActionButton>
               
-              <AnimatedActionButton href={`/${locale}/architects`}>
-                <ButtonIcon>
-                  <FiUsers size={18} />
-                </ButtonIcon>
-                <ButtonText>
-                  <ButtonLabel>Architects</ButtonLabel>
-                  <ButtonSubtitle>Find professionals</ButtonSubtitle>
-                </ButtonText>
-                <ButtonRipple />
-              </AnimatedActionButton>
+             
             </MainActions>
 
             <SecondaryActions>
@@ -382,10 +373,7 @@ export default function Menu() {
               <FiEdit size={20} />
               <span>Blog</span>
             </MobileLink>
-            <MobileLink href={`/${locale}/architects`}>
-              <FiUsers size={20} />
-              <span>Architects</span>
-            </MobileLink>
+         
           </MobileMainActions>
           
           <MobileDivider />

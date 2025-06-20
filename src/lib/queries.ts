@@ -70,6 +70,19 @@ export const LISTINGS_BY_MUNICIPALITY_FILTER = gql`
       transaction
       cityId
       municipalityId
+      city {
+        id
+        name_en
+        name_mk
+        name_sq
+        slug
+      }
+      municipality {
+        id
+        name_en
+        name_mk
+        name_sq
+      }
     }
   }
 `;

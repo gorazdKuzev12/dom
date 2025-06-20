@@ -40,12 +40,14 @@ interface Listing {
 interface ZoneListingsPageProps {
   listings: Listing[];
   municipalityName: string;
+  municipalitySlug: string;
   citySlug: string;
 }
 
 export default function ZoneListingsPage({
   listings,
   municipalityName,
+  municipalitySlug,
   citySlug,
 }: ZoneListingsPageProps) {
   const locale = useLocale();
@@ -60,6 +62,7 @@ export default function ZoneListingsPage({
   const [propertyType, setPropertyType] = useState("All");
   const [activeFiltersCount, setActiveFiltersCount] = useState(0);
 
+  console.log(municipalityName);
   // Calculate active filters count
   useEffect(() => {
     let count = 0;
@@ -116,13 +119,13 @@ export default function ZoneListingsPage({
     console.log(listing);
 
     console.log(citySlug);
-    // Build the URL format: [transaction]/[type]/[city]/municipality/[municipality]/listing/[listingId]
+    // Build the URL format: [locale]/[transaction]/[type]/[city]/[municipality]/listing/[listingId]
     const transaction = listing.transaction === 'SALE' ? 'buy' : 'rent';
     const propertyType = listing.type.toLowerCase().replace('_', '-'); // e.g., apartment (singular)
     const city = citySlug;
-    const municipality = municipalityName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
-    
-    const url = `/${locale}/${transaction}/${propertyType}/${city}/municipality/${municipality}/listing/${listing.id}`;
+    const municipality = municipalitySlug; // Use the original slug, not the localized name
+    console.log(municipality);
+    const url = `/${locale}/${transaction}/${propertyType}/${city}/${municipality}/listing/${listing.id}`;
     console.log(url);
     router.push(url);
   };

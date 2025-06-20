@@ -30,7 +30,6 @@ export default function PropertyFilters() {
   // Extract transaction and property type from URL path
   const getUrlParams = () => {
     const pathParts = pathname.split('/');
-    // Expected: /[locale]/[transaction]/[type]/[city]/municipality/[municipality]/listings
     const locale = pathParts[1];
     const transaction = pathParts[2]; // buy/rent
     const type = pathParts[3]; // apartments/houses/etc
