@@ -426,5 +426,17 @@
     },
     "copyright": "Сите права се задржани.",
     "madeWith": "Направено со љубов во Скопје"
+  },
+  "mapPage": {
+    "exploreNeighborhoods": "Истражете ги населбите во {cityName}",
+    "viewAllProperties": "Види ги сите имоти",
+    "searchPlaceholder": "Пребарај населби...",
+    "standard": "Стандардна",
+    "satellite": "Сателитска",
+    "properties": "имоти",
+    "popularNeighborhoods": "Популарни населби во {cityName}",
+    "averagePrice": "Просечна цена:",
+    "priceDataUnavailable": "Нема податоци за цена",
+    "viewProperties": "Види имоти"
   }
 }

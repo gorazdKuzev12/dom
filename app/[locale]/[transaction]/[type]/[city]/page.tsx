@@ -50,6 +50,18 @@ const propertyTypeMap: PropertyTypeMap = {
   building: "BUILDING"
 };
 
+// Helper function to create URL-safe slugs
+const createSlug = (text: string): string => {
+  return text
+    .toLowerCase()
+    .normalize("NFD") // Normalize to decomposed form
+    .replace(/[\u0300-\u036f]/g, "") // Remove diacritics/accents
+    .replace(/[^a-z0-9\s-]/g, "") // Remove non-alphanumeric characters except spaces and hyphens
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
+    .trim(); // Remove leading/trailing whitespace
+};
+
 export default async function PropertyListingPage({ params }: { params: PageParams }) {
   const { city, transaction, type } = params;
 
@@ -82,17 +94,26 @@ export default async function PropertyListingPage({ params }: { params: PagePara
 
     // Prepare municipalities data for the client component
     const municipalities = data.municipalitiesByCityName.map(
-      (municipality: any) => ({
-        id: municipality.id,
-        name: municipality.name_en, // Using English name as default
-        slug: municipality.name_en.toLowerCase().replace(/\s+/g, "-"),
-        propertyCount: municipality.propertyCount || 0, // Use the property count from GraphQL
-        avgPrice: municipality.averagePrice
-          ? `€${municipality.averagePrice}/m²`
-          : "Price data unavailable",
-        image: municipality.image || "/api/placeholder/400/160",
-        isPopular: municipality.isPopular,
-      })
+      (municipality: any) => {
+        const name =
+          params.locale === "mk"
+            ? municipality.name_mk
+            : params.locale === "sq"
+            ? municipality.name_sq
+            : municipality.name_en;
+
+        return {
+          id: municipality.id,
+          name,
+          slug: createSlug(municipality.name_en),
+          propertyCount: municipality.propertyCount || 0, // Use the property count from GraphQL
+          avgPrice: municipality.averagePrice
+            ? `€${municipality.averagePrice}/m²`
+            : "Price data unavailable",
+          image: municipality.image || "/api/placeholder/400/160",
+          isPopular: municipality.isPopular,
+        };
+      }
     );
 
     return (

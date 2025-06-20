@@ -412,5 +412,17 @@
     },
     "copyright": "All rights reserved.",
     "madeWith": "Made with love in Skopje"
+  },
+  "mapPage": {
+    "exploreNeighborhoods": "Explore neighborhoods in {cityName}",
+    "viewAllProperties": "View all properties",
+    "searchPlaceholder": "Search neighborhoods...",
+    "standard": "Standard",
+    "satellite": "Satellite",
+    "properties": "properties",
+    "popularNeighborhoods": "Popular neighborhoods in {cityName}",
+    "averagePrice": "Average price:",
+    "priceDataUnavailable": "Price data unavailable",
+    "viewProperties": "View properties"
   }
 }

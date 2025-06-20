@@ -101,6 +101,32 @@ const propertyTypeMap: PropertyTypeMap = {
   building: "BUILDING"
 };
 
+// Helper function to convert slug back to municipality name
+const slugToMunicipalityName = (slug: string): string => {
+  // Common municipality name mappings for URL slugs
+  const slugMappings: Record<string, string> = {
+    "centar": "Centar",
+    "karpos": "Karpoš", 
+    "aerodrom": "Aerodrom",
+    "butel": "Butel",
+    "cair": "Čair",
+    "gazi-baba": "Gazi Baba",
+    "gjorce-petrov": "Gjorče Petrov",
+    "kisela-voda": "Kisela Voda",
+    "saraj": "Saraj",
+    "suto-orizari": "Šuto Orizari",
+    "bitola": "Bitola",
+    "kumanovo": "Kumanovo",
+    "prilep": "Prilep",
+    "tetovo": "Tetovo",
+    "veles": "Veles",
+    "stip": "Štip",
+    "karbinci": "Karbinci"
+  };
+
+  return slugMappings[slug.toLowerCase()] || slug;
+};
+
 export default async function MunicipalityListingsPage({ 
   params, 
   searchParams 
@@ -120,7 +146,7 @@ export default async function MunicipalityListingsPage({
     return notFound();
   }
 
-  const municipalityName = municipality || "Centar";
+  const municipalityName = slugToMunicipalityName(municipality) || "Centar";
 
   // map URL → GraphQL filter
   const filter = {

@@ -206,7 +206,7 @@ export default function LoginPage() {
 
 const PageWrapper = styled.div`
   min-height: 100vh;
-  background: rgb(239, 239, 239);
+  background: #f8fafc;
   display: flex;
   flex-direction: column;
 `;
@@ -221,15 +221,14 @@ const MainContent = styled.div`
 
 const LoginContainer = styled.div`
   width: 100%;
-  max-width: 450px;
+  max-width: 400px;
 `;
 
 const LoginCard = styled.div`
   background: white;
-  border-radius: 20px;
-  padding: 3rem 2.5rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 `;
 
 const Header = styled.div`
@@ -238,44 +237,21 @@ const Header = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 2rem;
-  font-weight: 700;
-  color: #333;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #1a1a1a;
   margin-bottom: 0.5rem;
 `;
 
 const Subtitle = styled.p`
-  color: #666;
-  font-size: 1rem;
-`;
-
-const SuccessMessage = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: #d4edda;
-  border: 1px solid #c3e6cb;
-  color: #155724;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-`;
-
-const ErrorMessage = styled.div`
-  background: #f8d7da;
-  border: 1px solid #f5c6cb;
-  color: #721c24;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
+  color: #64748b;
+  font-size: 0.95rem;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
 `;
 
 const FormGroup = styled.div`
@@ -285,9 +261,9 @@ const FormGroup = styled.div`
 `;
 
 const Label = styled.label`
-  font-weight: 500;
-  color: #333;
   font-size: 0.9rem;
+  font-weight: 500;
+  color: #475569;
 `;
 
 const InputWrapper = styled.div`
@@ -299,27 +275,30 @@ const InputWrapper = styled.div`
 const InputIcon = styled.div`
   position: absolute;
   left: 1rem;
-  color: #999;
-  z-index: 1;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 3rem;
-  border: 2px solid #e1e5e9;
+  padding: 0.875rem 1rem 0.875rem 2.75rem;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+  background: #f8fafc;
   transition: all 0.2s ease;
-  background: white;
 
   &:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    border-color: #0d9488;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
   }
 
   &::placeholder {
-    color: #999;
+    color: #94a3b8;
   }
 `;
 
@@ -328,22 +307,22 @@ const PasswordToggle = styled.button`
   right: 1rem;
   background: none;
   border: none;
-  color: #999;
+  color: #94a3b8;
   cursor: pointer;
-  padding: 0;
+  padding: 0.25rem;
   display: flex;
   align-items: center;
-  justify-content: center;
+  transition: color 0.2s ease;
 
   &:hover {
-    color: #666;
+    color: #0d9488;
   }
 `;
 
 const CheckboxGroup = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  margin: 0.5rem 0;
 `;
 
 const CheckboxWrapper = styled.div`
@@ -355,56 +334,93 @@ const CheckboxWrapper = styled.div`
 const Checkbox = styled.input`
   width: 1rem;
   height: 1rem;
-  accent-color: #007bff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  cursor: pointer;
+  accent-color: #0d9488;
 `;
 
 const CheckboxLabel = styled.label`
   font-size: 0.9rem;
-  color: #666;
+  color: #475569;
+  cursor: pointer;
 `;
 
 const SubmitButton = styled.button`
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  width: 100%;
+  padding: 0.875rem;
+  background: #0d9488;
   color: white;
   border: none;
-  padding: 1rem 2rem;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: 1rem;
+  transition: all 0.2s ease;
 
-  &:hover:not(:disabled) {
-    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 123, 255, 0.3);
+  &:hover {
+    background: #0f766e;
+    transform: translateY(-1px);
   }
 
   &:disabled {
-    opacity: 0.7;
+    background: #94a3b8;
     cursor: not-allowed;
     transform: none;
   }
+
+  svg {
+    transition: transform 0.2s ease;
+  }
+
+  &:hover svg {
+    transform: translateX(2px);
+  }
 `;
 
-const RegisterLink = styled.div`
+const RegisterLink = styled.p`
   text-align: center;
-  margin-top: 2rem;
-  color: #666;
+  margin-top: 1.5rem;
   font-size: 0.9rem;
+  color: #475569;
 
   a {
-    color: #007bff;
+    color: #0d9488;
     text-decoration: none;
     font-weight: 500;
+    transition: color 0.2s ease;
 
     &:hover {
-      text-decoration: underline;
+      color: #0f766e;
     }
+  }
+`;
+
+const ErrorMessage = styled.div`
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 0.875rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+`;
+
+const SuccessMessage = styled.div`
+  background: #dcfce7;
+  color: #16a34a;
+  padding: 0.875rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  svg {
+    flex-shrink: 0;
   }
 `; 

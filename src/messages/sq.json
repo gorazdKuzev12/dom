@@ -426,5 +426,17 @@
     },
     "copyright": "Të gjitha të drejtat e rezervuara.",
     "madeWith": "Bërë me dashuri në Shkup"
+  },
+  "mapPage": {
+    "exploreNeighborhoods": "Eksploroni lagjet në {cityName}",
+    "viewAllProperties": "Shikoni të gjitha pronat",
+    "searchPlaceholder": "Kërko lagje...",
+    "standard": "Standard",
+    "satellite": "Satelit",
+    "properties": "prona",
+    "popularNeighborhoods": "Lagjet populore në {cityName}",
+    "averagePrice": "Çmimi mesatar:",
+    "priceDataUnavailable": "Të dhënat për çmimin nuk janë të disponueshme",
+    "viewProperties": "Shikoni pronat"
   }
 }

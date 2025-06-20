@@ -573,36 +573,32 @@ export const MarkerTooltip = styled.div`
   }
 `;
 
-export const NeighborhoodDetailOverlay = styled.div`
+export const NeighborhoodDetailOverlay = styled.div<{ $visible: boolean }>`
   position: absolute;
-  top: 5rem;
-  right: 1rem;
-  background: white;
+  top: 15px;
+  right: 15px;
+  width: 280px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   border-radius: 12px;
-  padding: 1rem;
-  width: 260px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  z-index: 100;
-  opacity: ${(props) => (props.visible ? 1 : 0)};
-  transition: all 0.3s ease;
-  pointer-events: ${(props) => (props.visible ? "all" : "none")};
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  z-index: 15;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #333;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: ${(props) => (props.$visible ? 1 : 0)};
   transform: ${(props) =>
-    props.visible ? "translateX(0)" : "translateX(20px)"};
+    props.$visible ? "translateY(0)" : "translateY(-10px)"};
+  pointer-events: ${(props) => (props.$visible ? "auto" : "none")};
 
-  @media (max-width: 640px) {
-    position: static;
-    width: 100%;
-    max-width: 370px;
-    /* margin: 1.5rem auto 0; */
-    border-radius: 10px;
-    padding: 1.2rem;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-    transform: none;
+  @media (max-width: 1024px) {
+    width: 250px;
+    padding: 1.25rem;
   }
 
-  @media (max-width: 768px) and (min-width: 641px) {
-    width: 220px;
-    padding: 0.75rem;
+  @media (max-width: 768px) {
+    display: none; // Hide on smaller screens if sidebar is present
   }
 `;
 

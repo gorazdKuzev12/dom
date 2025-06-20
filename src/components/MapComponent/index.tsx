@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { MapPin, Home, Search, X, ChevronRight, Map } from "lucide-react";
 import Menu from "@/components/Menu/page";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   AvgPrice,
   CardContent,
@@ -55,6 +56,7 @@ interface NeighborhoodsClientProps {
 }
 
 export default function NeighborhoodsClient({ cityName, neighborhoods }: NeighborhoodsClientProps) {
+  const t = useTranslations("mapPage");
   const router = useRouter();
   const [mapView, setMapView] = useState("standard");
   const [activeNeighborhood, setActiveNeighborhood] = useState<string | null>(null);
@@ -166,20 +168,20 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }: Neighbo
           <MapHeader>
             <MapTitle>
               <Map size={24} color="#1e6b56" />
-              Explore neighborhoods in {cityName}
+              {t("exploreNeighborhoods", { cityName })}
             </MapTitle>
             <MapControls>
               <MapButton
                 className={mapView === "standard" ? "active" : ""}
                 onClick={() => setMapView("standard")}
               >
-                Standard
+                {t("standard")}
               </MapButton>
               <MapButton
                 className={mapView === "satellite" ? "active" : ""}
                 onClick={() => setMapView("satellite")}
               >
-                Satellite
+                {t("satellite")}
               </MapButton>
             </MapControls>
           </MapHeader>
@@ -188,13 +190,13 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }: Neighbo
           <MapOverlay>
             <ViewAllButton onClick={viewAllProperties}>
               <Home size={16} />
-              View all properties
+              {t("viewAllProperties")}
             </ViewAllButton>
             <MapSearchInput>
               <Search size={16} color="#9ca3af" />
               <input
                 type="text"
-                placeholder="Search neighborhoods..."
+                placeholder={t("searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -261,7 +263,7 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }: Neighbo
                   </MarkerIcon>
                   <MarkerTooltip className="tooltip">
                     {neighborhood.name} • {neighborhood.propertyCount}{" "}
-                    properties
+                    {t("properties")}
                   </MarkerTooltip>
                 </NeighborhoodMarker>
               ))}
@@ -269,7 +271,7 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }: Neighbo
           </MapContainer>
 
           {/* Neighborhood Detail Overlay */}
-          <NeighborhoodDetailOverlay visible={activeNeighborhood !== null}>
+          <NeighborhoodDetailOverlay $visible={activeNeighborhood !== null}>
             {activeNeighborhood && getActiveNeighborhood() && (
               <>
                 <DetailName>{getActiveNeighborhood()?.name}</DetailName>
@@ -278,12 +280,12 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }: Neighbo
                     size={18}
                     style={{ marginRight: "10px", color: "#1e6b56" }}
                   />
-                  {getActiveNeighborhood()?.propertyCount} properties
+                  {getActiveNeighborhood()?.propertyCount} {t("properties")}
                 </DetailStat>
                 <DetailStat>
-                  <strong>Average price:</strong>{" "}
+                  <strong>{t("averagePrice")}</strong>{" "}
                   {getActiveNeighborhood()?.avgPrice ||
-                    "Price data unavailable"}
+                    t("priceDataUnavailable")}
                 </DetailStat>
 
                 <DetailDivider />
@@ -291,7 +293,7 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }: Neighbo
                 <ViewPropertiesButton
                   onClick={() => viewNeighborhoodProperties(activeNeighborhood)}
                 >
-                  View properties
+                  {t("viewProperties")}
                   <ChevronRight size={18} />
                 </ViewPropertiesButton>
               </>
@@ -299,7 +301,7 @@ export default function NeighborhoodsClient({ cityName, neighborhoods }: Neighbo
           </NeighborhoodDetailOverlay>
         </MapSection>
 
-        <Title>Popular neighborhoods in {cityName}</Title>
+        <Title>{t("popularNeighborhoods", { cityName })}</Title>
 
         <NeighborhoodsGrid>
           {neighborhoods
