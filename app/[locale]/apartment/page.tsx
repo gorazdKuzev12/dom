@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Heart,
   Trash2,
@@ -22,10 +22,115 @@ import {
   Wind,
 } from "lucide-react";
 import Menu from "@/components/Menu/page";
+import { FaFacebookMessenger, FaViber, FaInstagram, FaWhatsapp, FaTelegram, FaCopy } from 'react-icons/fa';
+import Footer from "@/components/Footer/page";
 
 export default function ApartmentPage() {
   const [showMenu, setShowMenu] = useState(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // Check if apartment is saved in localStorage on component mount
+  useEffect(() => {
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    setSaved(favorites.some(fav => fav.id === 'current-apartment-id')); // Replace with actual apartment ID
+  }, []);
+
+  const handleSave = () => {
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    
+    // Create apartment object
+    const apartment = {
+      id: 'current-apartment-id', // Replace with actual apartment ID
+      title: 'Office for rent in Ronda de Sant Pere',
+      location: 'La Dreta de l\'Eixample, Barcelona',
+      price: '2,880',
+      currency: '€',
+      period: 'month',
+      size: '144',
+      pricePerMeter: '20.00',
+      image: '/so.png'
+    };
+
+    if (!saved) {
+      // Add to favorites
+      favorites.push(apartment);
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+      setSaved(true);
+    } else {
+      // Remove from favorites
+      const newFavorites = favorites.filter(fav => fav.id !== apartment.id);
+      localStorage.setItem('favorites', JSON.stringify(newFavorites));
+      setSaved(false);
+    }
+
+    // Trigger storage event for other tabs
+    window.dispatchEvent(new Event('storage'));
+  };
+
+  const handleShare = async () => {
+    const shareUrl = window.location.href;
+    const shareTitle = "Check out this property on dom.mk";
+    const shareText = "I found this interesting property on dom.mk";
+
+    // Try using Web Share API first
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: shareTitle,
+          text: shareText,
+          url: shareUrl,
+        });
+        return;
+      } catch (err) {
+        // Fall back to custom menu if share fails or user cancels
+        setShowShareMenu(true);
+      }
+    } else {
+      // If Web Share API is not available, show custom menu
+      setShowShareMenu(true);
+    }
+  };
+
+  const handleSocialShare = (platform: string) => {
+    const shareUrl = encodeURIComponent(window.location.href);
+    const shareTitle = encodeURIComponent("Check out this property on dom.mk");
+    
+    let url = '';
+    switch (platform) {
+      case 'messenger':
+        url = `https://www.facebook.com/dialog/send?link=${shareUrl}&app_id=YOUR_FB_APP_ID&redirect_uri=${shareUrl}`;
+        break;
+      case 'viber':
+        url = `viber://forward?text=${shareTitle}%20${shareUrl}`;
+        break;
+      case 'instagram':
+        // Instagram doesn't have a direct share URL, copy to clipboard instead
+        copyToClipboard();
+        return;
+      case 'whatsapp':
+        url = `https://api.whatsapp.com/send?text=${shareTitle}%20${shareUrl}`;
+        break;
+      case 'telegram':
+        url = `https://t.me/share/url?url=${shareUrl}&text=${shareTitle}`;
+        break;
+    }
+    
+    if (url) {
+      window.open(url, '_blank');
+    }
+    setShowShareMenu(false);
+  };
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard!');
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+    setShowShareMenu(false);
+  };
 
   return (
     <Wrapper>
@@ -47,7 +152,6 @@ export default function ApartmentPage() {
           </SubImagesGrid>
         </ImageGrid>
       </Gallery>
-
       <ContentContainer>
         <MainContent>
           <Section>
@@ -69,7 +173,7 @@ export default function ApartmentPage() {
               </PriceDetail>
             </Header>
             <ButtonRow>
-              <ActionButton primary={saved} onClick={() => setSaved(!saved)}>
+              <ActionButton primary={saved} onClick={handleSave}>
                 <Heart
                   size={18}
                   fill={saved ? "white" : "none"}
@@ -80,7 +184,7 @@ export default function ApartmentPage() {
               <ActionButton>
                 <Trash2 size={18} /> Discard
               </ActionButton>
-              <ActionButton>
+              <ActionButton onClick={handleShare}>
                 <Share size={18} /> Share
               </ActionButton>
             </ButtonRow>
@@ -236,60 +340,163 @@ export default function ApartmentPage() {
         </Sidebar>
       </ContentContainer>
 
-      <Footer>
-        <FooterContent>
-          <FooterLogo>
-            <Home size={16} />
-            <span>dom.mk</span>
-          </FooterLogo>
-          <FooterLinks>
-            <FooterLink>About</FooterLink>
-            <FooterLink>Terms</FooterLink>
-            <FooterLink>Privacy</FooterLink>
-            <FooterLink>Contact</FooterLink>
-          </FooterLinks>
-          <FooterCopyright>© 2025 dom.mk. All rights reserved.</FooterCopyright>
-        </FooterContent>
-      </Footer>
+      <Footer />
+
+      {showShareMenu && (
+        <ShareMenuOverlay onClick={() => setShowShareMenu(false)}>
+          <ShareMenuContent onClick={e => e.stopPropagation()}>
+            <ShareMenuHeader>
+              <h3>Share this property</h3>
+              <CloseButton onClick={() => setShowShareMenu(false)}>
+                <X size={20} />
+              </CloseButton>
+            </ShareMenuHeader>
+            <ShareButtons>
+              <ShareButton onClick={() => handleSocialShare('messenger')}>
+                <FaFacebookMessenger size={24} />
+                <span>Messenger</span>
+              </ShareButton>
+              <ShareButton onClick={() => handleSocialShare('viber')}>
+                <FaViber size={24} />
+                <span>Viber</span>
+              </ShareButton>
+              <ShareButton onClick={() => handleSocialShare('whatsapp')}>
+                <FaWhatsapp size={24} />
+                <span>WhatsApp</span>
+              </ShareButton>
+              <ShareButton onClick={() => handleSocialShare('telegram')}>
+                <FaTelegram size={24} />
+                <span>Telegram</span>
+              </ShareButton>
+              <ShareButton onClick={copyToClipboard}>
+                <FaCopy size={24} />
+                <span>Copy Link</span>
+              </ShareButton>
+            </ShareButtons>
+          </ShareMenuContent>
+        </ShareMenuOverlay>
+      )}
     </Wrapper>
   );
 }
 
+// And add these updated styled components:
+const Gallery = styled.div`
+  padding: 1rem;
+  background: white;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+`;
+
+const ImageGrid = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0.5rem;
+  height: 500px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    height: auto;
+    gap: 0.75rem;
+  }
+`;
+
+const MainImage = styled.img`
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 8px;
+
+  @media (max-width: 768px) {
+    height: 250px;
+  }
+`;
+
+const SubImagesGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr;
+    height: 80px;
+  }
+`;
+
+const SubImage = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-image: url(${(props) => props.src});
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  ${(props) =>
+    props.overlay &&
+    `
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+    }
+  `}
+`;
+
+const SeeMoreOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 1;
+  gap: 0.5rem;
+  cursor: pointer;
+
+  span {
+    font-weight: 500;
+
+    @media (max-width: 768px) {
+      font-size: 0.75rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    gap: 0.25rem;
+  }
+`;
+
+const ContentContainer = styled.div`
+  max-width: 1201px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+    margin-top: 1rem;
+  }
+`;
 const Wrapper = styled.div`
   background: #f8f9fa;
   font-family: "Inter", "Segoe UI", sans-serif;
   color: #333;
-`;
-
-const Navbar = styled.nav`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-`;
-
-const Logo = styled.a`
-  font-size: 1.5rem;
-  font-weight: 700;
-  text-decoration: none;
-  color: #222;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-const NavLinks = styled.div`
-  display: flex;
-  gap: 2rem;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
 `;
 
 const NavItem = styled.button`
@@ -374,100 +581,6 @@ const MobileMenuItem = styled.button`
 
   &:hover {
     background: #f5f5f5;
-  }
-`;
-
-const Gallery = styled.div`
-  padding: 1.5rem;
-  background: white;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-`;
-
-const ImageGrid = styled.div`
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 0.75rem;
-  height: 450px;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const MainImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-`;
-
-const SubImagesGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 0.75rem;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const SubImage = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-image: url(${(props) => props.src});
-  background-size: cover;
-  background-position: center;
-  border-radius: 8px;
-  ${(props) =>
-    props.overlay &&
-    `
-    &:after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 8px;
-    }
-  `}
-`;
-
-const SeeMoreOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  z-index: 1;
-  gap: 0.5rem;
-  cursor: pointer;
-
-  span {
-    font-weight: 500;
-  }
-`;
-
-const ContentContainer = styled.div`
-  max-width: 1201px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1.5rem;
-  margin-top: 12rem;
-  @media (max-width: 992px) {
-    grid-template-columns: 1fr;
   }
 `;
 
@@ -719,50 +832,87 @@ const MapAddress = styled.div`
   }
 `;
 
-const Footer = styled.footer`
-  background: white;
-  margin-top: 3rem;
-  padding: 2rem 0;
-  border-top: 1px solid #eee;
-`;
-
-const FooterContent = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+const ShareMenuOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  text-align: center;
-`;
-
-const FooterLogo = styled.div`
-  font-size: 1.1rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-`;
-
-const FooterLinks = styled.div`
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
+  z-index: 10001;
 `;
 
-const FooterLink = styled.a`
-  color: #555;
-  text-decoration: none;
-  font-size: 0.9rem;
+const ShareMenuContent = styled.div`
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+`;
 
-  &:hover {
-    color: #0066ff;
+const ShareMenuHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
   }
 `;
 
-const FooterCopyright = styled.div`
-  font-size: 0.85rem;
-  color: #777;
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;
+
+const ShareButtons = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+`;
+
+const ShareButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #f8f8f8;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  span {
+    font-size: 0.9rem;
+  }
+
+  svg {
+    color: #0c4240;
+  }
 `;

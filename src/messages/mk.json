@@ -3,7 +3,47 @@
     "postProperty": "Објави имот",
     "home": "Дома",
     "about": "За нас",
-    "roommates": "Поврзи се со цимери"
+    "roommates": "Поврзи се со цимери",
+    "favorites": "Зачувани имоти",
+    "registerAgency": "Регистрирај се како агенција",
+    "properties": "Недвижности",
+  "postWithoutLogin": "Објави имот (без најава)",
+    "agencyLogin": "Најава за агенции",
+    "myAgency": "Моја Агенција",
+    "agency": "Агенција"
+  },
+  "Roommates": {
+    "title": "Најди го твојот совршен цимер",
+    "subtitle": "Поврзи се со луѓе кои бараат заеднички простор за живеење",
+    "postButton": "Објави дека барам соба",
+    "filters": {
+      "title": "Филтри",
+      "areas": "Сите области",
+      "cityCenter": "Центар",
+      "karpos": "Карпош",
+      "aerodrom": "Аеродром",
+      "gaziBaba": "Гази Баба",
+      "maxBudget": "Максимален буџет (€/месец)",
+      "lookingFor": "Барам",
+      "any": "Било што",
+      "roomInShared": "Соба во заеднички стан",
+      "entireApartment": "Цел стан со цимер",
+      "moveInDate": "Датум на вселување",
+      "lifestyle": "Начин на живот",
+      "nonSmoker": "Непушач",
+      "petFriendly": "Дозволени миленици",
+      "student": "Студент",
+      "professional": "Вработен"
+    },
+    "card": {
+      "verified": "Верификуван",
+      "viewPhone": "Види телефон",
+      "message": "Порака",
+      "budget": "Буџет",
+      "available": "Достапен",
+      "lookingFor": "Бара",
+      "prefers": "Преферира"
+    }
   },
   "Search": {
     "apartments": "Станови",
@@ -17,10 +57,389 @@
     "buildings": "Згради",
     "holiday": "Имоти за одмор",
     "villas": "Вили",
+    "studio": "Студио",
     "choose": "Избери град",
     "chooseLocal": "Избери тип",
     "buy": "Купи",
     "rent": "Изнајми",
     "searchButton": "Пребарај"
+  },
+  "Favorites": {
+    "savedProperties": "Зачувани имоти",
+    "savedPropertiesDesc": "Прегледај и управувај со твоите зачувани имоти",
+    "noSavedProperties": "Сè уште нема зачувани имоти",
+    "startSaving": "Започни со зачувување на имоти со кликање на иконата срце"
+  },
+  "Filters": {
+    "propertyType": "Тип на имот",
+    "select": "Избери...",
+    "house": "Куќа",
+    "apartment": "Стан",
+    "villa": "Вила",
+    "office": "Канцеларија",
+    "land": "Земјиште",
+    "priceRange": "Опсег на цена",
+    "min": "Мин",
+    "max": "Макс",
+    "size": "Големина",
+    "squareMeters": "м²",
+    "bedrooms": "Спални соби",
+    "bathrooms": "Бањи",
+    "condition": "Состојба",
+    "new": "Нов",
+    "good": "Добра",
+    "needsRenovation": "Потребна реновација",
+    "features": "Карактеристики",
+    "parking": "Паркинг",
+    "balcony": "Тераса",
+    "garden": "Градина",
+    "elevator": "Лифт",
+    "airConditioning": "Клима уред",
+    "heating": "Греење",
+    "furnished": "Наместен",
+    "swimmingPool": "Базен",
+    "internet": "Интернет/WiFi",
+    "laundry": "Перална",
+    "dishwasher": "Машина за садови",
+    "security": "Сигурност",
+    "storage": "Складишен простор",
+    "petFriendly": "Дозволени миленици",
+    "terrace": "Тераса",
+    "fireplace": "Камин",
+    "cableTV": "Кабелска ТВ",
+    "washingMachine": "Машина за перење",
+    "floor": "Кат",
+    "ground": "Приземје",
+    "basement": "Подрум",
+    "top": "Последен кат",
+    "middle": "Среден кат",
+    "listingDate": "Датум на објавување",
+    "today": "Денес",
+    "thisWeek": "Оваа недела",
+    "thisMonth": "Овој месец",
+    "sort": {
+      "newest": "Најнови",
+      "priceAsc": "Најниска цена",
+      "priceDesc": "Највисока цена"
+    }
+  },
+  "AgencyRegistration": {
+    "title": "Регистрирајте ја вашата агенција",
+    "subtitle": "Приклучете се на нашата платформа и претставете ги вашите имоти на илјадници потенцијални клиенти",
+    "steps": {
+      "agencyInfo": "Информации за агенцијата",
+      "accountDetails": "Детали за сметката",
+      "profileSetup": "Поставување на профил"
+    },
+    "form": {
+      "companyName": "Име на компанијата",
+      "companyNamePlaceholder": "Внесете го името на вашата агенција",
+      "email": "Е-пошта",
+      "emailPlaceholder": "Внесете ја вашата деловна е-пошта",
+      "phone": "Телефонски број",
+      "phonePlaceholder": "Внесете го вашиот деловен телефон",
+      "website": "Веб-страница (Опционално)",
+      "websitePlaceholder": "Внесете ја URL адресата на вашата веб-страница",
+      "address": "Адреса",
+      "addressPlaceholder": "Внесете ја адресата на канцеларијата",
+      "city": "Град",
+      "cityPlaceholder": "Внесете го вашиот град",
+      "zipCode": "Поштенски код",
+      "zipCodePlaceholder": "Внесете поштенски код",
+      "contactPerson": "Лице за контакт",
+      "contactPersonPlaceholder": "Внесете целосно име",
+      "contactRole": "Улога во компанијата",
+      "contactRolePlaceholder": "пр. Сопственик, Менаџер",
+      "password": "Лозинка",
+      "passwordPlaceholder": "Креирајте силна лозинка",
+      "confirmPassword": "Потврдете лозинка",
+      "confirmPasswordPlaceholder": "Повторно внесете ја вашата лозинка",
+      "licenseNumber": "Број на лиценца",
+      "licenseNumberPlaceholder": "Внесете го бројот на вашата лиценца за недвижности",
+      "taxId": "Даночен број",
+      "taxIdPlaceholder": "Внесете го вашиот даночен идентификационен број",
+      "agencySize": "Големина на агенцијата",
+      "agencySizeOptions": {
+        "small": "Мала (1-5 агенти)",
+        "medium": "Средна (6-20 агенти)",
+        "large": "Голема (21+ агенти)"
+      },
+      "logo": "Лого на агенцијата",
+      "uploadLogo": "Кликнете за прикачување лого",
+      "description": "Опис на агенцијата",
+      "descriptionPlaceholder": "Кажете ни за вашата агенција, специјалности и искуство",
+      "specializations": "Области на специјализација",
+      "agreeTerms": "Се согласувам со Условите за користење и Политиката за приватност"
+    },
+    "buttons": {
+      "back": "Назад",
+      "next": "Следно",
+      "submit": "Поднеси регистрација"
+    },
+    "errors": {
+      "requiredFields": "Ве молиме пополнете ги сите задолжителни полиња",
+      "invalidEmail": "Ве молиме внесете валидна е-пошта",
+      "passwordLength": "Лозинката мора да има најмалку 8 карактери",
+      "passwordMismatch": "Лозинките не се совпаѓаат",
+      "agreeTerms": "Мора да се согласите со Условите за користење",
+      "unknown": "Се појави неочекувана грешка"
+    },
+    "benefits": {
+      "title": "Придобивки од приклучувањето",
+      "items": {
+        "exposure": "Достигнете илјадници потенцијални клиенти",
+        "tools": "Пристап до професионални алатки за недвижности",
+        "analytics": "Добијте детални анализи и увиди",
+        "support": "24/7 посветена поддршка",
+        "marketing": "Бесплатни маркетинг алатки и ресурси",
+        "network": "Приклучете се на мрежа од врвни агенции"
+      }
+    }
+  },
+  "UserRegistration": {
+    "title": "Создадете ја вашата сметка",
+    "subtitle": "Приклучете се на dom.mk за да зачувувате омилени и управувате со вашите огласи",
+    "form": {
+      "fullName": "Целосно име",
+      "fullNamePlaceholder": "Внесете го вашето целосно име",
+      "email": "Емаил адреса",
+      "emailPlaceholder": "Внесете ја вашата емаил адреса",
+      "phone": "Телефонски број (опционално)",
+      "phonePlaceholder": "Внесете го вашиот телефонски број",
+      "password": "Лозинка",
+      "passwordPlaceholder": "Создадете лозинка",
+      "confirmPassword": "Потврдете лозинка",
+      "confirmPasswordPlaceholder": "Потврдете ја вашата лозинка",
+      "agreeTerms": "Се согласувам со Условите за користење и Политиката за приватност на dom.mk",
+      "submit": "Создади сметка",
+      "creating": "Создавање на сметка...",
+      "alreadyHaveAccount": "Веќе имате сметка?",
+      "signInHere": "Најавете се тука"
+    },
+    "errors": {
+      "requiredFields": "Ве молиме пополнете ги сите задолжителни полиња",
+      "invalidEmail": "Ве молиме внесете валидна емаил адреса",
+      "passwordTooShort": "Лозинката мора да има најмалку 8 карактери",
+      "passwordMismatch": "Лозинките не се совпаѓаат",
+      "agreeTermsRequired": "Ве молиме согласете се со условите и условите",
+      "unknown": "Регистрацијата не успеа. Ве молиме обидете се повторно."
+    }
+  },
+  "UserLogin": {
+    "title": "Добредојдовте назад",
+    "subtitle": "Најавете се на вашата dom.mk сметка",
+    "form": {
+      "email": "Емаил адреса",
+      "emailPlaceholder": "Внесете ја вашата емаил",
+      "password": "Лозинка",
+      "passwordPlaceholder": "Внесете ја вашата лозинка",
+      "rememberMe": "Запомни ме 7 дена",
+      "forgotPassword": "Заборавена лозинка?",
+      "login": "Најави се",
+      "loggingIn": "Најавување...",
+      "noAccount": "Немате сметка?",
+      "createOne": "Создадете тука"
+    },
+    "errors": {
+      "requiredFields": "Ве молиме пополнете ги сите задолжителни полиња",
+      "invalidEmail": "Ве молиме внесете валидна емаил адреса",
+      "invalidCredentials": "Најавата не успеа. Ве молиме проверете ги вашите податоци.",
+      "unknown": "Се појави неочекувана грешка"
+    }
+  },
+  "AgencyLogin": {
+    "title": "Најава за агенции",
+    "subtitle": "Пристапете до вашата контролна табла и управувајте со вашите имоти",
+    "form": {
+      "email": "Е-пошта",
+      "emailPlaceholder": "Внесете ја вашата деловна е-пошта",
+      "password": "Лозинка",
+      "passwordPlaceholder": "Внесете ја вашата лозинка",
+      "rememberMe": "Запомни ме",
+      "forgotPassword": "Заборавена лозинка?",
+      "login": "Најави се",
+      "loggingIn": "Најавување...",
+      "noAccount": "Немате агенциска сметка?",
+      "registerNow": "Регистрирајте се сега"
+    },
+    "errors": {
+      "requiredFields": "Ве молиме пополнете ги сите задолжителни полиња",
+      "invalidCredentials": "Невалидна е-пошта или лозинка",
+      "unknown": "Се појави неочекувана грешка"
+    },
+    "benefits": {
+      "title": "Придобивки од порталот за агенции",
+      "items": {
+        "dashboard": "Пристап до вашата персонализирана контролна табла",
+        "listings": "Управувајте со сите ваши објави за имоти",
+        "analytics": "Прегледајте детални аналитики за перформанси",
+        "leads": "Следете и управувајте со потенцијални клиенти",
+        "support": "Добијте приоритетна корисничка поддршка"
+      }
+    }
+  },
+  "PostProperty": {
+    "title": "Објави недвижнина",
+    "subtitle": "Пополнете ги деталите за да ја објавите вашата недвижнина",
+    "steps": {
+      "details": "Детали",
+      "media": "Медиа",
+      "publish": "Објави"
+    },
+    "contactInfo": {
+      "title": "Контакт информации",
+      "fullName": "Целосно име",
+      "fullNamePlaceholder": "Внесете го вашето целосно име",
+      "email": "Емаил адреса",
+      "emailPlaceholder": "Внесете ја вашата емаил адреса",
+      "phone": "Телефонски број",
+      "phonePlaceholder": "Внесете го вашиот телефонски број"
+    },
+    "propertyDetails": {
+      "title": "Детали за недвижнината",
+      "listingTitle": "Наслов",
+      "listingTitlePlaceholder": "пр. Уреден стан во Центар",
+      "propertyType": "Тип на недвижнина",
+      "types": {
+        "apartment": "Стан",
+        "house": "Куќа",
+        "office": "Канцеларија",
+        "land": "Земјиште"
+      },
+      "listingType": "Тип на оглас",
+      "listingTypes": {
+        "rent": "Изнајмување",
+        "buy": "Продажба"
+      },
+      "price": "Цена",
+      "pricePlaceholder": "Цена (€)",
+      "size": "Површина",
+      "sizePlaceholder": "Површина (м²)",
+      "condition": "Состојба",
+      "conditions": {
+        "new": "Нова",
+        "renovated": "Реновирана",
+        "needsRenovation": "Потребно реновирање"
+      },
+      "floor": "Кат",
+      "floorPlaceholder": "Број на кат",
+      "totalFloors": "Вкупно катови",
+      "totalFloorsPlaceholder": "Вкупен број на катови",
+      "rooms": "Соби",
+      "roomsPlaceholder": "Број на соби",
+      "bathrooms": "Бањи",
+      "bathroomsPlaceholder": "Број на бањи"
+    },
+    "location": {
+      "title": "Локација",
+      "city": "Град",
+      "selectCity": "Избери град",
+      "cities": {
+        "skopje": "Скопје",
+        "bitola": "Битола",
+        "kumanovo": "Куманово",
+        "ohrid": "Охрид",
+        "tetovo": "Тетово"
+      },
+      "address": "Адреса",
+      "addressPlaceholder": "Внесете ја адресата на недвижнината"
+    },
+    "amenities": {
+      "title": "Карактеристики",
+      "balcony": "Тераса",
+      "heating": "Греење",
+      "air_conditioning": "Клима",
+      "furnished": "Наместен",
+      "elevator": "Лифт",
+      "parking": "Паркинг",
+      "garden": "Градина",
+      "swimming_pool": "Базен",
+      "internet": "Интернет/WiFi",
+      "laundry": "Перална",
+      "dishwasher": "Машина за садови",
+      "security": "Сигурност",
+      "storage": "Складишен простор",
+      "pet_friendly": "Дозволени миленици",
+      "terrace": "Тераса",
+      "fireplace": "Камин",
+      "cable_tv": "Кабелска ТВ",
+      "washing_machine": "Машина за перење"
+    },
+    "description": {
+      "title": "Опис",
+      "placeholder": "Опишете ја вашата недвижнина детално..."
+    },
+    "media": {
+      "title": "Фотографии",
+      "subtitle": "Додадете фотографии од вашата недвижнина",
+      "dragDrop": "Повлечете и пуштете фотографии тука или кликнете за прикачување",
+      "maxSize": "Максимална големина на датотека: 5MB",
+      "formats": "Поддржани формати: JPG, PNG"
+    },
+    "buttons": {
+      "back": "Назад",
+      "next": "Следно",
+      "publish": "Објави оглас"
+    },
+    "errors": {
+      "required": "Ве молиме пополнете ги сите задолжителни полиња",
+      "invalidEmail": "Ве молиме внесете валидна емаил адреса",
+      "invalidPhone": "Ве молиме внесете валиден телефонски број",
+      "uploadFailed": "Прикачувањето на фотографиите не успеа",
+      "maxPhotos": "Максимум 10 фотографии се дозволени",
+      "minPhotos": "Ве молиме додадете барем една фотографија"
+    }
+  },
+  "MyAgency": {
+    "title": "Моја Агенција",
+    "subtitle": "Управувајте со вашиот профил и огласи за недвижности",
+    "editProfile": "Уреди Профил",
+    "properties": {
+      "title": "Огласи за Недвижности",
+      "subtitle": "Управувајте и следете ги сите ваши огласи",
+      "addNew": "Додај Оглас",
+      "edit": "Уреди",
+      "delete": "Избриши",
+      "noProperties": "Сè уште нема објавени огласи",
+      "addFirstProperty": "Додадете го вашиот прв оглас"
+    }
+  },
+  "Footer": {
+    "description": "Вашата доверлива платформа за недвижности во Северна Македонија. Најдете го вашиот совршен дом, поврзете се со цимери или развијте го вашиот бизнис со недвижности со нас.",
+    "quickLinks": {
+      "title": "Брзи Линкови",
+      "about": "За Нас",
+      "contact": "Контакт",
+      "terms": "Услови за користење",
+      "privacy": "Политика за приватност"
+    },
+    "services": {
+      "title": "Наши Услуги",
+      "postProperty": "Објави Имот",
+      "findRoommate": "Најди Цимер",
+      "registerAgency": "Регистрирај Агенција",
+      "savedProperties": "Зачувани Имоти"
+    },
+    "newsletter": {
+      "title": "Билтен",
+      "description": "Претплатете се на нашиот билтен за најновите ажурирања за недвижности и вести од пазарот.",
+      "placeholder": "Вашата емаил адреса",
+      "subscribe": "Претплати се"
+    },
+    "copyright": "Сите права се задржани.",
+    "madeWith": "Направено со љубов во Скопје"
+  },
+  "mapPage": {
+    "exploreNeighborhoods": "Истражете ги населбите во {cityName}",
+    "viewAllProperties": "Види ги сите имоти",
+    "searchPlaceholder": "Пребарај населби...",
+    "standard": "Стандардна",
+    "satellite": "Сателитска",
+    "properties": "имоти",
+    "popularNeighborhoods": "Популарни населби во {cityName}",
+    "averagePrice": "Просечна цена:",
+    "priceDataUnavailable": "Нема податоци за цена",
+    "noProperties": "Нема имоти",
+    "viewProperties": "Види имоти"
   }
 }

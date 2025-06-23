@@ -1,9 +1,49 @@
 {
   "Navigation": {
-    "postProperty": "Posto pronë",
-    "home": "Ballina",
-    "about": "Rreth neshk",
-    "roommates": "Lidhuni me shokët e dhomës"
+    "postProperty": "Publiko pronën",
+    "home": "Shtëpia",
+    "about": "Rreth nesh",
+    "roommates": "Lidhu me bashkëbanuesit",
+    "favorites": "Pronat e ruajtura",
+    "registerAgency": "Regjistrohu si agjenci",
+    "properties": "Prona",
+  "postWithoutLogin": "Publiko pronën (pa hyrje)",
+    "agencyLogin": "Hyrja për agjencitë",
+    "myAgency": "Agjencia Ime",
+    "agency": "Agjencia"
+  },
+  "Roommates": {
+    "title": "Gjeni shokun tuaj të dhomës perfekt",
+    "subtitle": "Lidhuni me njerëz që kërkojnë hapësira të përbashkëta banimi",
+    "postButton": "Posto që po kërkoj dhomë",
+    "filters": {
+      "title": "Filtrat",
+      "areas": "Të gjitha zonat",
+      "cityCenter": "Qendra",
+      "karpos": "Karposh",
+      "aerodrom": "Aerodrom",
+      "gaziBaba": "Gazi Baba",
+      "maxBudget": "Buxheti maksimal (€/muaj)",
+      "lookingFor": "Duke kërkuar",
+      "any": "Çfarëdo",
+      "roomInShared": "Dhomë në apartament të përbashkët",
+      "entireApartment": "Apartament i plotë me shok dhome",
+      "moveInDate": "Data e hyrjes",
+      "lifestyle": "Stili i jetesës",
+      "nonSmoker": "Jo-duhanpirës",
+      "petFriendly": "Miqësor ndaj kafshëve",
+      "student": "Student",
+      "professional": "Profesionist"
+    },
+    "card": {
+      "verified": "Verifikuar",
+      "viewPhone": "Shiko telefonin",
+      "message": "Mesazh",
+      "budget": "Buxheti",
+      "available": "I disponueshëm",
+      "lookingFor": "Duke kërkuar",
+      "prefers": "Preferon"
+    }
   },
   "Search": {
     "apartments": "Apartamente",
@@ -16,11 +56,390 @@
     "land": "Tokë",
     "buildings": "Ndërtesa",
     "villas": "Vila",
+    "studio": "Studio",
     "choose": "Zgjidhni një qytet",
     "holiday": "Pushime",
     "chooseLocal": "Zgjidhni një lloj",
     "buy": "Blej",
     "rent": "Merr me qira",
     "searchButton": "Kërko"
+  },
+  "Favorites": {
+    "savedProperties": "Pronat e ruajtura",
+    "savedPropertiesDesc": "Shikoni dhe menaxhoni pronat tuaja të ruajtura",
+    "noSavedProperties": "Ende nuk ka prona të ruajtura",
+    "startSaving": "Filloni të ruani prona duke klikuar ikonën e zemrës"
+  },
+  "Filters": {
+    "propertyType": "Lloji i pronës",
+    "select": "Zgjidhni...",
+    "house": "Shtëpi",
+    "apartment": "Apartament",
+    "villa": "Vilë",
+    "office": "Zyrë",
+    "land": "Tokë",
+    "priceRange": "Intervali i çmimit",
+    "min": "Min",
+    "max": "Maks",
+    "size": "Madhësia",
+    "squareMeters": "m²",
+    "bedrooms": "Dhoma gjumi",
+    "bathrooms": "Banjo",
+    "condition": "Gjendja",
+    "new": "E re",
+    "good": "E mirë",
+    "needsRenovation": "Ka nevojë për rinovim",
+    "features": "Karakteristikat",
+    "parking": "Parking",
+    "balcony": "Ballkon",
+    "garden": "Kopsht",
+    "elevator": "Ashensor",
+    "airConditioning": "Kondicionim",
+    "heating": "Ngrohje",
+    "furnished": "I mobiluar",
+    "swimmingPool": "Pishinë",
+    "internet": "Internet/WiFi",
+    "laundry": "Dhomë larjeje",
+    "dishwasher": "Makinë larëse enësh",
+    "security": "Siguri",
+    "storage": "Hapësirë ruajtjeje",
+    "petFriendly": "Miqësor ndaj kafshëve",
+    "terrace": "Terrasë",
+    "fireplace": "Oxhak",
+    "cableTV": "TV kabllore",
+    "washingMachine": "Makinë larëse",
+    "floor": "Kati",
+    "ground": "Përdhesë",
+    "basement": "Bodrum",
+    "top": "Kati i fundit",
+    "middle": "Kati i mesëm",
+    "listingDate": "Data e postimit",
+    "today": "Sot",
+    "thisWeek": "Këtë javë",
+    "thisMonth": "Këtë muaj",
+    "sort": {
+      "newest": "Më të rejat",
+      "priceAsc": "Çmimi më i ulët",
+      "priceDesc": "Çmimi më i lartë"
+    }
+  },
+  "AgencyRegistration": {
+    "title": "Regjistroni Agjencinë Tuaj",
+    "subtitle": "Bashkohuni me platformën tonë dhe prezantoni pronat tuaja mijëra klientëve potencialë",
+    "steps": {
+      "agencyInfo": "Informacioni i Agjencisë",
+      "accountDetails": "Detajet e Llogarisë",
+      "profileSetup": "Konfigurimi i Profilit"
+    },
+    "form": {
+      "companyName": "Emri i Kompanisë",
+      "companyNamePlaceholder": "Shkruani emrin e agjencisë tuaj",
+      "email": "Adresa e Emailit",
+      "emailPlaceholder": "Shkruani emailin tuaj të biznesit",
+      "phone": "Numri i Telefonit",
+      "phonePlaceholder": "Shkruani telefonin tuaj të biznesit",
+      "website": "Faqja e Internetit (Opsionale)",
+      "websitePlaceholder": "Shkruani URL-në e faqes tuaj",
+      "address": "Adresa",
+      "addressPlaceholder": "Shkruani adresën e zyrës",
+      "city": "Qyteti",
+      "cityPlaceholder": "Shkruani qytetin tuaj",
+      "zipCode": "Kodi Postar",
+      "zipCodePlaceholder": "Shkruani kodin postar",
+      "contactPerson": "Personi i Kontaktit",
+      "contactPersonPlaceholder": "Shkruani emrin e plotë",
+      "contactRole": "Roli në Kompani",
+      "contactRolePlaceholder": "p.sh. Pronar, Menaxher",
+      "password": "Fjalëkalimi",
+      "passwordPlaceholder": "Krijoni një fjalëkalim të fortë",
+      "confirmPassword": "Konfirmoni Fjalëkalimin",
+      "confirmPasswordPlaceholder": "Ri-shkruani fjalëkalimin tuaj",
+      "licenseNumber": "Numri i Licencës",
+      "licenseNumberPlaceholder": "Shkruani numrin e licencës së pasurive të paluajtshme",
+      "taxId": "ID Tatimore",
+      "taxIdPlaceholder": "Shkruani numrin tuaj të identifikimit tatimor",
+      "agencySize": "Madhësia e Agjencisë",
+      "agencySizeOptions": {
+        "small": "E Vogël (1-5 agjentë)",
+        "medium": "E Mesme (6-20 agjentë)",
+        "large": "E Madhe (21+ agjentë)"
+      },
+      "logo": "Logoja e Agjencisë",
+      "uploadLogo": "Klikoni për të ngarkuar logon",
+      "description": "Përshkrimi i Agjencisë",
+      "descriptionPlaceholder": "Na tregoni për agjencinë tuaj, specialitetet dhe përvojën",
+      "specializations": "Fushat e Specializimit",
+      "agreeTerms": "Unë pranoj Kushtet e Shërbimit dhe Politikën e Privatësisë"
+    },
+    "buttons": {
+      "back": "Prapa",
+      "next": "Tjetër",
+      "submit": "Dërgo Regjistrimin"
+    },
+    "errors": {
+      "requiredFields": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
+      "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
+      "passwordLength": "Fjalëkalimi duhet të jetë të paktën 8 karaktere",
+      "passwordMismatch": "Fjalëkalimet nuk përputhen",
+      "agreeTerms": "Duhet të pranoni Kushtet e Shërbimit",
+      "unknown": "Ndodhi një gabim i papritur"
+    },
+    "benefits": {
+      "title": "Përfitimet e Bashkimit",
+      "items": {
+        "exposure": "Arrini mijëra klientë potencialë",
+        "tools": "Qasje në mjete profesionale të pasurive të paluajtshme",
+        "analytics": "Merrni analiza dhe njohuri të detajuara",
+        "support": "Mbështetje e dedikuar 24/7",
+        "marketing": "Mjete dhe burime falas për marketing",
+        "network": "Bashkohuni me një rrjet agjencish të nivelit të lartë"
+      }
+    }
+  },
+  "UserRegistration": {
+    "title": "Krijoni Llogarinë Tuaj",
+    "subtitle": "Bashkohuni me dom.mk për të ruajtur të preferuarat dhe menaxhuar listimet tuaja",
+    "form": {
+      "fullName": "Emri i Plotë",
+      "fullNamePlaceholder": "Shkruani emrin tuaj të plotë",
+      "email": "Adresa e Emailit",
+      "emailPlaceholder": "Shkruani adresën tuaj të emailit",
+      "phone": "Numri i Telefonit (Opsional)",
+      "phonePlaceholder": "Shkruani numrin tuaj të telefonit",
+      "password": "Fjalëkalimi",
+      "passwordPlaceholder": "Krijoni një fjalëkalim",
+      "confirmPassword": "Konfirmoni Fjalëkalimin",
+      "confirmPasswordPlaceholder": "Konfirmoni fjalëkalimin tuaj",
+      "agreeTerms": "Unë pajtohem me Kushtet e Shërbimit dhe Politikën e Privatësisë së dom.mk",
+      "submit": "Krijo Llogari",
+      "creating": "Duke krijuar llogarinë...",
+      "alreadyHaveAccount": "Keni tashmë një llogari?",
+      "signInHere": "Hyni këtu"
+    },
+    "errors": {
+      "requiredFields": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
+      "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
+      "passwordTooShort": "Fjalëkalimi duhet të ketë të paktën 8 karaktere",
+      "passwordMismatch": "Fjalëkalimet nuk përputhen",
+      "agreeTermsRequired": "Ju lutemi pajtohuni me kushtet dhe kushtet",
+      "unknown": "Regjistrimi dështoi. Ju lutemi provoni përsëri."
+    }
+  },
+  "UserLogin": {
+    "title": "Mirë se erdhët përsëri",
+    "subtitle": "Hyni në llogarinë tuaj dom.mk",
+    "form": {
+      "email": "Adresa e Emailit",
+      "emailPlaceholder": "Shkruani emailin tuaj",
+      "password": "Fjalëkalimi",
+      "passwordPlaceholder": "Shkruani fjalëkalimin tuaj",
+      "rememberMe": "Më mbaj mend për 7 ditë",
+      "forgotPassword": "Keni harruar fjalëkalimin?",
+      "login": "Hyni",
+      "loggingIn": "Duke hyrë...",
+      "noAccount": "Nuk keni llogari?",
+      "createOne": "Krijoni një këtu"
+    },
+    "errors": {
+      "requiredFields": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
+      "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
+      "invalidCredentials": "Hyrja dështoi. Ju lutemi kontrolloni kredencialet tuaja.",
+      "unknown": "Ndodhi një gabim i papritur"
+    }
+  },
+  "AgencyLogin": {
+    "title": "Hyrja e Agjencisë",
+    "subtitle": "Qasuni në panelin tuaj të kontrollit dhe menaxhoni pronat tuaja",
+    "form": {
+      "email": "Adresa e Emailit",
+      "emailPlaceholder": "Shkruani emailin tuaj të biznesit",
+      "password": "Fjalëkalimi",
+      "passwordPlaceholder": "Shkruani fjalëkalimin tuaj",
+      "rememberMe": "Më mbaj mend",
+      "forgotPassword": "Keni harruar fjalëkalimin?",
+      "login": "Hyni",
+      "loggingIn": "Duke hyrë...",
+      "noAccount": "Nuk keni llogari të agjencisë?",
+      "registerNow": "Regjistrohuni tani"
+    },
+    "errors": {
+      "requiredFields": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
+      "invalidCredentials": "Email ose fjalëkalim i pavlefshëm",
+      "unknown": "Ndodhi një gabim i papritur"
+    },
+    "benefits": {
+      "title": "Përfitimet e Portalit të Agjencisë",
+      "items": {
+        "dashboard": "Qasje në panelin tuaj të personalizuar",
+        "listings": "Menaxhoni të gjitha listat tuaja të pronave",
+        "analytics": "Shikoni analiza të detajuara të performancës",
+        "leads": "Gjurmoni dhe menaxhoni klientët potencialë",
+        "support": "Merrni mbështetje prioritare për klientët"
+      }
+    }
+  },
+  "PostProperty": {
+    "title": "Posto pronën",
+    "subtitle": "Plotësoni detajet për të listuar pronën tuaj",
+    "steps": {
+      "details": "Detajet",
+      "media": "Media",
+      "publish": "Publiko"
+    },
+    "contactInfo": {
+      "title": "Informacioni i kontaktit",
+      "fullName": "Emri i plotë",
+      "fullNamePlaceholder": "Shkruani emrin tuaj të plotë",
+      "email": "Adresa e emailit",
+      "emailPlaceholder": "Shkruani adresën tuaj të emailit",
+      "phone": "Numri i telefonit",
+      "phonePlaceholder": "Shkruani numrin tuaj të telefonit"
+    },
+    "propertyDetails": {
+      "title": "Detajet e pronës",
+      "listingTitle": "Titulli",
+      "listingTitlePlaceholder": "p.sh. Apartament i rehatshëm në Qendër",
+      "propertyType": "Lloji i pronës",
+      "types": {
+        "apartment": "Apartament",
+        "house": "Shtëpi",
+        "office": "Zyrë",
+        "land": "Tokë"
+      },
+      "listingType": "Lloji i listimit",
+      "listingTypes": {
+        "rent": "Me qira",
+        "buy": "Për shitje"
+      },
+      "price": "Çmimi",
+      "pricePlaceholder": "Çmimi (€)",
+      "size": "Sipërfaqja",
+      "sizePlaceholder": "Sipërfaqja (m²)",
+      "condition": "Gjendja",
+      "conditions": {
+        "new": "E re",
+        "renovated": "E rinovuar",
+        "needsRenovation": "Ka nevojë për rinovim"
+      },
+      "floor": "Kati",
+      "floorPlaceholder": "Numri i katit",
+      "totalFloors": "Totali i kateve",
+      "totalFloorsPlaceholder": "Numri total i kateve",
+      "rooms": "Dhomat",
+      "roomsPlaceholder": "Numri i dhomave",
+      "bathrooms": "Banjot",
+      "bathroomsPlaceholder": "Numri i banjove"
+    },
+    "location": {
+      "title": "Vendndodhja",
+      "city": "Qyteti",
+      "selectCity": "Zgjidhni qytetin",
+      "cities": {
+        "skopje": "Shkup",
+        "bitola": "Manastir",
+        "kumanovo": "Kumanovë",
+        "ohrid": "Ohër",
+        "tetovo": "Tetovë"
+      },
+      "address": "Adresa",
+      "addressPlaceholder": "Shkruani adresën e pronës"
+    },
+    "amenities": {
+      "title": "Pajisjet",
+      "balcony": "Ballkon",
+      "heating": "Ngrohje",
+      "air_conditioning": "Kondicionim",
+      "furnished": "I mobiluar",
+      "elevator": "Ashensor",
+      "parking": "Parking",
+      "garden": "Kopsht",
+      "swimming_pool": "Pishinë",
+      "internet": "Internet/WiFi",
+      "laundry": "Dhomë larjeje",
+      "dishwasher": "Makinë larëse enësh",
+      "security": "Siguri",
+      "storage": "Hapësirë ruajtjeje",
+      "pet_friendly": "Miqësor ndaj kafshëve",
+      "terrace": "Terrasë",
+      "fireplace": "Oxhak",
+      "cable_tv": "TV kabllore",
+      "washing_machine": "Makinë larëse"
+    },
+    "description": {
+      "title": "Përshkrimi",
+      "placeholder": "Përshkruani pronën tuaj në detaje..."
+    },
+    "media": {
+      "title": "Fotografitë",
+      "subtitle": "Shtoni fotografi të pronës suaj",
+      "dragDrop": "Tërhiqni dhe lëshoni fotografi këtu ose klikoni për të ngarkuar",
+      "maxSize": "Madhësia maksimale e skedarit: 5MB",
+      "formats": "Formatet e mbështetura: JPG, PNG"
+    },
+    "buttons": {
+      "back": "Prapa",
+      "next": "Tjetër",
+      "publish": "Publiko listimin"
+    },
+    "errors": {
+      "required": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
+      "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
+      "invalidPhone": "Ju lutemi shkruani një numër telefoni të vlefshëm",
+      "uploadFailed": "Ngarkimi i fotografive dështoi",
+      "maxPhotos": "Lejohen maksimum 10 fotografi",
+      "minPhotos": "Ju lutemi shtoni të paktën një fotografi"
+    }
+  },
+  "MyAgency": {
+    "title": "Agjencia Ime",
+    "subtitle": "Menaxhoni profilin tuaj dhe listimin e pronave",
+    "editProfile": "Ndrysho Profilin",
+    "properties": {
+      "title": "Listimet e Pronave",
+      "subtitle": "Menaxhoni dhe ndiqni të gjitha listimet tuaja të pronave",
+      "addNew": "Shto Pronë",
+      "edit": "Ndrysho",
+      "delete": "Fshij",
+      "noProperties": "Ende nuk ka prona të listuara",
+      "addFirstProperty": "Shtoni listimin tuaj të parë të pronës"
+    }
+  },
+  "Footer": {
+    "description": "Platforma juaj e besueshme e pasurive të paluajtshme në Maqedoninë e Veriut. Gjeni shtëpinë tuaj të përkryer, lidhuni me shokët e dhomës ose zhvilloni biznesin tuaj të pasurive të paluajtshme me ne.",
+    "quickLinks": {
+      "title": "Lidhje të Shpejta",
+      "about": "Rreth Nesh",
+      "contact": "Kontakt",
+      "terms": "Kushtet e Përdorimit",
+      "privacy": "Politika e Privatësisë"
+    },
+    "services": {
+      "title": "Shërbimet Tona",
+      "postProperty": "Posto Pronë",
+      "findRoommate": "Gjej Shok Dhome",
+      "registerAgency": "Regjistro Agjenci",
+      "savedProperties": "Pronat e Ruajtura"
+    },
+    "newsletter": {
+      "title": "Buletini",
+      "description": "Abonohu në buletinin tonë për përditësimet më të fundit të pronave dhe lajmet e tregut të pasurive të paluajtshme.",
+      "placeholder": "Adresa juaj e emailit",
+      "subscribe": "Abonohu"
+    },
+    "copyright": "Të gjitha të drejtat e rezervuara.",
+    "madeWith": "Bërë me dashuri në Shkup"
+  },
+  "mapPage": {
+    "exploreNeighborhoods": "Eksploroni lagjet në {cityName}",
+    "viewAllProperties": "Shikoni të gjitha pronat",
+    "searchPlaceholder": "Kërko lagje...",
+    "standard": "Standard",
+    "satellite": "Satelit",
+    "properties": "prona",
+    "popularNeighborhoods": "Lagjet populore në {cityName}",
+    "averagePrice": "Çmimi mesatar:",
+    "priceDataUnavailable": "Të dhënat për çmimin nuk janë të disponueshme",
+    "noProperties": "Nuk ka prona",
+    "viewProperties": "Shikoni pronat"
   }
 }
