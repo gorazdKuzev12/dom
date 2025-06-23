@@ -572,8 +572,8 @@ export default async function MunicipalityListingsPage({
     // Fetch listings, cities, and municipalities in parallel
     const [listingsResult, citiesResult, municipalitiesResult] = await Promise.all([
       client.query({
-        query: LISTINGS_BY_MUNICIPALITY_FILTER,
-        variables: { name: municipalityName, filter },
+      query: LISTINGS_BY_MUNICIPALITY_FILTER,
+      variables: { name: municipalityName, filter },
       }),
       client.query({
         query: GET_ALL_CITIES,
@@ -613,14 +613,14 @@ export default async function MunicipalityListingsPage({
         
         {/* Main Content with SEO-friendly structure */}
                 <main>
-          <ZoneListingsPage
+      <ZoneListingsPage
             listings={listings}
             municipalityName={displayMunicipalityName}
             municipalitySlug={municipality}
-            citySlug={city}
+        citySlug={city}
             cities={cities}
             municipalities={municipalities}
-          />
+      />
         </main>
       </>
     );

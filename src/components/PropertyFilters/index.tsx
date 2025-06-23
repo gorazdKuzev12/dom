@@ -328,20 +328,63 @@ export default function PropertyFilters({
     }
   };
 
-  // Handle city change - this should update the URL path
-  const handleCityChange = (e: ChangeEvent<HTMLSelectElement>): void => {
+  // Handle city change - go directly to first municipality of that city
+  const handleCityChange = async (e: ChangeEvent<HTMLSelectElement>): Promise<void> => {
     const value = e.target.value;
     setCity(value);
+    setMunicipality(''); // Clear municipality when city changes
     
     const pathParts = pathname.split('/');
     const locale = pathParts[1];
     const currentTransaction = pathParts[2];
     const currentType = pathParts[3];
-    const municipalityPart = pathParts.slice(5).join('/');
     
-    const newPath = `/${locale}/${currentTransaction}/${currentType}/${value}${municipalityPart ? '/' + municipalityPart : ''}`;
-    const params = createParamsWithCurrentState({ city: value });
-    router.push(`${newPath}?${params.toString()}`, { scroll: false });
+    try {
+      // Import Apollo client and queries
+      const { getClient } = await import('@/lib/client');
+      const { GET_MUNICIPALITIES_BY_CITY_NAME } = await import('@/lib/queries');
+      
+      // Fetch municipalities for the selected city
+      const client = getClient();
+      const { data } = await client.query({
+        query: GET_MUNICIPALITIES_BY_CITY_NAME,
+        variables: { name: value }
+      });
+      
+      if (data?.municipalitiesByCityName && data.municipalitiesByCityName.length > 0) {
+        // Get the first municipality
+        const firstMunicipality = data.municipalitiesByCityName[0];
+        
+        // Create slug from municipality name
+        const createSlug = (text: string): string => {
+          return text
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9\s-]/g, "")
+            .replace(/\s+/g, "-")
+            .replace(/-+/g, "-")
+            .trim();
+        };
+        
+        const municipalitySlug = createSlug(firstMunicipality.name_en);
+        setMunicipality(municipalitySlug);
+        
+        // Navigate directly to the first municipality's listings
+        const newPath = `/${locale}/${currentTransaction}/${currentType}/${value}/${municipalitySlug}/listings`;
+        const params = createParamsWithCurrentState({ city: value, municipality: municipalitySlug });
+        router.push(`${newPath}?${params.toString()}`, { scroll: false });
+      } else {
+        // Fallback: navigate to city page if no municipalities found
+        const newPath = `/${locale}/${currentTransaction}/${currentType}/${value}`;
+        router.push(newPath, { scroll: false });
+      }
+    } catch (error) {
+      console.error('Error fetching municipalities:', error);
+      // Fallback: navigate to city page on error
+      const newPath = `/${locale}/${currentTransaction}/${currentType}/${value}`;
+      router.push(newPath, { scroll: false });
+    }
   };
 
   // Handle municipality change - this should update the URL path
@@ -389,21 +432,20 @@ export default function PropertyFilters({
             ))}
           </SelectInput>
           
-          <SelectInput value={municipality} onChange={handleMunicipalityChange}>
-            <option value="">All Areas</option>
-            {municipalities.map((municipalityItem) => (
-              <option key={municipalityItem.id} value={municipalityItem.name_en.toLowerCase()}>
-                {getLocalizedName(municipalityItem, 'en')}
-              </option>
-            ))}
-          </SelectInput>
+          {/* Only show municipality filter if there are multiple municipalities */}
+          {municipalities.length > 1 && (
+            <SelectInput value={municipality} onChange={handleMunicipalityChange}>
+              <option value="">All Areas</option>
+              {municipalities.map((municipalityItem) => (
+                <option key={municipalityItem.id} value={municipalityItem.name_en.toLowerCase()}>
+                  {getLocalizedName(municipalityItem, 'en')}
+                </option>
+              ))}
+            </SelectInput>
+          )}
         </LocationSelects>
 
-        <SortSelect value={sortOption} onChange={handleSortChange}>
-          <option value="newest">{t("Filters.sort.newest")}</option>
-          <option value="price_asc">{t("Filters.sort.priceAsc")}</option>
-          <option value="price_desc">{t("Filters.sort.priceDesc")}</option>
-        </SortSelect>
+     
       </TopOptions>
 
       <FilterSection>

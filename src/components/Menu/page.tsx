@@ -172,7 +172,14 @@ export default function Menu() {
         <DesktopMenu>
           <NavLinks>
             <MainActions>
-              <AnimatedActionButton href={`/${locale}/post-property`}>
+              <AnimatedActionButton href={`/${locale}/buy/apartments/skopje/centar/listings`}>
+          <ButtonIcon>
+            <FiHome size={16} />
+          </ButtonIcon>
+          <ButtonLabel>{t("properties")}</ButtonLabel>
+        </AnimatedActionButton>
+
+        <AnimatedActionButton href={`/${locale}/post-property`}>
                 <ButtonIcon>
                   <FiPlusSquare size={18} />
                 </ButtonIcon>
@@ -361,7 +368,12 @@ export default function Menu() {
       <MobileDrawer isOpen={mobileOpen}>
         <DrawerContent>
           <MobileMainActions>
-            <MobileLink href={`/${locale}/post-property`}>
+            <MobileLink href={`/${locale}/buy/apartments/skopje/centar/listings`}>
+            <FiHome size={20} />
+            <span>{t("properties")}</span>
+          </MobileLink>
+
+          <MobileLink href={`/${locale}/post-property`}>
               <FiPlusSquare size={20} />
               <span>{t("postWithoutLogin")}</span>
             </MobileLink>

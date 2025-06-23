@@ -6,7 +6,8 @@
     "roommates": "Connect with roommates",
     "favorites": "Saved properties",
     "registerAgency": "Register as Agency",
-    "postWithoutLogin": "Post Property (No Login required)",
+    "properties": "Properties",
+  "postWithoutLogin": "Post Property (No Login required)",
     "agencyLogin": "Agency Login",
     "myAgency": "My Agency",
         "agency": " Agencies"
