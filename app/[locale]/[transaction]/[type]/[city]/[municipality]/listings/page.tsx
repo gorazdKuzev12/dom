@@ -1,6 +1,6 @@
 import ZoneListingsPage from "@/components/ZoneListingPage";
 import { getClient } from "@/lib/client";
-import { LISTINGS_BY_MUNICIPALITY_FILTER } from "@/lib/queries";
+import { LISTINGS_BY_MUNICIPALITY_FILTER, GET_ALL_CITIES, GET_MUNICIPALITIES_BY_CITY_NAME } from "@/lib/queries";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
@@ -568,12 +568,25 @@ export default async function MunicipalityListingsPage({
 
   try {
     const client = getClient();
-    const { data } = await client.query({
-      query: LISTINGS_BY_MUNICIPALITY_FILTER,
-      variables: { name: municipalityName, filter },
-    });
+    
+    // Fetch listings, cities, and municipalities in parallel
+    const [listingsResult, citiesResult, municipalitiesResult] = await Promise.all([
+      client.query({
+        query: LISTINGS_BY_MUNICIPALITY_FILTER,
+        variables: { name: municipalityName, filter },
+      }),
+      client.query({
+        query: GET_ALL_CITIES,
+      }),
+      client.query({
+        query: GET_MUNICIPALITIES_BY_CITY_NAME,
+        variables: { name: city },
+      }),
+    ]);
 
-    const listings = data?.listingsByMunicipalityFilter ?? [];
+    const listings = listingsResult.data?.listingsByMunicipalityFilter ?? [];
+    const cities = citiesResult.data?.city ?? [];
+    const municipalities = municipalitiesResult.data?.municipalitiesByCityName ?? [];
     
     // Get localized municipality name for display
     let displayMunicipalityName = municipalityName;
@@ -599,12 +612,14 @@ export default async function MunicipalityListingsPage({
         />
         
         {/* Main Content with SEO-friendly structure */}
-        <main>
+                <main>
           <ZoneListingsPage
             listings={listings}
             municipalityName={displayMunicipalityName}
             municipalitySlug={municipality}
             citySlug={city}
+            cities={cities}
+            municipalities={municipalities}
           />
         </main>
       </>

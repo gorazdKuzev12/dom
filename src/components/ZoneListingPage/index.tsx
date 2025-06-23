@@ -37,11 +37,32 @@ interface Listing {
   municipalityId: string;
 }
 
+interface City {
+  id: string;
+  name_en: string;
+  name_mk: string;
+  name_sq: string;
+  slug: string;
+}
+
+interface Municipality {
+  id: string;
+  name_en: string;
+  name_mk: string;
+  name_sq: string;
+  isPopular?: boolean;
+  averagePrice?: number;
+  image?: string;
+  propertyCount?: number;
+}
+
 interface ZoneListingsPageProps {
   listings: Listing[];
   municipalityName: string;
   municipalitySlug: string;
   citySlug: string;
+  cities: City[];
+  municipalities: Municipality[];
 }
 
 export default function ZoneListingsPage({
@@ -49,6 +70,8 @@ export default function ZoneListingsPage({
   municipalityName,
   municipalitySlug,
   citySlug,
+  cities,
+  municipalities,
 }: ZoneListingsPageProps) {
   const locale = useLocale();
   const router = useRouter();
@@ -87,32 +110,7 @@ export default function ZoneListingsPage({
   }, [mobileFiltersOpen]);
 
   // Filter listings based on sidebar inputs
-  const filteredListings = listings.filter((listing) => {
-    if (
-      propertyType !== "All" &&
-      listing.type.toLowerCase() !== propertyType.toLowerCase()
-    ) {
-      return false;
-    }
-
-    if (priceMin && listing.price < parseInt(priceMin)) {
-      return false;
-    }
-
-    if (priceMax && listing.price > parseInt(priceMax)) {
-      return false;
-    }
-
-    if (sizeMin && listing.size < parseInt(sizeMin)) {
-      return false;
-    }
-
-    if (sizeMax && listing.size > parseInt(sizeMax)) {
-      return false;
-    }
-
-    return true;
-  });
+  
   console.log(citySlug);
 
   const handleListingClick = (listing: Listing) => {
@@ -181,10 +179,15 @@ export default function ZoneListingsPage({
             </MobileFilterHeader>
 
             <FiltersContent>
-              <PropertyFilters />
+              <PropertyFilters 
+                cities={cities}
+                municipalities={municipalities}
+                currentCitySlug={citySlug}
+                currentMunicipalitySlug={municipalitySlug}
+              />
 
               <ApplyFilterButton onClick={toggleMobileFilters}>
-                Show {filteredListings.length} properties
+                Show {listings.length} properties
               </ApplyFilterButton>
             </FiltersContent>
           </SidebarContainer>
@@ -193,7 +196,7 @@ export default function ZoneListingsPage({
           <ListArea>
             <ResultsHeader>
               <ResultsCount>
-                {filteredListings.length} properties in {municipalityName}
+                {listings.length} properties in {municipalityName}
               </ResultsCount>
               <SortDropdown>
                 <option>Newest first</option>
@@ -202,9 +205,9 @@ export default function ZoneListingsPage({
               </SortDropdown>
             </ResultsHeader>
 
-            {filteredListings.length > 0 ? (
+            {listings.length > 0 ? (
               <PropertiesList>
-                {filteredListings.map((listing) => (
+                {listings.map((listing) => (
                   <PropertyCard
                     key={listing.id}
                     onClick={() => handleListingClick(listing)}

@@ -5,6 +5,32 @@ import styled from "styled-components";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
+interface City {
+  id: string;
+  name_en: string;
+  name_mk: string;
+  name_sq: string;
+  slug: string;
+}
+
+interface Municipality {
+  id: string;
+  name_en: string;
+  name_mk: string;
+  name_sq: string;
+  isPopular?: boolean;
+  averagePrice?: number;
+  image?: string;
+  propertyCount?: number;
+}
+
+interface PropertyFiltersProps {
+  cities?: City[];
+  municipalities?: Municipality[];
+  currentCitySlug?: string;
+  currentMunicipalitySlug?: string;
+}
+
 interface FilterState {
   listingType: string;
   sortOption: string;
@@ -19,9 +45,16 @@ interface FilterState {
   specificDetails: string[];
   floor: string[];
   listingDate: string;
+  city: string;
+  municipality: string;
 }
 
-export default function PropertyFilters() {
+export default function PropertyFilters({
+  cities = [],
+  municipalities = [],
+  currentCitySlug = "",
+  currentMunicipalitySlug = "",
+}: PropertyFiltersProps = {}) {
   const t = useTranslations();
   const router = useRouter();
   const pathname = usePathname();
@@ -52,6 +85,8 @@ export default function PropertyFilters() {
   const [specificDetails, setSpecificDetails] = useState<FilterState["specificDetails"]>([]);
   const [floor, setFloor] = useState<FilterState["floor"]>([]);
   const [listingDate, setListingDate] = useState<FilterState["listingDate"]>("");
+  const [city, setCity] = useState<FilterState["city"]>(currentCitySlug);
+  const [municipality, setMunicipality] = useState<FilterState["municipality"]>(currentMunicipalitySlug);
 
   // Format price with currency symbol and thousands separators
   const formatPrice = (value: string): string => {
@@ -95,8 +130,10 @@ export default function PropertyFilters() {
       );
       setFloor(searchParams.get("floor")?.split(",").filter(Boolean) || []);
       setListingDate(searchParams.get("listingDate") || "");
+      setCity(searchParams.get("city") || currentCitySlug);
+      setMunicipality(searchParams.get("municipality") || currentMunicipalitySlug);
     }
-  }, [searchParams, urlTransaction, urlType]);
+  }, [searchParams, urlTransaction, urlType, currentCitySlug, currentMunicipalitySlug]);
 
   // Create a function to construct params object with current state values
   const createParamsWithCurrentState = (updatedValues = {}) => {
@@ -114,6 +151,8 @@ export default function PropertyFilters() {
       specificDetails,
       floor,
       listingDate,
+      city,
+      municipality,
       ...updatedValues,
     };
 
@@ -140,6 +179,10 @@ export default function PropertyFilters() {
       params.set("floor", currentValues.floor.join(","));
     if (currentValues.listingDate)
       params.set("listingDate", currentValues.listingDate);
+    if (currentValues.city && currentValues.city !== currentCitySlug)
+      params.set("city", currentValues.city);
+    if (currentValues.municipality && currentValues.municipality !== currentMunicipalitySlug)
+      params.set("municipality", currentValues.municipality);
 
     return params;
   };
@@ -273,6 +316,50 @@ export default function PropertyFilters() {
     applyFilters({ listingDate: value });
   };
 
+  // Helper function to get localized name
+  const getLocalizedName = (item: City | Municipality, locale: string = 'en'): string => {
+    switch (locale) {
+      case 'mk':
+        return item.name_mk;
+      case 'sq':
+        return item.name_sq;
+      default:
+        return item.name_en;
+    }
+  };
+
+  // Handle city change - this should update the URL path
+  const handleCityChange = (e: ChangeEvent<HTMLSelectElement>): void => {
+    const value = e.target.value;
+    setCity(value);
+    
+    const pathParts = pathname.split('/');
+    const locale = pathParts[1];
+    const currentTransaction = pathParts[2];
+    const currentType = pathParts[3];
+    const municipalityPart = pathParts.slice(5).join('/');
+    
+    const newPath = `/${locale}/${currentTransaction}/${currentType}/${value}${municipalityPart ? '/' + municipalityPart : ''}`;
+    const params = createParamsWithCurrentState({ city: value });
+    router.push(`${newPath}?${params.toString()}`, { scroll: false });
+  };
+
+  // Handle municipality change - this should update the URL path
+  const handleMunicipalityChange = (e: ChangeEvent<HTMLSelectElement>): void => {
+    const value = e.target.value;
+    setMunicipality(value);
+    
+    const pathParts = pathname.split('/');
+    const locale = pathParts[1];
+    const currentTransaction = pathParts[2];
+    const currentType = pathParts[3];
+    const currentCity = pathParts[4];
+    
+    const newPath = `/${locale}/${currentTransaction}/${currentType}/${currentCity}/${value}/listings`;
+    const params = createParamsWithCurrentState({ municipality: value });
+    router.push(`${newPath}?${params.toString()}`, { scroll: false });
+  };
+
   return (
     <FilterContainer>
       <TopOptions>
@@ -290,6 +377,27 @@ export default function PropertyFilters() {
             {t("Search.rent")}
           </ToggleButton>
         </ListingTypeToggle>
+
+        {/* City and Municipality selects */}
+        <LocationSelects>
+          <SelectInput value={city} onChange={handleCityChange}>
+            <option value="">All Cities</option>
+            {cities.map((cityItem) => (
+              <option key={cityItem.id} value={cityItem.slug}>
+                {getLocalizedName(cityItem, 'en')}
+              </option>
+            ))}
+          </SelectInput>
+          
+          <SelectInput value={municipality} onChange={handleMunicipalityChange}>
+            <option value="">All Areas</option>
+            {municipalities.map((municipalityItem) => (
+              <option key={municipalityItem.id} value={municipalityItem.name_en.toLowerCase()}>
+                {getLocalizedName(municipalityItem, 'en')}
+              </option>
+            ))}
+          </SelectInput>
+        </LocationSelects>
 
         <SortSelect value={sortOption} onChange={handleSortChange}>
           <option value="newest">{t("Filters.sort.newest")}</option>
@@ -573,6 +681,17 @@ const ListingTypeToggle = styled.div`
   border-radius: 8px;
   overflow: hidden;
   height: 44px;
+`;
+
+const LocationSelects = styled.div`
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  
+  > select {
+    flex: 1;
+    min-width: 140px;
+  }
 `;
 
 interface ToggleButtonProps {
