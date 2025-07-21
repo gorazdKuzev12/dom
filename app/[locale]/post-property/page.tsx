@@ -93,7 +93,9 @@ function PostPropertyForm() {
   const [error, setError] = useState("");
   const [listingResult, setListingResult] = useState<ListingResult | null>(null);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [isAgencyLoggedIn, setIsAgencyLoggedIn] = useState(false);
   const [userData, setUserData] = useState<any>(null);
+  const [agencyData, setAgencyData] = useState<any>(null);
   const [municipalities, setMunicipalities] = useState<Municipality[]>([]);
   
   // GraphQL hooks
@@ -122,18 +124,38 @@ function PostPropertyForm() {
     amenities: [],
   });
 
-  // Check for user authentication and populate form data
+  // Check for user or agency authentication and populate form data
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const userToken = localStorage.getItem('userToken') || sessionStorage.getItem('userToken');
+      const agencyToken = localStorage.getItem('agencyToken') || sessionStorage.getItem('agencyToken');
       const storedUserData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
+      const storedAgencyData = localStorage.getItem('agencyData') || sessionStorage.getItem('agencyData');
       
-      if (userToken && storedUserData) {
+      if (agencyToken && storedAgencyData) {
+        // Agency is logged in
+        const agency = JSON.parse(storedAgencyData);
+        setIsAgencyLoggedIn(true);
+        setIsUserLoggedIn(false);
+        setAgencyData(agency);
+        setUserData(null);
+        
+        // Auto-populate contact information from agency
+        setFormData(prev => ({
+          ...prev,
+          name: agency.contactPerson || agency.companyName || "",
+          email: agency.email || "",
+          phone: agency.phone || "",
+        }));
+      } else if (userToken && storedUserData) {
+        // User is logged in
         const user = JSON.parse(storedUserData);
         setIsUserLoggedIn(true);
+        setIsAgencyLoggedIn(false);
         setUserData(user);
+        setAgencyData(null);
         
-        // Auto-populate contact information
+        // Auto-populate contact information from user
         setFormData(prev => ({
           ...prev,
           name: user.name || "",
@@ -141,8 +163,11 @@ function PostPropertyForm() {
           phone: user.phone || "",
         }));
       } else {
+        // No one is logged in
         setIsUserLoggedIn(false);
+        setIsAgencyLoggedIn(false);
         setUserData(null);
+        setAgencyData(null);
       }
     }
   }, []);
@@ -364,6 +389,8 @@ function PostPropertyForm() {
         contactPhone: formData.phone,
         cityId: selectedCity.id,
         municipalityId: selectedMunicipality?.id || null,
+        // Add agency connection if agency is logged in
+        agencyId: isAgencyLoggedIn ? agencyData?.id : null,
       };
 
       // Create the listing
@@ -505,7 +532,11 @@ function PostPropertyForm() {
                   <CardSection>
                     <SectionTitle>
                       <User size={18} /> {t("contactInfo.title")}
-                      {isUserLoggedIn && <AutoFilledBadge>Auto-filled</AutoFilledBadge>}
+                      {(isUserLoggedIn || isAgencyLoggedIn) && (
+                        <AutoFilledBadge>
+                          {isAgencyLoggedIn ? "Agency" : "User"} Auto-filled
+                        </AutoFilledBadge>
+                      )}
                     </SectionTitle>
                     <FormGrid>
                       <FormGroup>
@@ -520,8 +551,8 @@ function PostPropertyForm() {
                           onChange={handleChange}
                           placeholder={t("contactInfo.fullNamePlaceholder")}
                           required
-                          disabled={isUserLoggedIn}
-                          autoFilled={isUserLoggedIn}
+                          disabled={isUserLoggedIn || isAgencyLoggedIn}
+                          autoFilled={isUserLoggedIn || isAgencyLoggedIn}
                         />
                       </FormGroup>
                       <FormGroup>
@@ -536,8 +567,8 @@ function PostPropertyForm() {
                           onChange={handleChange}
                           placeholder={t("contactInfo.emailPlaceholder")}
                           required
-                          disabled={isUserLoggedIn}
-                          autoFilled={isUserLoggedIn}
+                          disabled={isUserLoggedIn || isAgencyLoggedIn}
+                          autoFilled={isUserLoggedIn || isAgencyLoggedIn}
                         />
                       </FormGroup>
                       <FormGroup>
@@ -552,15 +583,16 @@ function PostPropertyForm() {
                           onChange={handleChange}
                           placeholder={t("contactInfo.phonePlaceholder")}
                           required
-                          disabled={isUserLoggedIn}
-                          autoFilled={isUserLoggedIn}
+                          disabled={isUserLoggedIn || isAgencyLoggedIn}
+                          autoFilled={isUserLoggedIn || isAgencyLoggedIn}
                         />
                       </FormGroup>
                     </FormGrid>
                   </CardSection>
 
-                  {/* Login Benefits Section */}
-                  <LoginBenefitsCard>
+                  {/* Login Benefits Section - Only show when not logged in */}
+                  {!isUserLoggedIn && !isAgencyLoggedIn && (
+                    <LoginBenefitsCard>
                     <BenefitsHeader>
                       <BenefitsIcon>🚀</BenefitsIcon>
                       <BenefitsTitle>No Login Required - Post Instantly!</BenefitsTitle>
@@ -586,6 +618,7 @@ function PostPropertyForm() {
                       <RegisterButton href="/register">Create Account</RegisterButton>
                     </BenefitsActions>
                   </LoginBenefitsCard>
+                  )}
                 </StepContent>
               )}
 
@@ -906,11 +939,9 @@ function PostPropertyForm() {
                         <UploadText>
                           {uploadingImages 
                             ? t("media.uploading") 
-                            : isDragOver
-                              ? t("media.dropHere")
-                              : formData.images.length > 0
-                                ? t("media.addMorePhotos")
-                                : t("media.dragDrop")
+                            : formData.images.length > 0
+                              ? t("media.addMorePhotos")
+                              : t("media.dragDrop")
                           }
                         </UploadText>
                         <UploadSubtext>
@@ -992,7 +1023,17 @@ function PostPropertyForm() {
                     <SuccessTitle>Property Posted Successfully!</SuccessTitle>
                     <SuccessSubtitle>Your listing "{listingResult.title}" is now live</SuccessSubtitle>
                     
-                    {isUserLoggedIn ? (
+                    {isAgencyLoggedIn ? (
+                      <LoggedInSuccessCard>
+                        <LoggedInSuccessTitle>✓ Agency Listing Active</LoggedInSuccessTitle>
+                        <LoggedInSuccessText>
+                          Your listing is linked to your agency account. You can edit, update, and manage it anytime from your agency dashboard.
+                        </LoggedInSuccessText>
+                        <ManageListingButton href={`/my-agency`}>
+                          Manage Agency Listings
+                        </ManageListingButton>
+                      </LoggedInSuccessCard>
+                    ) : isUserLoggedIn ? (
                       <LoggedInSuccessCard>
                         <LoggedInSuccessTitle>✓ Full Control Active</LoggedInSuccessTitle>
                         <LoggedInSuccessText>
@@ -1030,7 +1071,7 @@ function PostPropertyForm() {
                       </PostAnotherButton>
                     </SuccessActions>
 
-                    {!isUserLoggedIn && (
+                    {!isUserLoggedIn && !isAgencyLoggedIn && (
                       <AccountPrompt>
                         <AccountPromptTitle>Want to manage your listings easily?</AccountPromptTitle>
                         <AccountPromptText>
