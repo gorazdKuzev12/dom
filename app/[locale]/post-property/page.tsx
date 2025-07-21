@@ -27,8 +27,9 @@ import {
 } from "lucide-react";
 import Menu from "@/components/Menu/page";
 import Footer from "@/components/Footer/page";
-import { CREATE_LISTING, GET_ALL_CITIES } from "@/lib/queries";
+import { CREATE_LISTING, GET_ALL_CITIES, GET_MUNICIPALITIES_BY_CITY_NAME } from "@/lib/queries";
 import { getClient } from "@/lib/client";
+import { uploadMultipleImagesToCloudinary, uploadImageToCloudinary } from "@/lib/cloudinary";
 
 interface FormData {
   name: string;
@@ -50,6 +51,17 @@ interface FormData {
   address: string;
   images: File[];
   amenities: string[];
+}
+
+interface Municipality {
+  id: string;
+  name_en: string;
+  name_mk: string;
+  name_sq: string;
+  isPopular: boolean;
+  averagePrice: number;
+  image: string;
+  propertyCount: number;
 }
 
 interface ListingResult {
@@ -75,10 +87,14 @@ function PostPropertyForm() {
   const t = useTranslations("PostProperty");
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [uploadingImages, setUploadingImages] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isDragOver, setIsDragOver] = useState(false);
   const [error, setError] = useState("");
   const [listingResult, setListingResult] = useState<ListingResult | null>(null);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [userData, setUserData] = useState<any>(null);
+  const [municipalities, setMunicipalities] = useState<Municipality[]>([]);
   
   // GraphQL hooks
   const [createListing] = useMutation(CREATE_LISTING);
@@ -131,6 +147,37 @@ function PostPropertyForm() {
     }
   }, []);
 
+  // Fetch municipalities when city changes
+  useEffect(() => {
+    if (formData.city) {
+      fetchMunicipalities(formData.city);
+    } else {
+      setMunicipalities([]);
+      setFormData(prev => ({ ...prev, municipality: "" }));
+    }
+  }, [formData.city]);
+
+  const fetchMunicipalities = async (cityName: string) => {
+    try {
+      const client = getClient();
+      const { data } = await client.query({
+        query: GET_MUNICIPALITIES_BY_CITY_NAME,
+        variables: {
+          name: cityName,
+          transaction: formData.listingType,
+          propertyType: formData.type
+        }
+      });
+      
+      if (data?.municipalitiesByCityName) {
+        setMunicipalities(data.municipalitiesByCityName);
+      }
+    } catch (error) {
+      console.error("Error fetching municipalities:", error);
+      setMunicipalities([]);
+    }
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -151,11 +198,46 @@ function PostPropertyForm() {
     } else if (type === "file") {
       const fileInput = e.target as HTMLInputElement;
       if (fileInput.files) {
-        setFormData(prev => ({ ...prev, images: Array.from(fileInput.files!) }));
+        const newFiles = Array.from(fileInput.files);
+        const totalFiles = formData.images.length + newFiles.length;
+        if (totalFiles > 10) {
+          setError(t("errors.maxPhotos"));
+          return;
+        }
+        setFormData(prev => ({ ...prev, images: [...prev.images, ...newFiles] }));
       }
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
     }
+    setError("");
+  };
+
+  // Drag and drop handlers
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    
+    const files = Array.from(e.dataTransfer.files).filter(file => 
+      file.type.startsWith('image/')
+    );
+    
+    const totalFiles = formData.images.length + files.length;
+    if (totalFiles > 10) {
+      setError(t("errors.maxPhotos"));
+      return;
+    }
+    
+    setFormData(prev => ({ ...prev, images: [...prev.images, ...files] }));
     setError("");
   };
 
@@ -203,10 +285,37 @@ function PostPropertyForm() {
     setError("");
   };
 
-  // Upload images to a service (placeholder - replace with your image upload service)
+  // Upload images to Cloudinary with progress tracking
   const uploadImages = async (images: File[]): Promise<string[]> => {
-    // This is a placeholder. In a real app, you'd upload to cloudinary, AWS S3, etc.
-    return images.map((_, index) => `/placeholder-image-${index + 1}.jpg`);
+    try {
+      if (images.length === 0) {
+        return [];
+      }
+      
+      setUploadingImages(true);
+      setUploadProgress(0);
+      
+      // Upload images one by one to track progress
+      const imageUrls: string[] = [];
+      for (let i = 0; i < images.length; i++) {
+        try {
+          const imageUrl = await uploadImageToCloudinary(images[i]);
+          imageUrls.push(imageUrl);
+          setUploadProgress(((i + 1) / images.length) * 100);
+        } catch (error) {
+          console.error(`Error uploading image ${i + 1}:`, error);
+          throw new Error(`Failed to upload image ${i + 1}`);
+        }
+      }
+      
+      return imageUrls;
+    } catch (error) {
+      console.error('Error uploading images to Cloudinary:', error);
+      throw new Error(t("errors.uploadFailed"));
+    } finally {
+      setUploadingImages(false);
+      setUploadProgress(0);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -217,7 +326,7 @@ function PostPropertyForm() {
     setError("");
 
     try {
-      // Upload images first
+      // Upload images first with progress tracking
       const imageUrls = await uploadImages(formData.images);
       
       // Find the selected city
@@ -228,6 +337,11 @@ function PostPropertyForm() {
       if (!selectedCity) {
         throw new Error("Selected city not found");
       }
+
+      // Find the selected municipality
+      const selectedMunicipality = municipalities.find(
+        (municipality) => municipality.id === formData.municipality
+      );
 
       // Prepare the input for GraphQL mutation
       const input = {
@@ -249,7 +363,7 @@ function PostPropertyForm() {
         contactEmail: formData.email,
         contactPhone: formData.phone,
         cityId: selectedCity.id,
-        municipalityId: formData.municipality || null,
+        municipalityId: selectedMunicipality?.id || null,
       };
 
       // Create the listing
@@ -696,15 +810,31 @@ function PostPropertyForm() {
                       <FormGroup>
                         <Label>
                           <Building2 size={16} />
-                          Municipality (Optional)
+                          {t("location.municipality")} {municipalities.length > 0 && "(Optional)"}
                         </Label>
-                        <Input
-                          type="text"
-                          name="municipality"
-                          value={formData.municipality}
-                          onChange={handleChange}
-                          placeholder="Enter municipality"
-                        />
+                        {municipalities.length > 0 ? (
+                          <Select
+                            name="municipality"
+                            value={formData.municipality}
+                            onChange={handleChange}
+                          >
+                            <option value="">{t("location.selectMunicipality")}</option>
+                            {municipalities.map((municipality) => (
+                              <option key={municipality.id} value={municipality.id}>
+                                {municipality.name_en}
+                              </option>
+                            ))}
+                          </Select>
+                        ) : (
+                          <Input
+                            type="text"
+                            name="municipality"
+                            value={formData.municipality}
+                            onChange={handleChange}
+                            placeholder={formData.city ? t("location.noMunicipalities") : t("location.selectCityFirst")}
+                            disabled={!formData.city}
+                          />
+                        )}
                       </FormGroup>
                     </FormGrid>
 
@@ -755,7 +885,12 @@ function PostPropertyForm() {
                     <SectionTitle>
                       <Image size={18} /> {t("media.title")}
                     </SectionTitle>
-                    <UploadArea>
+                    <UploadArea
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                      isDragOver={isDragOver}
+                    >
                       <input
                         type="file"
                         name="images"
@@ -764,22 +899,87 @@ function PostPropertyForm() {
                         accept="image/*"
                         style={{ display: "none" }}
                         id="image-upload"
+                        disabled={uploadingImages}
                       />
                       <UploadContent>
                         <UploadCloud size={48} />
-                        <UploadText>{t("media.dragDrop")}</UploadText>
+                        <UploadText>
+                          {uploadingImages 
+                            ? t("media.uploading") 
+                            : isDragOver
+                              ? t("media.dropHere")
+                              : formData.images.length > 0
+                                ? t("media.addMorePhotos")
+                                : t("media.dragDrop")
+                          }
+                        </UploadText>
                         <UploadSubtext>
-                          {t("media.maxSize")}
-                          <br />
-                          {t("media.formats")}
+                          {uploadingImages 
+                            ? `${Math.round(uploadProgress)}% uploaded`
+                            : formData.images.length > 0
+                              ? `${t("media.currentPhotos")}: ${formData.images.length} | ${t("media.maxPhotos")}: 10`
+                              : `${t("media.recommendedPhotos")} | ${t("media.maxSize")} | ${t("media.formats")}`
+                          }
                         </UploadSubtext>
-                        <UploadButton htmlFor="image-upload">
-                          {formData.images.length > 0
-                            ? `${formData.images.length} images selected`
-                            : "Choose Files"}
+                        {uploadingImages && (
+                          <UploadProgressBar>
+                            <UploadProgressFill progress={uploadProgress} />
+                          </UploadProgressBar>
+                        )}
+                        <UploadButton 
+                          htmlFor="image-upload" 
+                          style={{ 
+                            opacity: uploadingImages ? 0.6 : 1,
+                            pointerEvents: uploadingImages ? 'none' : 'auto'
+                          }}
+                        >
+                          {uploadingImages 
+                            ? t("media.uploading") 
+                            : formData.images.length > 0
+                              ? t("media.addMorePhotos")
+                              : t("media.choosePhotos")
+                          }
                         </UploadButton>
                       </UploadContent>
                     </UploadArea>
+
+                    {/* Image Preview Section */}
+                    {formData.images.length > 0 && (
+                      <ImagePreviewSection>
+                        <ImagePreviewTitle>
+                          📸 {t("media.selectedPhotos")} ({formData.images.length}/10)
+                        </ImagePreviewTitle>
+                        <ImagePreviewGrid>
+                          {formData.images.map((image, index) => (
+                            <ImagePreviewItem key={index}>
+                              <ImagePreviewImage
+                                src={URL.createObjectURL(image)}
+                                alt={`Preview ${index + 1}`}
+                              />
+                              <ImagePreviewOverlay>
+                                <RemoveImageButton
+                                  onClick={() => {
+                                    setFormData(prev => ({
+                                      ...prev,
+                                      images: prev.images.filter((_, i) => i !== index)
+                                    }));
+                                  }}
+                                  disabled={uploadingImages}
+                                >
+                                  ✕
+                                </RemoveImageButton>
+                              </ImagePreviewOverlay>
+                              <ImagePreviewNumber>{index + 1}</ImagePreviewNumber>
+                            </ImagePreviewItem>
+                          ))}
+                        </ImagePreviewGrid>
+                        <ImageUploadTips>
+                          <TipItem>💡 {t("media.tip1")}</TipItem>
+                          <TipItem>💡 {t("media.tip2")}</TipItem>
+                          <TipItem>💡 {t("media.tip3")}</TipItem>
+                        </ImageUploadTips>
+                      </ImagePreviewSection>
+                    )}
                   </CardSection>
                 </StepContent>
               )}
@@ -1208,17 +1408,24 @@ const AmenityLabel = styled.label`
   cursor: pointer;
 `;
 
-const UploadArea = styled.div`
-  border: 2px dashed #e1e5eb;
+const UploadArea = styled.div<{ isDragOver?: boolean }>`
+  border: 2px dashed ${props => props.isDragOver ? '#0c4240' : '#e1e5eb'};
   border-radius: 8px;
   padding: 2rem;
+  background: ${props => props.isDragOver ? '#f0f9ff' : '#f9fafb'};
   transition: all 0.2s ease;
   cursor: pointer;
+  position: relative;
 
   &:hover {
     border-color: #0c4240;
-    background: #f5f9f9;
+    background: #f0f9ff;
   }
+
+  ${props => props.isDragOver && `
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(12, 66, 64, 0.15);
+  `}
 `;
 
 const UploadContent = styled.div`
@@ -1718,6 +1925,145 @@ const ManageListingButton = styled.a`
   &:hover {
     background: #15803d;
     transform: translateY(-1px);
+  }
+`;
+
+// Upload Progress Bar Components
+const UploadProgressBar = styled.div`
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 1rem 0;
+`;
+
+const UploadProgressFill = styled.div<{ progress: number }>`
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  width: ${props => props.progress}%;
+`;
+
+// Image Preview Components
+const ImagePreviewSection = styled.div`
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #e5e7eb;
+`;
+
+const ImagePreviewTitle = styled.h3`
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0c4240;
+  margin: 0 0 1rem 0;
+  text-align: center;
+`;
+
+const ImagePreviewGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+`;
+
+const ImagePreviewItem = styled.div`
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const ImagePreviewImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const ImagePreviewOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  ${ImagePreviewItem}:hover & {
+    opacity: 1;
+  }
+`;
+
+const RemoveImageButton = styled.button`
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #dc2626;
+    transform: scale(1.1);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+const ImagePreviewNumber = styled.div`
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+`;
+
+const ImageUploadTips = styled.div`
+  background: white;
+  border-radius: 6px;
+  padding: 1rem;
+  border-left: 4px solid #10b981;
+`;
+
+const TipItem = styled.div`
+  font-size: 0.9rem;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+
+  &:last-child {
+    margin-bottom: 0;
   }
 `;
 

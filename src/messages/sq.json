@@ -334,6 +334,10 @@
       "title": "Vendndodhja",
       "city": "Qyteti",
       "selectCity": "Zgjidhni qytetin",
+      "municipality": "Komuna",
+      "selectMunicipality": "Zgjidhni komunën",
+      "noMunicipalities": "Nuk ka komuna të disponueshme për këtë qytet",
+      "selectCityFirst": "Ju lutemi zgjidhni qytetin së pari",
       "cities": {
         "skopje": "Shkup",
         "bitola": "Manastir",
@@ -373,8 +377,19 @@
       "title": "Fotografitë",
       "subtitle": "Shtoni fotografi të pronës suaj",
       "dragDrop": "Tërhiqni dhe lëshoni fotografi këtu ose klikoni për të ngarkuar",
+      "dropHere": "Lëshoni fotografi këtu!",
+      "uploading": "Duke ngarkuar imazhe...",
+      "addMorePhotos": "Shtoni më shumë fotografi",
+      "choosePhotos": "Zgjidhni fotografi",
+      "currentPhotos": "Fotografi aktuale",
+      "maxPhotos": "Fotografi maks.",
+      "recommendedPhotos": "Ngarkoni 5-10 fotografi për rezultate më të mira",
       "maxSize": "Madhësia maksimale e skedarit: 5MB",
-      "formats": "Formatet e mbështetura: JPG, PNG"
+      "formats": "Formatet e mbështetura: JPG, PNG",
+      "selectedPhotos": "Fotografi të zgjedhura",
+      "tip1": "Filloni me foton më të mirë të jashtme si foto kryesore",
+      "tip2": "Përfshini fotografi të të gjitha dhomave, kuzhinës dhe banjove",
+      "tip3": "Tregoni pronën nga kënde të ndryshme dhe në ndriçim të mirë"
     },
     "buttons": {
       "back": "Prapa",

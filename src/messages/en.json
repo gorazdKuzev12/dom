@@ -318,6 +318,10 @@
       "title": "Location",
       "city": "City",
       "selectCity": "Select a city",
+      "municipality": "Municipality",
+      "selectMunicipality": "Select a municipality",
+      "noMunicipalities": "No municipalities available for this city",
+      "selectCityFirst": "Please select a city first",
       "cities": {
         "skopje": "Skopje",
         "bitola": "Bitola",
@@ -357,8 +361,19 @@
       "title": "Photos",
       "subtitle": "Add photos of your property",
       "dragDrop": "Drag and drop photos here or click to upload",
+      "dropHere": "Drop photos here!",
+      "uploading": "Uploading images...",
+      "addMorePhotos": "Add more photos",
+      "choosePhotos": "Choose Photos",
+      "currentPhotos": "Current photos",
+      "maxPhotos": "Max photos",
+      "recommendedPhotos": "Upload 5-10 photos for better results",
       "maxSize": "Maximum file size: 5MB",
-      "formats": "Supported formats: JPG, PNG"
+      "formats": "Supported formats: JPG, PNG",
+      "selectedPhotos": "Selected Photos",
+      "tip1": "Start with the best exterior shot as your main photo",
+      "tip2": "Include photos of all rooms, kitchen, and bathrooms",
+      "tip3": "Show the property from different angles and in good lighting"
     },
     "buttons": {
       "back": "Back",
