@@ -519,7 +519,7 @@ export default function ListingClient({ listing, locale }: ListingClientProps) {
                   key={index}
                   src={image}
                   alt={`Thumbnail ${index + 1}`}
-                  active={index === currentImageIndex}
+                  $active={index === currentImageIndex}
                   onClick={() => setCurrentImageIndex(index)}
                 />
               ))}
@@ -844,7 +844,7 @@ const GalleryThumbnails = styled.div`
 `;
 
 interface GalleryThumbnailProps {
-  active: boolean;
+  $active: boolean;
 }
 
 const GalleryThumbnail = styled.img<GalleryThumbnailProps>`
@@ -854,8 +854,8 @@ const GalleryThumbnail = styled.img<GalleryThumbnailProps>`
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
-  opacity: ${props => props.active ? 1 : 0.6};
-  border: ${props => props.active ? '2px solid #27795b' : '2px solid transparent'};
+  opacity: ${props => props.$active ? 1 : 0.6};
+  border: ${props => props.$active ? '2px solid #27795b' : '2px solid transparent'};
   flex-shrink: 0;
 
   &:hover {

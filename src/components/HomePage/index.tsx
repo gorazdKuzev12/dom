@@ -197,19 +197,19 @@ const LanguageContainer = styled.div`
   }
 `;
 
-const LanguageButton = styled.button<{ active: boolean }>`
+const LanguageButton = styled.button<{ $active: boolean }>`
   background: none;
   border: none;
   padding: 0.15rem 0.3rem;
   font-size: 0.75rem;
-  font-weight: ${(props) => (props.active ? "600" : "400")};
-  color: ${(props) => (props.active ? "#0c4240" : "#666")};
+  font-weight: ${(props) => (props.$active ? "600" : "400")};
+  color: ${(props) => (props.$active ? "#0c4240" : "#666")};
   cursor: pointer;
   transition: all 0.2s ease;
   border-radius: 3px;
 
   &:hover {
-    background: ${(props) => (props.active ? "transparent" : "#e7f1f1")};
+    background: ${(props) => (props.$active ? "transparent" : "#e7f1f1")};
     color: #0c4240;
   }
 
@@ -452,6 +452,81 @@ const LogoutButton = styled.button`
   }
 `;
 
+const MobileLogoutButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #dc2626;
+  background: none;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  width: 100%;
+  text-align: left;
+
+  &:hover {
+    background: rgba(220, 38, 38, 0.05);
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+    font-weight: 500;
+  }
+`;
+
+// Placeholder that perfectly matches React Select
+const SelectPlaceholder = styled.div`
+  /* Copy exact styles from customSelectStyles */
+  border-radius: 12px;
+  border: 1px solid rgba(221, 221, 221, 0.6);
+  padding: 0.4rem 0.6rem;
+  font-size: 1rem;
+  min-width: 200px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Let content determine height like React Select does */
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  color: #999;
+  font-weight: 500;
+  position: relative;
+  cursor: not-allowed;
+  line-height: 1.15; /* Match React Select line-height */
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #999;
+  }
+
+  @media (max-width: 480px) {
+    width: 360px;
+    min-width: 0;
+    padding: 0.5rem 0.7rem;
+    min-height: 38px;
+  }
+`;
+
 export default function HomePageClient({ initialCities }: HomePageClientProps) {
   const t = useTranslations("Navigation");
   const searchT = useTranslations("Search");
@@ -469,8 +544,11 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const accountDropdownRef = useRef<HTMLDivElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+    
     const handleClickOutside = (event: MouseEvent) => {
       if (accountDropdownRef.current && !accountDropdownRef.current.contains(event.target as Node)) {
         setAccountDropdownOpen(false);
@@ -690,7 +768,7 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
               <LanguageButton
                 key={lang.value}
                 onClick={() => handleLocaleChange(lang.value)}
-                active={locale === lang.value}
+                $active={locale === lang.value}
                 disabled={isPending}
               >
                 {lang.label}
@@ -743,27 +821,27 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
             </TopLink>
           </>
         ) : (
-          <TopLink as="button" onClick={handleUserLogout} style={{ color: '#dc2626' }}>
+          <MobileLogoutButton onClick={handleUserLogout}>
             <FiLogOut size={16} />
             {t("logout")}
-          </TopLink>
+          </MobileLogoutButton>
         )}
 
         <LanguageContainer>
           <FiGlobe />
-          {languages.map((lang) => (
-            <LanguageButton
-              key={lang.value}
-              onClick={() => {
-                handleLocaleChange(lang.value);
-                setOpen(false);
-              }}
-              active={locale === lang.value}
-              disabled={isPending}
-            >
-              {lang.label}
-            </LanguageButton>
-          ))}
+                      {languages.map((lang) => (
+              <LanguageButton
+                key={lang.value}
+                onClick={() => {
+                  handleLocaleChange(lang.value);
+                  setOpen(false);
+                }}
+                $active={locale === lang.value}
+                disabled={isPending}
+              >
+                {lang.label}
+              </LanguageButton>
+            ))}
         </LanguageContainer>
       </MobileMenu>
 
@@ -772,13 +850,13 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
         <SearchBar>
           <ToggleGroup>
             <ToggleButton
-              active={searchMode === "SALE"}
+              $active={searchMode === "SALE"}
               onClick={() => handleSearchModeChange("buy")}
             >
               {searchT("buy")}
             </ToggleButton>
             <ToggleButton
-              active={searchMode === "RENT"}
+              $active={searchMode === "RENT"}
               onClick={() => handleSearchModeChange("rent")}
             >
               {searchT("rent")}
@@ -786,34 +864,44 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
           </ToggleGroup>
 
           {/* Property type dropdown with React Select */}
-          <Select
-            styles={customSelectStyles}
-            value={selectedPropertyType}
-            onChange={handlePropertyTypeChange}
-            options={propertyTypeOptions}
-            placeholder={searchT("chooseLocal")}
-            className="city-select"
-            menuPortalTarget={
-              typeof window !== "undefined" ? document.body : null
-            }
-            menuPosition="absolute"
-            menuShouldBlockScroll={true}
-          />
+          {isMounted ? (
+            <Select
+              instanceId="property-type-select"
+              styles={customSelectStyles}
+              value={selectedPropertyType}
+              onChange={handlePropertyTypeChange}
+              options={propertyTypeOptions}
+              placeholder={searchT("chooseLocal")}
+              className="city-select"
+              menuPortalTarget={document.body}
+              menuPosition="absolute"
+              menuShouldBlockScroll={true}
+            />
+          ) : (
+            <SelectPlaceholder>
+              {searchT("chooseLocal")}
+            </SelectPlaceholder>
+          )}
 
           {/* City selection dropdown with React Select */}
-          <Select
-            styles={customSelectStyles}
-            value={selectedCity}
-            onChange={handleCityChange}
-            options={cityOptions}
-            placeholder={searchT("choose")}
-            className="city-select"
-            menuPortalTarget={
-              typeof window !== "undefined" ? document.body : null
-            }
-            menuPosition="absolute"
-            menuShouldBlockScroll={true}
-          />
+          {isMounted ? (
+            <Select
+              instanceId="city-select"
+              styles={customSelectStyles}
+              value={selectedCity}
+              onChange={handleCityChange}
+              options={cityOptions}
+              placeholder={searchT("choose")}
+              className="city-select"
+              menuPortalTarget={document.body}
+              menuPosition="absolute"
+              menuShouldBlockScroll={true}
+            />
+          ) : (
+            <SelectPlaceholder>
+              {searchT("choose")}
+            </SelectPlaceholder>
+          )}
 
           <SearchButton onClick={handleSearch}>
             {searchT("searchButton")}

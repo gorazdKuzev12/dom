@@ -408,13 +408,13 @@ export default function PropertyFilters({
       <TopOptions>
         <ListingTypeToggle>
           <ToggleButton
-            active={listingType === "buy"}
+            $active={listingType === "buy"}
             onClick={() => handleListingTypeChange("buy")}
           >
             {t("Search.buy")}
           </ToggleButton>
           <ToggleButton
-            active={listingType === "rent"}
+            $active={listingType === "rent"}
             onClick={() => handleListingTypeChange("rent")}
           >
             {t("Search.rent")}
@@ -737,15 +737,15 @@ const LocationSelects = styled.div`
 `;
 
 interface ToggleButtonProps {
-  active: boolean;
+  $active: boolean;
 }
 
 const ToggleButton = styled.button<ToggleButtonProps>`
   flex: 1;
   padding: 12px 0;
   text-align: center;
-  background: ${(props) => (props.active ? "#0c4240" : "transparent")};
-  color: ${(props) => (props.active ? "#ffffff" : "#4b5563")};
+  background: ${(props) => (props.$active ? "#0c4240" : "transparent")};
+  color: ${(props) => (props.$active ? "#ffffff" : "#4b5563")};
   border: none;
   cursor: pointer;
   font-size: 14px;
@@ -753,7 +753,7 @@ const ToggleButton = styled.button<ToggleButtonProps>`
   transition: all 0.3s ease;
 
   &:hover {
-    background: ${(props) => (props.active ? "#1a1a1a" : "#e5e7eb")};
+    background: ${(props) => (props.$active ? "#1a1a1a" : "#e5e7eb")};
   }
 `;
 

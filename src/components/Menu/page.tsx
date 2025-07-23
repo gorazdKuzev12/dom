@@ -334,7 +334,7 @@ export default function Menu() {
                     <LanguageOption
                       key={lang.value}
                       onClick={() => handleLocaleChange(lang.value)}
-                      active={locale === lang.value}
+                      $active={locale === lang.value}
                       disabled={isPending}
                     >
                       <LanguageFlag>{lang.flag}</LanguageFlag>
@@ -463,7 +463,7 @@ export default function Menu() {
                     handleLocaleChange(lang.value);
                     setMobileOpen(false);
                   }}
-                  active={locale === lang.value}
+                  $active={locale === lang.value}
                   disabled={isPending}
                 >
                   <LanguageFlag>{lang.flag}</LanguageFlag>
@@ -898,7 +898,7 @@ const LanguageDropdown = styled.div<{ isOpen: boolean }>`
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 `;
 
-const LanguageOption = styled.button<{ active: boolean }>`
+const LanguageOption = styled.button<{ $active: boolean }>`
   position: relative;
   display: flex;
   align-items: center;
@@ -907,11 +907,11 @@ const LanguageOption = styled.button<{ active: boolean }>`
   width: 100%;
   border: none;
   border-radius: 4px;
-  background: ${props => props.active ? 'rgba(0, 0, 0, 0.05)' : 'transparent'};
+  background: ${props => props.$active ? 'rgba(0, 0, 0, 0.05)' : 'transparent'};
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
-  color: ${props => props.active ? '#000' : '#222'};
+  color: ${props => props.$active ? '#000' : '#222'};
 
   &:hover {
     background: rgba(0, 0, 0, 0.05);
@@ -1085,15 +1085,15 @@ const MobileLangGrid = styled.div`
   gap: 0.25rem;
 `;
 
-const MobileLangButton = styled.button<{ active: boolean }>`
+const MobileLangButton = styled.button<{ $active: boolean }>`
   display: flex;
   align-items: center;
   gap: 0.4rem;
   padding: 0.6rem 0.75rem;
   border: none;
   border-radius: 6px;
-  background: ${props => props.active ? 'rgba(0, 0, 0, 0.05)' : 'transparent'};
-  color: ${props => props.active ? '#000' : '#222'};
+  background: ${props => props.$active ? 'rgba(0, 0, 0, 0.05)' : 'transparent'};
+  color: ${props => props.$active ? '#000' : '#222'};
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 500;

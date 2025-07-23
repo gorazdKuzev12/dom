@@ -392,16 +392,16 @@ export const ToggleGroup = styled.div`
 `;
 
 
-export const ToggleButton = styled.button<{ active?: boolean }>`
+export const ToggleButton = styled.button<{ $active?: boolean }>`
   padding: 0.6rem 1.2rem;
   border: none;
-  background: ${({ active }) => 
-    active 
+  background: ${({ $active }) => 
+    $active 
       ? 'linear-gradient(135deg, #0c4240 0%, #1a5f5c 100%)' 
       : 'transparent'
   };
-  color: ${({ active }) => (active ? '#fff' : '#666')};
-  font-weight: ${({ active }) => (active ? '600' : '500')};
+  color: ${({ $active }) => ($active ? '#fff' : '#666')};
+  font-weight: ${({ $active }) => ($active ? '600' : '500')};
   cursor: pointer;
   font-size: 1rem;
   position: relative;
