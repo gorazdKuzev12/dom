@@ -267,7 +267,7 @@ export default function Menu() {
                   <ButtonIcon>
                     <FiBriefcase size={18} />
                   </ButtonIcon>
-                  <span>Agency</span>
+                  <span>{t("agency")}</span>
                   <DropdownArrow isOpen={dropdownOpen}>
                     <FiChevronDown size={16} />
                   </DropdownArrow>
