@@ -7,10 +7,14 @@
     "favorites": "Saved properties",
     "registerAgency": "Register as Agency",
     "properties": "Properties",
-  "postWithoutLogin": "Post Property (No Login required)",
+    "postWithoutLogin": "Post Property (No Login required)",
     "agencyLogin": "Agency Login",
     "myAgency": "My Agency",
-        "agency": " Agencies"
+    "agency": " Agencies",
+    "account": "Account",
+    "register": "Register",
+    "login": "Login",
+    "logout": "Logout"
   },
   "Roommates": {
     "title": "Find Your Perfect Roommate",

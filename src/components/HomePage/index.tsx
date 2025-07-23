@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect, useRef } from "react";
 import Select, {
   StylesConfig,
   ActionMeta,
@@ -14,6 +14,9 @@ import {
   FiGlobe,
   FiBriefcase,
   FiChevronDown,
+  FiUser,
+  FiLogIn,
+  FiLogOut,
 } from "react-icons/fi";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
@@ -328,6 +331,127 @@ const AgencyDropdownItem = styled.a`
   }
 `;
 
+// Account dropdown styles
+const AccountDropdownWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
+const AccountDropdownButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: rgb(218, 230, 230);
+  background: none;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.041);
+    color: #000;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+    font-weight: 500;
+  }
+`;
+
+const AccountDropdownMenu = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.5rem;
+  min-width: 180px;
+  z-index: 1000;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+`;
+
+const AccountDropdownItem = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  color: #333;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+
+  &:hover {
+    background: rgba(12, 66, 64, 0.08);
+    color: #0c4240;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+`;
+
+const AccountInfo = styled.div`
+  padding: 0.6rem 1rem;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 6px;
+  margin-bottom: 0.2rem;
+`;
+
+const AccountName = styled.div`
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.1rem;
+`;
+
+const AccountEmail = styled.div`
+  font-size: 0.8rem;
+  color: #666;
+`;
+
+const LogoutButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  padding: 0.6rem 1rem;
+  color: #dc2626;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+
+  &:hover {
+    background: rgba(220, 38, 38, 0.05);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: #dc2626;
+  }
+`;
+
 export default function HomePageClient({ initialCities }: HomePageClientProps) {
   const t = useTranslations("Navigation");
   const searchT = useTranslations("Search");
@@ -341,6 +465,56 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
   const [searchMode, setSearchMode] = useState("SALE");
   const [open, setOpen] = useState(false);
   const [agencyDropdownOpen, setAgencyDropdownOpen] = useState(false);
+  const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
+  const accountDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (accountDropdownRef.current && !accountDropdownRef.current.contains(event.target as Node)) {
+        setAccountDropdownOpen(false);
+      }
+    };
+
+    const checkAuthStatus = () => {
+      if (typeof window !== 'undefined') {
+        // Check user authentication
+        const userToken = localStorage.getItem('userToken') || sessionStorage.getItem('userToken');
+        const storedUserData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
+        
+        if (userToken && storedUserData) {
+          setIsUserLoggedIn(true);
+          setUserData(JSON.parse(storedUserData));
+        } else {
+          setIsUserLoggedIn(false);
+          setUserData(null);
+        }
+      }
+    };
+
+    checkAuthStatus();
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener('storage', checkAuthStatus);
+    
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener('storage', checkAuthStatus);
+    };
+  }, []);
+
+  const handleUserLogout = () => {
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('userData');
+    sessionStorage.removeItem('userToken');
+    sessionStorage.removeItem('userData');
+    
+    setIsUserLoggedIn(false);
+    setUserData(null);
+    setAccountDropdownOpen(false);
+    
+    router.push(`/${locale}/login`);
+  };
 
   // Property type options with correct mappings to GraphQL schema
   const propertyTypeOptions: SelectOption[] = [
@@ -472,6 +646,44 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
             )}
           </AgencyDropdownWrapper>
 
+          <AccountDropdownWrapper ref={accountDropdownRef}>
+            <AccountDropdownButton
+              onClick={() => setAccountDropdownOpen(!accountDropdownOpen)}
+            >
+              <FiUser size={16} />
+              {t("account")}
+              <FiChevronDown size={14} />
+            </AccountDropdownButton>
+
+            {accountDropdownOpen && (
+              <AccountDropdownMenu>
+                {!isUserLoggedIn ? (
+                  <>
+                    <AccountDropdownItem href={`/${locale}/register`}>
+                      <FiUser size={16} />
+                      {t("register")}
+                    </AccountDropdownItem>
+                    <AccountDropdownItem href={`/${locale}/login`}>
+                      <FiLogIn size={16} />
+                      {t("login")}
+                    </AccountDropdownItem>
+                  </>
+                ) : (
+                  <>
+                    <AccountInfo>
+                      <AccountName>{userData?.name}</AccountName>
+                      <AccountEmail>{userData?.email}</AccountEmail>
+                    </AccountInfo>
+                    <LogoutButton onClick={handleUserLogout}>
+                      <FiLogOut size={16} />
+                      {t("logout")}
+                    </LogoutButton>
+                  </>
+                )}
+              </AccountDropdownMenu>
+            )}
+          </AccountDropdownWrapper>
+
           <LanguageContainer>
             <FiGlobe />
             {languages.map((lang) => (
@@ -517,6 +729,25 @@ export default function HomePageClient({ initialCities }: HomePageClientProps) {
           <FiBriefcase size={16} />
           {t("myAgency")}
         </TopLink>
+
+        {/* Account mobile links */}
+        {!isUserLoggedIn ? (
+          <>
+            <TopLink href={`/${locale}/register`}>
+              <FiUser size={16} />
+              {t("register")}
+            </TopLink>
+            <TopLink href={`/${locale}/login`}>
+              <FiLogIn size={16} />
+              {t("login")}
+            </TopLink>
+          </>
+        ) : (
+          <TopLink as="button" onClick={handleUserLogout} style={{ color: '#dc2626' }}>
+            <FiLogOut size={16} />
+            {t("logout")}
+          </TopLink>
+        )}
 
         <LanguageContainer>
           <FiGlobe />

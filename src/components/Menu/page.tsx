@@ -224,7 +224,7 @@ export default function Menu() {
                   <ButtonIcon>
                     <FiUser size={18} />
                   </ButtonIcon>
-                  <span>Account</span>
+                  <span>{t("account")}</span>
                   <DropdownArrow isOpen={userDropdownOpen}>
                     <FiChevronDown size={16} />
                   </DropdownArrow>
@@ -236,11 +236,11 @@ export default function Menu() {
                     <>
                       <DropdownItem href={`/${locale}/register`}>
                         <FiUser size={16} />
-                        <span>Register</span>
+                        <span>{t("register")}</span>
                       </DropdownItem>
                       <DropdownItem href={`/${locale}/login`}>
                         <FiLogIn size={16} />
-                        <span>Login</span>
+                        <span>{t("login")}</span>
                       </DropdownItem>
                     </>
                   ) : (
@@ -252,7 +252,7 @@ export default function Menu() {
                       <DropdownDivider />
                       <LogoutButton onClick={handleUserLogout}>
                         <FiLogOut size={16} />
-                        <span>Logout</span>
+                        <span>{t("logout")}</span>
                       </LogoutButton>
                     </>
                   )}
@@ -299,7 +299,7 @@ export default function Menu() {
                       <DropdownDivider />
                       <LogoutButton onClick={handleLogout}>
                         <FiLogOut size={16} />
-                        <span>Logout</span>
+                        <span>{t("logout")}</span>
                       </LogoutButton>
                     </>
                   )}
@@ -395,11 +395,11 @@ export default function Menu() {
               <>
                 <MobileLink href={`/${locale}/register`}>
                   <FiUser size={20} />
-                  <span>Register</span>
+                  <span>{t("register")}</span>
                 </MobileLink>
                 <MobileLink href={`/${locale}/login`}>
                   <FiLogIn size={20} />
-                  <span>Login</span>
+                  <span>{t("login")}</span>
                 </MobileLink>
               </>
             ) : (
@@ -410,7 +410,7 @@ export default function Menu() {
                 </MobileAgencyInfo>
                 <MobileLogoutButton onClick={handleUserLogout}>
                   <FiLogOut size={20} />
-                  <span>Logout</span>
+                  <span>{t("logout")}</span>
                 </MobileLogoutButton>
               </>
             )}
@@ -438,7 +438,7 @@ export default function Menu() {
                 </MobileAgencyInfo>
                 <MobileLogoutButton onClick={handleLogout}>
                   <FiLogOut size={20} />
-                  <span>Logout</span>
+                  <span>{t("logout")}</span>
                 </MobileLogoutButton>
               </>
             )}

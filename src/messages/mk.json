@@ -7,10 +7,14 @@
     "favorites": "Зачувани имоти",
     "registerAgency": "Регистрирај се како агенција",
     "properties": "Недвижности",
-  "postWithoutLogin": "Објави имот (без најава)",
+    "postWithoutLogin": "Објави имот (без најава)",
     "agencyLogin": "Најава за агенции",
     "myAgency": "Моја Агенција",
-    "agency": "Агенција"
+    "agency": "Агенција",
+    "account": "Сметка",
+    "register": "Регистрирај се",
+    "login": "Најави се",
+    "logout": "Одјави се"
   },
   "Roommates": {
     "title": "Најди го твојот совршен цимер",

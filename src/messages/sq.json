@@ -7,10 +7,14 @@
     "favorites": "Pronat e ruajtura",
     "registerAgency": "Regjistrohu si agjenci",
     "properties": "Prona",
-  "postWithoutLogin": "Publiko pronën (pa hyrje)",
+    "postWithoutLogin": "Publiko pronën (pa hyrje)",
     "agencyLogin": "Hyrja për agjencitë",
     "myAgency": "Agjencia Ime",
-    "agency": "Agjencia"
+    "agency": "Agjencia",
+    "account": "Llogaria",
+    "register": "Regjistrohu",
+    "login": "Hyr",
+    "logout": "Dil"
   },
   "Roommates": {
     "title": "Gjeni shokun tuaj të dhomës perfekt",
