@@ -78,11 +78,15 @@ export default function AgencyLoginPage() {
             email: formData.email,
             password: formData.password,
           }
+        },
+        // Ensure credentials (cookies) are included
+        context: {
+          credentials: 'include'
         }
       });
 
       if (result.data?.loginAgency) {
-        // Store the token and agency data
+        // Store the token and agency data (backup for client-side auth)
         const { token, agency } = result.data.loginAgency;
         
         if (formData.rememberMe) {
@@ -93,8 +97,12 @@ export default function AgencyLoginPage() {
           sessionStorage.setItem('agencyData', JSON.stringify(agency));
         }
         
-        // Redirect to agency dashboard
-        router.push('/my-agency');
+        setSuccess("Login successful! Redirecting...");
+        
+        // Small delay to ensure cookie is set before redirect
+        setTimeout(() => {
+          router.push('/my-agency');
+        }, 500);
       }
     } catch (err: any) {
       console.error('Login error:', err);
