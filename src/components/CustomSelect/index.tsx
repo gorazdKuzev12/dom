@@ -27,7 +27,7 @@ const SelectButton = styled.button`
   }
 `;
 
-const OptionsContainer = styled.div`
+const OptionsContainer = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   top: 100%;
   left: 0;
@@ -40,7 +40,7 @@ const OptionsContainer = styled.div`
   margin-top: 5px;
   z-index: 1000;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-  display: ${(props) => (props.isOpen ? "block" : "none")};
+  display: ${(props) => (props.$isOpen ? "block" : "none")};
 `;
 
 const Option = styled.div`
@@ -101,7 +101,7 @@ const CustomSelect = ({ options, value, onChange, placeholder }) => {
         {getSelectedLabel()}
       </SelectButton>
 
-      <OptionsContainer isOpen={isOpen}>
+      <OptionsContainer $isOpen={isOpen}>
         {options.map((option, index) => (
           <Option
             key={index}

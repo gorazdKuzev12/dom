@@ -157,7 +157,7 @@ export default function Menu() {
       <NavbarInner>
         {/* Logo */}
         <LogoWrapper>
-          <AnimatedLogo href={`/${locale}`} isLoaded={isLoaded} scrolled={scrolled}>
+          <AnimatedLogo href={`/${locale}`} $isLoaded={isLoaded} $scrolled={scrolled}>
             <LogoIcon>
               <FiHome size={24} />
             </LogoIcon>
@@ -219,19 +219,19 @@ export default function Menu() {
               <DropdownWrapper ref={userDropdownRef}>
                 <AnimatedDropdownButton 
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  isOpen={userDropdownOpen}
+                  $isOpen={userDropdownOpen}
                 >
                   <ButtonIcon>
                     <FiUser size={18} />
                   </ButtonIcon>
                   <span>{t("account")}</span>
-                  <DropdownArrow isOpen={userDropdownOpen}>
+                  <DropdownArrow $isOpen={userDropdownOpen}>
                     <FiChevronDown size={16} />
                   </DropdownArrow>
                   <ButtonRipple />
                 </AnimatedDropdownButton>
                 
-                <AnimatedDropdownMenu isOpen={userDropdownOpen}>
+                <AnimatedDropdownMenu $isOpen={userDropdownOpen}>
                   {!isUserLoggedIn ? (
                     <>
                       <DropdownItem href={`/${locale}/register`}>
@@ -262,19 +262,19 @@ export default function Menu() {
               <DropdownWrapper ref={dropdownRef}>
                 <AnimatedDropdownButton 
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  isOpen={dropdownOpen}
+                  $isOpen={dropdownOpen}
                 >
                   <ButtonIcon>
                     <FiBriefcase size={18} />
                   </ButtonIcon>
                   <span>{t("agency")}</span>
-                  <DropdownArrow isOpen={dropdownOpen}>
+                  <DropdownArrow $isOpen={dropdownOpen}>
                     <FiChevronDown size={16} />
                   </DropdownArrow>
                   <ButtonRipple />
                 </AnimatedDropdownButton>
                 
-                <AnimatedDropdownMenu isOpen={dropdownOpen}>
+                <AnimatedDropdownMenu $isOpen={dropdownOpen}>
                   {!isLoggedIn ? (
                     <>
                       <DropdownItem href={`/${locale}/register-agency`}>
@@ -319,17 +319,17 @@ export default function Menu() {
               <LanguageWrapper ref={langDropdownRef}>
                 <LanguageButton 
                   onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-                  isOpen={langDropdownOpen}
+                  $isOpen={langDropdownOpen}
                 >
                   <LanguageFlag>{currentLanguage?.flag}</LanguageFlag>
                   <LanguageLabel>{currentLanguage?.label}</LanguageLabel>
-                  <DropdownArrow isOpen={langDropdownOpen}>
+                  <DropdownArrow $isOpen={langDropdownOpen}>
                     <FiChevronDown size={14} />
                   </DropdownArrow>
                   <ButtonRipple />
                 </LanguageButton>
                 
-                <LanguageDropdown isOpen={langDropdownOpen}>
+                <LanguageDropdown $isOpen={langDropdownOpen}>
                   {languages.map((lang) => (
                     <LanguageOption
                       key={lang.value}
@@ -559,7 +559,7 @@ const LogoWrapper = styled.div`
   position: relative;
 `;
 
-const AnimatedLogo = styled.a<{ isLoaded: boolean; scrolled: boolean }>`
+const AnimatedLogo = styled.a<{ $isLoaded: boolean; $scrolled: boolean }>`
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -567,16 +567,16 @@ const AnimatedLogo = styled.a<{ isLoaded: boolean; scrolled: boolean }>`
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: left center;
   
-  ${props => props.isLoaded && css`
+  ${props => props.$isLoaded && css`
     animation: ${slideInFromLeft} 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   `}
   
-  ${props => props.scrolled && css`
+  ${props => props.$scrolled && css`
     transform: scale(0.95);
   `}
 
   &:hover {
-    transform: ${props => props.scrolled ? 'scale(0.98)' : 'scale(1.02)'};
+    transform: ${props => props.$scrolled ? 'scale(0.98)' : 'scale(1.02)'};
   }
 `;
 
@@ -709,7 +709,7 @@ const DropdownWrapper = styled.div`
   position: relative;
 `;
 
-const AnimatedDropdownButton = styled.button<{ isOpen: boolean }>`
+const AnimatedDropdownButton = styled.button<{ $isOpen: boolean }>`
   position: relative;
   display: flex;
   align-items: center;
@@ -724,7 +724,7 @@ const AnimatedDropdownButton = styled.button<{ isOpen: boolean }>`
   font-size: 0.85rem;
   font-weight: 500;
 
-  ${props => props.isOpen && css`
+  ${props => props.$isOpen && css`
     background: rgba(0, 0, 0, 0.05);
     color: #000;
   `}
@@ -739,17 +739,17 @@ const AnimatedDropdownButton = styled.button<{ isOpen: boolean }>`
   }
 `;
 
-const DropdownArrow = styled.div<{ isOpen: boolean }>`
+const DropdownArrow = styled.div<{ $isOpen: boolean }>`
   display: flex;
   align-items: center;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
-  ${props => props.isOpen && css`
+  ${props => props.$isOpen && css`
     transform: rotate(180deg);
   `}
 `;
 
-const AnimatedDropdownMenu = styled.div<{ isOpen: boolean }>`
+const AnimatedDropdownMenu = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   top: calc(100% + 0.5rem);
   right: 0;
@@ -761,9 +761,9 @@ const AnimatedDropdownMenu = styled.div<{ isOpen: boolean }>`
   min-width: 180px;
   z-index: 1000;
   
-  opacity: ${props => props.isOpen ? 1 : 0};
-  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
-  transform: ${props => props.isOpen ? 'translateY(0) scale(1)' : 'translateY(-10px) scale(0.98)'};
+  opacity: ${props => props.$isOpen ? 1 : 0};
+  visibility: ${props => props.$isOpen ? 'visible' : 'hidden'};
+  transform: ${props => props.$isOpen ? 'translateY(0) scale(1)' : 'translateY(-10px) scale(0.98)'};
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 `;
 
@@ -837,7 +837,7 @@ const LanguageWrapper = styled.div`
   position: relative;
 `;
 
-const LanguageButton = styled.button<{ isOpen: boolean }>`
+const LanguageButton = styled.button<{ $isOpen: boolean }>`
   position: relative;
   display: flex;
   align-items: center;
@@ -851,7 +851,7 @@ const LanguageButton = styled.button<{ isOpen: boolean }>`
   color: #222;
   font-size: 0.8rem;
 
-  ${props => props.isOpen && css`
+  ${props => props.$isOpen && css`
     background: rgba(0, 0, 0, 0.05);
     color: #000;
   `}
@@ -880,7 +880,7 @@ const LanguageLabel = styled.span`
   color: inherit;
 `;
 
-const LanguageDropdown = styled.div<{ isOpen: boolean }>`
+const LanguageDropdown = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   top: calc(100% + 0.5rem);
   right: 0;
@@ -892,9 +892,9 @@ const LanguageDropdown = styled.div<{ isOpen: boolean }>`
   min-width: 160px;
   z-index: 1000;
   
-  opacity: ${props => props.isOpen ? 1 : 0};
-  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
-  transform: ${props => props.isOpen ? 'translateY(0) scale(1)' : 'translateY(-10px) scale(0.98)'};
+  opacity: ${props => props.$isOpen ? 1 : 0};
+  visibility: ${props => props.$isOpen ? 'visible' : 'hidden'};
+  transform: ${props => props.$isOpen ? 'translateY(0) scale(1)' : 'translateY(-10px) scale(0.98)'};
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 `;
 
