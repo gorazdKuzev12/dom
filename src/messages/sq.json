@@ -77,11 +77,18 @@
   "Filters": {
     "propertyType": "Lloji i pronës",
     "select": "Zgjidhni...",
-    "house": "Shtëpi",
     "apartment": "Apartament",
-    "villa": "Vilë",
+    "house": "Shtëpi",
+    "room": "Dhomë",
     "office": "Zyrë",
+    "villa": "Vilë",
+    "garage": "Garazh",
+    "storageRoom": "Dhomë ruajtjeje",
+    "commercial": "Komerciale",
     "land": "Tokë",
+    "building": "Ndërtesë",
+    "holiday": "Për pushime",
+    "studio": "Studio",
     "priceRange": "Intervali i çmimit",
     "min": "Min",
     "max": "Maks",
@@ -270,6 +277,7 @@
       "requiredFields": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
       "invalidCredentials": "Email ose fjalëkalim i pavlefshëm",
 
+
       "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
       "loginFailed": "Dështoi hyrja. Ju lutemi kontrolloni kredencialet tuaja.",
       "unknown": "Ndodhi një gabim i papritur"
@@ -314,8 +322,16 @@
       "types": {
         "apartment": "Apartament",
         "house": "Shtëpi",
+        "room": "Dhomë",
         "office": "Zyrë",
-        "land": "Tokë"
+        "villa": "Vilë",
+        "garage": "Garazh",
+        "storageRoom": "Dhomë ruajtjeje",
+        "commercial": "Komerciale",
+        "land": "Tokë",
+        "building": "Ndërtesë",
+        "holiday": "Për pushime",
+        "studio": "Studio"
       },
       "listingType": "Lloji i listimit",
       "listingTypes": {
@@ -537,6 +553,15 @@
       "vacationRentals": "Qira për Pushime",
       "luxuryProperties": "Prona Luksoze",
       "propertyManagement": "Menaxhimi i Pronave"
+    }
+  },
+  "Listings": {
+    "pagination": {
+      "previous": "E mëparshme",
+      "next": "Tjetër",
+      "resultsCount": "{count} prona në {municipality} (Faqja {current} nga {total})",
+      "singleResult": "1 pronë në {municipality}",
+      "noResults": "Nuk ka prona në {municipality}"
     }
   }
 }

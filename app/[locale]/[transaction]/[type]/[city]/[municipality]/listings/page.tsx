@@ -73,6 +73,7 @@ interface SearchParams {
   condition?: string;
   listingDate?: string;
   sort?: string;
+  page?: string;
 }
 
 interface TransactionTypeMap {
@@ -96,13 +97,10 @@ const propertyTypeMap: PropertyTypeMap = {
   homes: "HOUSE",
   rooms: "ROOM",
   room: "ROOM",
-  villas: "VILLA",
-  villa: "VILLA",
-  studios: "STUDIO",
-  studio: "STUDIO",
-  land: "LAND",
   offices: "OFFICE",
   office: "OFFICE",
+  villas: "VILLA",
+  villa: "VILLA",
   garages: "GARAGE",
   garage: "GARAGE",
   "storage-rooms": "STORAGE_ROOM",
@@ -110,8 +108,14 @@ const propertyTypeMap: PropertyTypeMap = {
   "commercial-properties": "COMMERCIAL",
   "commercial-property": "COMMERCIAL",
   commercial: "COMMERCIAL",
+  land: "LAND",
   buildings: "BUILDING",
-  building: "BUILDING"
+  building: "BUILDING",
+  "holiday-rentals": "HOLIDAY",
+  "holiday-rental": "HOLIDAY",
+  holiday: "HOLIDAY",
+  studios: "STUDIO",
+  studio: "STUDIO"
 };
 
 
@@ -131,13 +135,10 @@ const translations = {
       homes: "Houses",
       rooms: "Rooms",
       room: "Rooms",
-      villas: "Villas",
-      villa: "Villas",
-      studios: "Studios",
-      studio: "Studios",
-      land: "Land",
       offices: "Offices",
       office: "Offices",
+      villas: "Villas",
+      villa: "Villas",
       garages: "Garages",
       garage: "Garages",
       "storage-rooms": "Storage Rooms",
@@ -145,8 +146,14 @@ const translations = {
       "commercial-properties": "Commercial Properties",
       "commercial-property": "Commercial Properties",
       commercial: "Commercial Properties",
+      land: "Land",
       buildings: "Buildings",
-      building: "Buildings"
+      building: "Buildings",
+      "holiday-rentals": "Holiday Rentals",
+      "holiday-rental": "Holiday Rentals",
+      holiday: "Holiday Rentals",
+      studios: "Studios",
+      studio: "Studios"
     },
     seoTexts: {
       titleTemplate: "{propertyType} for {transaction} in {municipality}, {city} | DOM Real Estate",
@@ -174,13 +181,10 @@ const translations = {
       homes: "Куќи",
       rooms: "Соби",
       room: "Соби",
-      villas: "Вили",
-      villa: "Вили",
-      studios: "Студија",
-      studio: "Студија",
-      land: "Земјиште",
       offices: "Канцеларии",
       office: "Канцеларии",
+      villas: "Вили",
+      villa: "Вили",
       garages: "Гаражи",
       garage: "Гаражи",
       "storage-rooms": "Магацински простор",
@@ -188,8 +192,14 @@ const translations = {
       "commercial-properties": "Комерцијални имоти",
       "commercial-property": "Комерцијални имоти",
       commercial: "Комерцијални имоти",
+      land: "Земјиште",
       buildings: "Згради",
-      building: "Згради"
+      building: "Згради",
+      "holiday-rentals": "За одмор",
+      "holiday-rental": "За одмор",
+      holiday: "За одмор",
+      studios: "Студија",
+      studio: "Студија"
     },
     seoTexts: {
       titleTemplate: "{propertyType} за {transaction} во {municipality}, {city} | DOM Недвижности",
@@ -217,13 +227,10 @@ const translations = {
       homes: "Shtëpi",
       rooms: "Dhoma",
       room: "Dhoma",
-      villas: "Vila",
-      villa: "Vila",
-      studios: "Studio",
-      studio: "Studio",
-      land: "Tokë",
       offices: "Zyra",
       office: "Zyra",
+      villas: "Vila",
+      villa: "Vila",
       garages: "Garazhe",
       garage: "Garazhe",
       "storage-rooms": "Dhoma magazinimi",
@@ -231,8 +238,14 @@ const translations = {
       "commercial-properties": "Prona komerciale",
       "commercial-property": "Prona komerciale",
       commercial: "Prona komerciale",
+      land: "Tokë",
       buildings: "Ndërtesa",
-      building: "Ndërtesa"
+      building: "Ndërtesa",
+      "holiday-rentals": "Për pushime",
+      "holiday-rental": "Për pushime",
+      holiday: "Për pushime",
+      studios: "Studio",
+      studio: "Studio"
     },
     seoTexts: {
       titleTemplate: "{propertyType} për {transaction} në {municipality}, {city} | DOM Pasuri të Paluajtshme",
@@ -547,6 +560,11 @@ export default async function MunicipalityListingsPage({
   // The localized display name will be handled from the database response
   const municipalityName = municipality;
 
+  // Calculate pagination parameters
+  const LISTINGS_PER_PAGE = 8;
+  const currentPage = parseInt(searchParams.page || '1', 10);
+  const offset = (currentPage - 1) * LISTINGS_PER_PAGE;
+
   // map URL → GraphQL filter
   const filter = {
     transaction: transactionEnum,
@@ -573,7 +591,12 @@ export default async function MunicipalityListingsPage({
     const [listingsResult, citiesResult, municipalitiesResult] = await Promise.all([
       client.query({
       query: LISTINGS_BY_MUNICIPALITY_FILTER,
-      variables: { name: municipalityName, filter },
+      variables: { 
+        name: municipalityName, 
+        filter,
+        limit: LISTINGS_PER_PAGE,
+        offset
+      },
       }),
       client.query({
         query: GET_ALL_CITIES,
@@ -584,7 +607,12 @@ export default async function MunicipalityListingsPage({
       }),
     ]);
 
-    const listings = listingsResult.data?.listingsByMunicipalityFilter ?? [];
+    const paginatedResult = listingsResult.data?.listingsByMunicipalityFilter;
+    const listings = paginatedResult?.listings ?? [];
+    const totalCount = paginatedResult?.totalCount ?? 0;
+    const hasNextPage = paginatedResult?.hasNextPage ?? false;
+    const hasPreviousPage = paginatedResult?.hasPreviousPage ?? false;
+    
     const cities = citiesResult.data?.city ?? [];
     const municipalities = municipalitiesResult.data?.municipalitiesByCityName ?? [];
     
@@ -620,6 +648,12 @@ export default async function MunicipalityListingsPage({
         citySlug={city}
             cities={cities}
             municipalities={municipalities}
+            // Pagination props
+            currentPage={currentPage}
+            totalCount={totalCount}
+            hasNextPage={hasNextPage}
+            hasPreviousPage={hasPreviousPage}
+            itemsPerPage={LISTINGS_PER_PAGE}
       />
         </main>
       </>

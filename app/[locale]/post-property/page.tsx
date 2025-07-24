@@ -668,16 +668,16 @@ function PostPropertyForm() {
                         >
                           <option value="APARTMENT">{t("propertyDetails.types.apartment")}</option>
                           <option value="HOUSE">{t("propertyDetails.types.house")}</option>
-                          <option value="ROOM">Room</option>
+                          <option value="ROOM">{t("propertyDetails.types.room")}</option>
                           <option value="OFFICE">{t("propertyDetails.types.office")}</option>
-                          <option value="VILLA">Villa</option>
-                          <option value="GARAGE">Garage</option>
-                          <option value="STORAGE_ROOM">Storage Room</option>
-                          <option value="COMMERCIAL">Commercial</option>
+                          <option value="VILLA">{t("propertyDetails.types.villa")}</option>
+                          <option value="GARAGE">{t("propertyDetails.types.garage")}</option>
+                          <option value="STORAGE_ROOM">{t("propertyDetails.types.storageRoom")}</option>
+                          <option value="COMMERCIAL">{t("propertyDetails.types.commercial")}</option>
                           <option value="LAND">{t("propertyDetails.types.land")}</option>
-                          <option value="BUILDING">Building</option>
-                          <option value="HOLIDAY">Holiday Property</option>
-                          <option value="STUDIO">Studio</option>
+                          <option value="BUILDING">{t("propertyDetails.types.building")}</option>
+                          <option value="HOLIDAY">{t("propertyDetails.types.holiday")}</option>
+                          <option value="STUDIO">{t("propertyDetails.types.studio")}</option>
                         </Select>
                       </FormGroup>
 

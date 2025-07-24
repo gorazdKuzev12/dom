@@ -219,14 +219,15 @@ export default function PropertyFilters({
       "APARTMENT": "apartments",
       "HOUSE": "homes", 
       "ROOM": "rooms",
-      "VILLA": "villas",
-      "STUDIO": "studio",
       "OFFICE": "offices",
+      "VILLA": "villas",
       "GARAGE": "garages",
       "STORAGE_ROOM": "storage-rooms",
       "COMMERCIAL": "commercial-properties",
       "LAND": "land",
       "BUILDING": "buildings",
+      "HOLIDAY": "holiday-rentals",
+      "STUDIO": "studios",
     };
     
     const urlPropertyType = propertyTypeMap[value] || value.toLowerCase();
@@ -455,11 +456,18 @@ export default function PropertyFilters({
         <FilterTitle>{t("Filters.propertyType")}</FilterTitle>
         <SelectInput value={propertyType} onChange={handlePropertyTypeChange}>
           <option value="">{t("Filters.select")}</option>
-          <option value="house">{t("Filters.house")}</option>
-          <option value="apartment">{t("Filters.apartment")}</option>
-          <option value="villa">{t("Filters.villa")}</option>
-          <option value="office">{t("Filters.office")}</option>
-          <option value="land">{t("Filters.land")}</option>
+          <option value="APARTMENT">{t("Filters.apartment")}</option>
+          <option value="HOUSE">{t("Filters.house")}</option>
+          <option value="ROOM">{t("Filters.room")}</option>
+          <option value="OFFICE">{t("Filters.office")}</option>
+          <option value="VILLA">{t("Filters.villa")}</option>
+          <option value="GARAGE">{t("Filters.garage")}</option>
+          <option value="STORAGE_ROOM">{t("Filters.storageRoom")}</option>
+          <option value="COMMERCIAL">{t("Filters.commercial")}</option>
+          <option value="LAND">{t("Filters.land")}</option>
+          <option value="BUILDING">{t("Filters.building")}</option>
+          <option value="HOLIDAY">{t("Filters.holiday")}</option>
+          <option value="STUDIO">{t("Filters.studio")}</option>
         </SelectInput>
       </FilterSection>
 

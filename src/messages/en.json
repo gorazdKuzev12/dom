@@ -79,11 +79,18 @@
   "Filters": {
     "propertyType": "Property Type",
     "select": "Select...",
-    "house": "House",
     "apartment": "Apartment",
-    "villa": "Villa",
+    "house": "House",
+    "room": "Room",
     "office": "Office",
+    "villa": "Villa",
+    "garage": "Garage",
+    "storageRoom": "Storage Room",
+    "commercial": "Commercial",
     "land": "Land",
+    "building": "Building",
+    "holiday": "Holiday Rental",
+    "studio": "Studio",
     "priceRange": "Price Range",
     "min": "Min",
     "max": "Max",
@@ -297,8 +304,16 @@
       "types": {
         "apartment": "Apartment",
         "house": "House",
+        "room": "Room",
         "office": "Office",
-        "land": "Land"
+        "villa": "Villa",
+        "garage": "Garage",
+        "storageRoom": "Storage Room",
+        "commercial": "Commercial",
+        "land": "Land",
+        "building": "Building",
+        "holiday": "Holiday Property",
+        "studio": "Studio"
       },
       "listingType": "Listing Type",
       "listingTypes": {
@@ -521,6 +536,15 @@
       "vacationRentals": "Vacation Rentals",
       "luxuryProperties": "Luxury Properties",
       "propertyManagement": "Property Management"
+    }
+  },
+  "Listings": {
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "resultsCount": "{count} properties in {municipality} (Page {current} of {total})",
+      "singleResult": "1 property in {municipality}",
+      "noResults": "No properties in {municipality}"
     }
   }
 }

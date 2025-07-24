@@ -77,11 +77,18 @@
   "Filters": {
     "propertyType": "Тип на имот",
     "select": "Избери...",
-    "house": "Куќа",
     "apartment": "Стан",
-    "villa": "Вила",
+    "house": "Куќа",
+    "room": "Соба",
     "office": "Канцеларија",
+    "villa": "Вила",
+    "garage": "Гаража",
+    "storageRoom": "Магацински простор",
+    "commercial": "Комерцијален",
     "land": "Земјиште",
+    "building": "Зграда",
+    "holiday": "За одмор",
+    "studio": "Студио",
     "priceRange": "Опсег на цена",
     "min": "Мин",
     "max": "Макс",
@@ -313,8 +320,16 @@
       "types": {
         "apartment": "Стан",
         "house": "Куќа",
+        "room": "Соба",
         "office": "Канцеларија",
-        "land": "Земјиште"
+        "villa": "Вила",
+        "garage": "Гаража",
+        "storageRoom": "Магацински простор",
+        "commercial": "Комерцијален",
+        "land": "Земјиште",
+        "building": "Зграда",
+        "holiday": "За одмор",
+        "studio": "Студио"
       },
       "listingType": "Тип на оглас",
       "listingTypes": {
@@ -536,6 +551,15 @@
       "vacationRentals": "Изнајмување за Одмор",
       "luxuryProperties": "Луксузни Недвижности",
       "propertyManagement": "Управување со Недвижности"
+    }
+  },
+  "Listings": {
+    "pagination": {
+      "previous": "Претходна",
+      "next": "Следна",
+      "resultsCount": "{count} имоти во {municipality} (Страница {current} од {total})",
+      "singleResult": "1 имот во {municipality}",
+      "noResults": "Нема имоти во {municipality}"
     }
   }
 }

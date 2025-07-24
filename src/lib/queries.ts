@@ -56,33 +56,40 @@ export const LISTINGS_BY_MUNICIPALITY_FILTER = gql`
   query ListingsByMunicipalityFilter(
     $name: String!
     $filter: ListingFilterInput
+    $limit: Int
+    $offset: Int
   ) {
-    listingsByMunicipalityFilter(name: $name, filter: $filter) {
-      id
-      title
-      price
-      rooms
-      bathrooms
-      size
-      images
-      createdAt 
-      type
-      transaction
-      cityId
-      municipalityId
-      city {
+    listingsByMunicipalityFilter(name: $name, filter: $filter, limit: $limit, offset: $offset) {
+      listings {
         id
-        name_en
-        name_mk
-        name_sq
-        slug
+        title
+        price
+        rooms
+        bathrooms
+        size
+        images
+        createdAt 
+        type
+        transaction
+        cityId
+        municipalityId
+        city {
+          id
+          name_en
+          name_mk
+          name_sq
+          slug
+        }
+        municipality {
+          id
+          name_en
+          name_mk
+          name_sq
+        }
       }
-      municipality {
-        id
-        name_en
-        name_mk
-        name_sq
-      }
+      totalCount
+      hasNextPage
+      hasPreviousPage
     }
   }
 `;
