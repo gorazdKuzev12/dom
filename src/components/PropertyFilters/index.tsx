@@ -316,6 +316,18 @@ export default function PropertyFilters({
     applyFilters({ listingDate: value });
   };
 
+  // Helper function to create URL-safe slugs (same as backend)
+  const createSlug = (text: string): string => {
+    return text
+      .toLowerCase()
+      .normalize("NFD") // Normalize to decomposed form
+      .replace(/[\u0300-\u036f]/g, "") // Remove diacritics/accents
+      .replace(/[^a-z0-9\s-]/g, "") // Remove non-alphanumeric characters except spaces and hyphens
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
+      .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
+      .trim(); // Remove leading/trailing whitespace
+  };
+
   // Helper function to get localized name
   const getLocalizedName = (item: City | Municipality, locale: string = 'en'): string => {
     switch (locale) {
@@ -355,18 +367,6 @@ export default function PropertyFilters({
         // Get the first municipality
         const firstMunicipality = data.municipalitiesByCityName[0];
         
-        // Create slug from municipality name
-        const createSlug = (text: string): string => {
-          return text
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/[^a-z0-9\s-]/g, "")
-            .replace(/\s+/g, "-")
-            .replace(/-+/g, "-")
-            .trim();
-        };
-        
         const municipalitySlug = createSlug(firstMunicipality.name_en);
         setMunicipality(municipalitySlug);
         
@@ -398,8 +398,11 @@ export default function PropertyFilters({
     const currentType = pathParts[3];
     const currentCity = pathParts[4];
     
-    const newPath = `/${locale}/${currentTransaction}/${currentType}/${currentCity}/${value}/listings`;
-    const params = createParamsWithCurrentState({ municipality: value });
+    // Create proper slug for URL
+    const municipalitySlug = value ? createSlug(value) : value;
+    
+    const newPath = `/${locale}/${currentTransaction}/${currentType}/${currentCity}/${municipalitySlug}/listings`;
+    const params = createParamsWithCurrentState({ municipality: municipalitySlug });
     router.push(`${newPath}?${params.toString()}`, { scroll: false });
   };
 
@@ -437,7 +440,7 @@ export default function PropertyFilters({
             <SelectInput value={municipality} onChange={handleMunicipalityChange}>
               <option value="">All Areas</option>
               {municipalities.map((municipalityItem) => (
-                <option key={municipalityItem.id} value={municipalityItem.name_en.toLowerCase()}>
+                <option key={municipalityItem.id} value={createSlug(municipalityItem.name_en)}>
                   {getLocalizedName(municipalityItem, 'en')}
                 </option>
               ))}

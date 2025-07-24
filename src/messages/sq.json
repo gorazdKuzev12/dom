@@ -259,16 +259,17 @@
       "emailPlaceholder": "Shkruani emailin tuaj të biznesit",
       "password": "Fjalëkalimi",
       "passwordPlaceholder": "Shkruani fjalëkalimin tuaj",
-      "rememberMe": "Më mbaj mend",
+      "rememberMe": "Më mbaj mend për 7 ditë",
       "forgotPassword": "Keni harruar fjalëkalimin?",
       "login": "Hyni",
-      "loggingIn": "Duke hyrë...",
+      "loggingIn": "Duke u futur...",
       "noAccount": "Nuk keni llogari të agjencisë?",
       "registerNow": "Regjistrohuni tani"
     },
     "errors": {
       "requiredFields": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
       "invalidCredentials": "Email ose fjalëkalim i pavlefshëm",
+
       "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
       "loginFailed": "Dështoi hyrja. Ju lutemi kontrolloni kredencialet tuaja.",
       "unknown": "Ndodhi një gabim i papritur"

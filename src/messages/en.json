@@ -245,8 +245,8 @@
       "passwordPlaceholder": "Enter your password",
       "rememberMe": "Remember me for 7 days",
       "forgotPassword": "Forgot password?",
-      "login": "Login",
-      "loggingIn": "Logging in...",
+      "login": "Sign In",
+      "loggingIn": "Signing in...",
       "noAccount": "Don't have an agency account?",
       "registerNow": "Register now"
     },

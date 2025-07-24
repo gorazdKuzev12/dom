@@ -187,7 +187,7 @@ export default function AgencyLoginPage() {
                     onChange={handleChange}
                   />
                   <CheckboxLabel htmlFor="rememberMe">
-                    {t("form.rememberMe")} for 7 days
+                    {t("form.rememberMe")}
                   </CheckboxLabel>
                 </CheckboxWrapper>
               </CheckboxGroup>
