@@ -458,6 +458,24 @@
       "verified": "✓ I verifikuar",
       "agencyVerified": "✓ Agjenci e verifikuar"
     },
+    "loginBenefits": {
+      "title": "Nuk Kërkohet Kyçje - Publiko Menjëherë!",
+      "description": "Mund ta publikoni pronën tuaj tani pa krijuar një llogari. Do t'ju japim një numër rezervimi për të menaxhuar gjithçka. Por nëse dëshironi edhe më shumë kontroll, krijimi i një llogarie ju jep:",
+      "goodNews": "Lajme të mira!",
+      "benefits": {
+        "editListings": "✓ Editoni dhe përditësoni listimet tuaja në çdo kohë nga paneli",
+        "viewAnalytics": "✓ Shikoni analitika të detajuara dhe statistika vizitorësh",
+        "saveFavorites": "✓ Ruani dhe organizoni prona të preferuara",
+        "manageMultiple": "✓ Menaxhoni disa listime në një vend",
+        "prioritySupport": "✓ Merrni mbështetje prioritare dhe njoftimet",
+        "noBookingNumbers": "✓ Nuk ka nevojë të mbani mend numrat e rezervimit"
+      },
+      "note": "💡 Gjithmonë mund të krijoni një llogari më vonë dhe të lidhni listimet tuaja ekzistuese!",
+      "actions": {
+        "login": "Kyçu",
+        "register": "Krijo Llogari"
+      }
+    },
     "errors": {
       "required": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
       "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",

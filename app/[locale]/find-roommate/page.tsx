@@ -1,6 +1,95 @@
 import { getClient } from "@/lib/client";
 import { GET_ROOMMATES, GET_ALL_CITIES } from "@/lib/queries";
 import FindRoommateClient from "@/components/FindRoommateClient";
+import { Metadata } from "next";
+
+interface PageParams {
+  locale: string;
+}
+
+// Generate metadata for SEO
+export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
+  const { locale } = params;
+  
+  const titles = {
+    en: "Find Your Perfect Roommate | DOM Real Estate",
+    mk: "Најди го твојот совршен цимер | DOM Real Estate", 
+    sq: "Gjej Bashkëbanuesin Tënd të Përkryer | DOM Real Estate"
+  };
+  
+  const descriptions = {
+    en: "Connect with compatible roommates in North Macedonia. Filter by location, budget, lifestyle preferences, and more. Find shared apartments, rooms, and housing with trusted roommates on DOM.",
+    mk: "Поврзете се со компатибилни цимери во Северна Македонија. Филтрирајте по локација, буџет, животни преференци и повеќе. Најдете заеднички станови, соби и живеалишта со доверливи цимери на DOM.",
+    sq: "Lidhu me bashkëbanues të përputhshëm në Maqedoninë e Veriut. Filtro sipas vendndodhjes, buxhetit, preferencave të jetesës dhe më shumë. Gjej apartamente të përbashkëta, dhoma dhe strehim me bashkëbanues të besueshëm në DOM."
+  };
+
+  const keywords = {
+    en: "find roommate, shared housing, room sharing, apartment sharing, roommate finder, compatible roommates, student housing, professional roommates, North Macedonia roommates",
+    mk: "најди цимер, заедничко живеалиште, споделување соба, споделување стан, барање цимер, компатибилни цимери, студентско живеалиште, професионални цимери, цимери Северна Македонија",
+    sq: "gjej bashkëbanues, strehim i përbashkët, ndarje dhome, ndarje apartamenti, gjetës bashkëbanuesi, bashkëbanues të përputhshëm, strehim studenti, bashkëbanues profesionalë, bashkëbanues Maqedonia e Veriut"
+  };
+
+  const title = titles[locale as keyof typeof titles] || titles.en;
+  const description = descriptions[locale as keyof typeof descriptions] || descriptions.en;
+  const keyword = keywords[locale as keyof typeof keywords] || keywords.en;
+  
+  return {
+    title,
+    description,
+    keywords: keyword,
+    authors: [{ name: "DOM Real Estate" }],
+    creator: "DOM Real Estate",
+    publisher: "DOM Real Estate",
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://dom.mk/${locale}/find-roommate`,
+      siteName: "DOM Real Estate",
+      locale: locale === 'mk' ? 'mk_MK' : locale === 'sq' ? 'sq_AL' : 'en_US',
+      type: "website",
+      images: [
+        {
+          url: "/roommate-og-image.jpg", // You can add this image later
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      creator: "@DOMRealEstate",
+      images: ["/roommate-og-image.jpg"],
+    },
+    alternates: {
+      canonical: `https://dom.mk/${locale}/find-roommate`,
+      languages: {
+        'en': 'https://dom.mk/en/find-roommate',
+        'mk': 'https://dom.mk/mk/find-roommate',
+        'sq': 'https://dom.mk/sq/find-roommate',
+      },
+    },
+    other: {
+      'theme-color': '#667eea',
+      'color-scheme': 'light',
+    },
+    // JSON-LD structured data for better SEO
+    verification: {
+      google: 'your-google-verification-code', // Add your Google verification code
+      yandex: 'your-yandex-verification-code', // Add your Yandex verification code if needed
+    },
+  };
+}
 
 interface SearchParams {
   cityId?: string;
@@ -62,11 +151,14 @@ function buildFilter(searchParams: SearchParams) {
 }
 
 export default async function FindRoommatePage({ 
+  params,
   searchParams 
 }: { 
+  params: PageParams;
   searchParams: SearchParams 
 }) {
   const client = getClient();
+  const { locale } = params;
   
   // Build filter from search params
   const filter = buildFilter(searchParams);
@@ -86,23 +178,95 @@ export default async function FindRoommatePage({
     const roommates = roommatesData.data?.roommates || [];
     const cities = citiesData.data?.city || [];
 
+    // JSON-LD structured data for better SEO
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": locale === 'mk' ? "DOM - Најди Цимер" : locale === 'sq' ? "DOM - Gjej Bashkëbanues" : "DOM - Find Roommate",
+      "description": locale === 'mk' 
+        ? "Најдете го вашиот совршен цимер во Северна Македонија. Филтрирајте по локација, буџет и животни преференци."
+        : locale === 'sq'
+        ? "Gjeni bashkëbanuesin tuaj të përkryer në Maqedoninë e Veriut. Filtroni sipas vendndodhjes, buxhetit dhe preferencave të jetesës."
+        : "Find your perfect roommate in North Macedonia. Filter by location, budget, and lifestyle preferences.",
+      "url": `https://dom.mk/${locale}/find-roommate`,
+      "applicationCategory": "RealEstateApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "provider": {
+        "@type": "Organization",
+        "name": "DOM Real Estate",
+        "url": "https://dom.mk"
+      },
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Students, Professionals, People looking for shared housing"
+      },
+      "featureList": [
+        "Location-based search",
+        "Budget filtering", 
+        "Lifestyle compatibility matching",
+        "Verified profiles",
+        "Multi-language support"
+      ]
+    };
+
     // Pass data to client component
     return (
-      <FindRoommateClient 
-        roommates={roommates}
-        cities={cities}
-      />
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData)
+          }}
+        />
+        <FindRoommateClient 
+          roommates={roommates}
+          cities={cities}
+        />
+      </>
     );
   } catch (error) {
     console.error('Error fetching roommates:', error);
     
+    // JSON-LD structured data for better SEO (even on error)
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": locale === 'mk' ? "DOM - Најди Цимер" : locale === 'sq' ? "DOM - Gjej Bashkëbanues" : "DOM - Find Roommate",
+      "description": locale === 'mk' 
+        ? "Најдете го вашиот совршен цимер во Северна Македонија. Филтрирајте по локација, буџет и животни преференци."
+        : locale === 'sq'
+        ? "Gjeni bashkëbanuesin tuaj të përkryer në Maqedoninë e Veriut. Filtroni sipas vendndodhjes, buxhetit dhe preferencave të jetesës."
+        : "Find your perfect roommate in North Macedonia. Filter by location, budget, and lifestyle preferences.",
+      "url": `https://dom.mk/${locale}/find-roommate`,
+      "applicationCategory": "RealEstateApplication",
+      "operatingSystem": "Web",
+      "provider": {
+        "@type": "Organization",
+        "name": "DOM Real Estate",
+        "url": "https://dom.mk"
+      }
+    };
+    
     // Pass error to client component
     return (
-      <FindRoommateClient 
-        roommates={[]}
-        cities={[]}
-        error="Please try again later."
-      />
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData)
+          }}
+        />
+        <FindRoommateClient 
+          roommates={[]}
+          cities={[]}
+          error="Please try again later."
+        />
+      </>
     );
   }
 }

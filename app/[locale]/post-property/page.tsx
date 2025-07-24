@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 import styled from "styled-components";
 import { useMutation, useQuery, ApolloProvider } from "@apollo/client";
 import {
@@ -98,6 +99,8 @@ interface InputProps {
 
 function PostPropertyForm() {
   const t = useTranslations("PostProperty");
+  const pathname = usePathname();
+  const locale = pathname.split('/')[1] || 'en'; // Extract locale from pathname
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
@@ -531,32 +534,9 @@ function PostPropertyForm() {
                 </ControlFeatures>
               </LoggedInCard>
             ) : (
-                             <GuestCard>
-                 <ControlHeader>
-                   <ControlIcon>🔓</ControlIcon>
-                   <ControlInfo>
-                     <ControlTitle>Post Without Login - No Account Required!</ControlTitle>
-                     <ControlSubtitle>
-                       You can post your property instantly without creating an account. 
-                       We'll give you a unique booking number to access and manage your listing anytime.
-                     </ControlSubtitle>
-                   </ControlInfo>
-                 </ControlHeader>
-                 <GuestFeatures>
-                   <GuestFeatureItem>✓ Post immediately - no registration needed</GuestFeatureItem>
-                   <GuestFeatureItem>✓ Get a unique booking number for access</GuestFeatureItem>
-                   <GuestFeatureItem>✓ Manage your listing with the booking number</GuestFeatureItem>
-                   <GuestFeatureItem>✓ Upgrade to full account anytime later</GuestFeatureItem>
-                 </GuestFeatures>
-                 <GuestActions>
-                   <LoginForControlButton href="/login">
-                     Login for Full Control
-                   </LoginForControlButton>
-                   <CreateAccountForControlButton href="/register">
-                     Create Account
-                   </CreateAccountForControlButton>
-                 </GuestActions>
-               </GuestCard>
+                             <>
+                
+               </>
             )}
           </FullControlSection>
 
@@ -659,27 +639,25 @@ function PostPropertyForm() {
                     <LoginBenefitsCard>
                     <BenefitsHeader>
                       <BenefitsIcon>🚀</BenefitsIcon>
-                      <BenefitsTitle>No Login Required - Post Instantly!</BenefitsTitle>
+                      <BenefitsTitle>{t("loginBenefits.title")}</BenefitsTitle>
                     </BenefitsHeader>
                     <BenefitsText>
-                      <strong>Good news!</strong> You can post your property right now without creating an account. 
-                      We'll give you a booking number to manage everything. But if you want even more control, 
-                      creating an account gives you:
+                      <strong>{t("loginBenefits.goodNews")}</strong> {t("loginBenefits.description")}
                     </BenefitsText>
                     <BenefitsList>
-                      <BenefitItem>✓ Edit and update your listings anytime from dashboard</BenefitItem>
-                      <BenefitItem>✓ View detailed analytics and visitor statistics</BenefitItem>
-                      <BenefitItem>✓ Save and organize favorite properties</BenefitItem>
-                      <BenefitItem>✓ Manage multiple listings in one place</BenefitItem>
-                      <BenefitItem>✓ Get priority support and notifications</BenefitItem>
-                      <BenefitItem>✓ No need to remember booking numbers</BenefitItem>
+                      <BenefitItem>{t("loginBenefits.benefits.editListings")}</BenefitItem>
+                      <BenefitItem>{t("loginBenefits.benefits.viewAnalytics")}</BenefitItem>
+                      <BenefitItem>{t("loginBenefits.benefits.saveFavorites")}</BenefitItem>
+                      <BenefitItem>{t("loginBenefits.benefits.manageMultiple")}</BenefitItem>
+                      <BenefitItem>{t("loginBenefits.benefits.prioritySupport")}</BenefitItem>
+                      <BenefitItem>{t("loginBenefits.benefits.noBookingNumbers")}</BenefitItem>
                     </BenefitsList>
                     <BenefitsNote>
-                      💡 <em>You can always create an account later and link your existing listings!</em>
+                      <em>{t("loginBenefits.note")}</em>
                     </BenefitsNote>
                     <BenefitsActions>
-                      <LoginButton href="/login">Login</LoginButton>
-                      <RegisterButton href="/register">Create Account</RegisterButton>
+                      <LoginButton href={`/${locale}/login`}>{t("loginBenefits.actions.login")}</LoginButton>
+                      <RegisterButton href={`/${locale}/register`}>{t("loginBenefits.actions.register")}</RegisterButton>
                     </BenefitsActions>
                   </LoginBenefitsCard>
                   )}

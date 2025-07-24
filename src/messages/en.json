@@ -439,6 +439,24 @@
       "verified": "✓ Verified",
       "agencyVerified": "✓ Agency Verified"
     },
+    "loginBenefits": {
+      "title": "No Login Required - Post Instantly!",
+      "description": "You can post your property right now without creating an account. We'll give you a booking number to manage everything. But if you want even more control, creating an account gives you:",
+      "goodNews": "Good news!",
+      "benefits": {
+        "editListings": "✓ Edit and update your listings anytime from dashboard",
+        "viewAnalytics": "✓ View detailed analytics and visitor statistics",
+        "saveFavorites": "✓ Save and organize favorite properties",
+        "manageMultiple": "✓ Manage multiple listings in one place",
+        "prioritySupport": "✓ Get priority support and notifications",
+        "noBookingNumbers": "✓ No need to remember booking numbers"
+      },
+      "note": "💡 You can always create an account later and link your existing listings!",
+      "actions": {
+        "login": "Login",
+        "register": "Create Account"
+      }
+    },
     "errors": {
       "required": "Please fill in all required fields",
       "invalidEmail": "Please enter a valid email address",
