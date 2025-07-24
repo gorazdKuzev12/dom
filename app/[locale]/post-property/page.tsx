@@ -501,10 +501,27 @@ function PostPropertyForm() {
                 <ControlHeader>
                   <ControlIcon>👤</ControlIcon>
                   <ControlInfo>
-                    <ControlTitle>Full Control Mode</ControlTitle>
-                    <ControlSubtitle>Logged in as {userData?.name}</ControlSubtitle>
+                    <ControlTitle>{t("controlMode.fullControlMode")}</ControlTitle>
+                    <ControlSubtitle>{t("controlMode.loggedInAs")} {userData?.name}</ControlSubtitle>
                   </ControlInfo>
-                  <ControlBadge>✓ Verified</ControlBadge>
+                  <ControlBadge>{t("controlMode.verified")}</ControlBadge>
+                </ControlHeader>
+                <ControlFeatures>
+                  <FeatureItem>✓ Contact info auto-filled</FeatureItem>
+                  <FeatureItem>✓ Edit listings anytime</FeatureItem>
+                  <FeatureItem>✓ View analytics</FeatureItem>
+                  <FeatureItem>✓ Manage all properties</FeatureItem>
+                </ControlFeatures>
+              </LoggedInCard>
+            ) : isAgencyLoggedIn ? (
+              <LoggedInCard>
+                <ControlHeader>
+                  <ControlIcon>🏢</ControlIcon>
+                  <ControlInfo>
+                    <ControlTitle>{t("controlMode.agencyControlMode")}</ControlTitle>
+                    <ControlSubtitle>{t("controlMode.loggedInAs")} {agencyData?.companyName || agencyData?.contactPerson}</ControlSubtitle>
+                  </ControlInfo>
+                  <ControlBadge>{t("controlMode.agencyVerified")}</ControlBadge>
                 </ControlHeader>
                 <ControlFeatures>
                   <FeatureItem>✓ Contact info auto-filled</FeatureItem>

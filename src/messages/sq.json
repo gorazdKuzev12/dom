@@ -451,6 +451,13 @@
       "next": "Tjetër",
       "publish": "Publiko listimin"
     },
+    "controlMode": {
+      "fullControlMode": "Modaliteti i kontrollit të plotë",
+      "agencyControlMode": "Modaliteti i kontrollit të agjencisë",
+      "loggedInAs": "I kyçur si",
+      "verified": "✓ I verifikuar",
+      "agencyVerified": "✓ Agjenci e verifikuar"
+    },
     "errors": {
       "required": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
       "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",

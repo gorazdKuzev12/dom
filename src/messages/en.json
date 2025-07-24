@@ -432,6 +432,13 @@
       "next": "Next",
       "publish": "Publish Listing"
     },
+    "controlMode": {
+      "fullControlMode": "Full Control Mode",
+      "agencyControlMode": "Agency Control Mode",
+      "loggedInAs": "Logged in as",
+      "verified": "✓ Verified",
+      "agencyVerified": "✓ Agency Verified"
+    },
     "errors": {
       "required": "Please fill in all required fields",
       "invalidEmail": "Please enter a valid email address",
