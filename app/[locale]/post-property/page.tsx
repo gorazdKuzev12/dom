@@ -51,6 +51,19 @@ interface FormData {
   address: string;
   images: File[];
   amenities: string[];
+  // Room-specific fields
+  shareWith: string;
+  couplesAllowed: boolean;
+  minorsAllowed: boolean;
+  streetFacingWindow: boolean;
+  privateToilet: boolean;
+  bedType: string;
+  // Garage-specific fields
+  motorbikeGarage: boolean;
+  automaticDoor: boolean;
+  securitySystemAndGuards: boolean;
+  // Land-specific fields
+  landType: string;
 }
 
 interface Municipality {
@@ -122,6 +135,19 @@ function PostPropertyForm() {
     address: "",
     images: [],
     amenities: [],
+    // Room-specific fields
+    shareWith: "",
+    couplesAllowed: false,
+    minorsAllowed: false,
+    streetFacingWindow: false,
+    privateToilet: false,
+    bedType: "",
+    // Garage-specific fields
+    motorbikeGarage: false,
+    automaticDoor: false,
+    securitySystemAndGuards: false,
+    // Land-specific fields
+    landType: "",
   });
 
   // Check for user or agency authentication and populate form data
@@ -389,6 +415,19 @@ function PostPropertyForm() {
         contactPhone: formData.phone,
         cityId: selectedCity.id,
         municipalityId: selectedMunicipality?.id || null,
+        // Room-specific fields
+        shareWith: formData.shareWith || null,
+        couplesAllowed: formData.couplesAllowed,
+        minorsAllowed: formData.minorsAllowed,
+        streetFacingWindow: formData.streetFacingWindow,
+        privateToilet: formData.privateToilet,
+        bedType: formData.bedType || null,
+        // Garage-specific fields
+        motorbikeGarage: formData.motorbikeGarage,
+        automaticDoor: formData.automaticDoor,
+        securitySystemAndGuards: formData.securitySystemAndGuards,
+        // Land-specific fields
+        landType: formData.landType || null,
         // Add agency connection if agency is logged in
         agencyId: isAgencyLoggedIn ? agencyData?.id : null,
       };
@@ -730,82 +769,231 @@ function PostPropertyForm() {
                       </FormGroup>
                     </FormGrid>
 
-                    <FormGrid>
+                    {/* Hide condition and floor fields for LAND */}
+                    {formData.type !== "LAND" && (
+                      <FormGrid>
+                        <FormGroup>
+                          <Label>
+                            <Info size={16} />
+                            {t("propertyDetails.condition")}
+                          </Label>
+                          <Select
+                            name="condition"
+                            value={formData.condition}
+                            onChange={handleChange}
+                            required
+                          >
+                            <option value="NEW">{t("propertyDetails.conditions.new")}</option>
+                            <option value="RENOVATED">{t("propertyDetails.conditions.renovated")}</option>
+                            <option value="NEEDS_RENOVATION">{t("propertyDetails.conditions.needsRenovation")}</option>
+                          </Select>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <Label>
+                            <Building2 size={16} />
+                            {t("propertyDetails.floor")}
+                          </Label>
+                          <Input
+                            type="number"
+                            name="floor"
+                            value={formData.floor}
+                            onChange={handleChange}
+                            placeholder={t("propertyDetails.floorPlaceholder")}
+                          />
+                        </FormGroup>
+
+                        <FormGroup>
+                          <Label>
+                            <Building2 size={16} />
+                            {t("propertyDetails.totalFloors")}
+                          </Label>
+                          <Input
+                            type="number"
+                            name="totalFloors"
+                            value={formData.totalFloors}
+                            onChange={handleChange}
+                            placeholder={t("propertyDetails.totalFloorsPlaceholder")}
+                          />
+                        </FormGroup>
+                      </FormGrid>
+                    )}
+
+                    {/* Property-specific fields based on type */}
+                    {(formData.type === "APARTMENT" || formData.type === "HOUSE" || formData.type === "VILLA" || formData.type === "STUDIO" || formData.type === "HOLIDAY") && (
+                      <FormGrid>
+                        <FormGroup>
+                          <Label>
+                            <BedDouble size={16} />
+                            {t("propertyDetails.rooms")}
+                          </Label>
+                          <Input
+                            type="number"
+                            name="rooms"
+                            value={formData.rooms}
+                            onChange={handleChange}
+                            placeholder={t("propertyDetails.roomsPlaceholder")}
+                          />
+                        </FormGroup>
+
+                        <FormGroup>
+                          <Label>
+                            <Bath size={16} />
+                            {t("propertyDetails.bathrooms")}
+                          </Label>
+                          <Input
+                            type="number"
+                            name="bathrooms"
+                            value={formData.bathrooms}
+                            onChange={handleChange}
+                            placeholder={t("propertyDetails.bathroomsPlaceholder")}
+                          />
+                        </FormGroup>
+                      </FormGrid>
+                    )}
+
+                    {/* Room-specific fields */}
+                    {formData.type === "ROOM" && (
+                      <>
+                        <FormGroup>
+                          <Label>
+                            <User size={16} />
+                            {t("propertyDetails.shareWith")}
+                          </Label>
+                          <Select
+                            name="shareWith"
+                            value={formData.shareWith}
+                            onChange={handleChange}
+                          >
+                            <option value="">{t("propertyDetails.select")}</option>
+                            <option value="ONE_PERSON">{t("propertyDetails.shareWithOptions.ONE_PERSON")}</option>
+                            <option value="TWO_PEOPLE">{t("propertyDetails.shareWithOptions.TWO_PEOPLE")}</option>
+                            <option value="THREE_OR_MORE">{t("propertyDetails.shareWithOptions.THREE_OR_MORE")}</option>
+                          </Select>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <Label>
+                            <Info size={16} />
+                            {t("propertyDetails.roomCharacteristics")}
+                          </Label>
+                          <AmenitiesGrid>
+                            <AmenityItem>
+                              <Checkbox
+                                type="checkbox"
+                                name="couplesAllowed"
+                                checked={formData.couplesAllowed}
+                                onChange={handleChange}
+                              />
+                              <AmenityLabel>{t("propertyDetails.couplesAllowed")}</AmenityLabel>
+                            </AmenityItem>
+                            <AmenityItem>
+                              <Checkbox
+                                type="checkbox"
+                                name="minorsAllowed"
+                                checked={formData.minorsAllowed}
+                                onChange={handleChange}
+                              />
+                              <AmenityLabel>{t("propertyDetails.minorsAllowed")}</AmenityLabel>
+                            </AmenityItem>
+                            <AmenityItem>
+                              <Checkbox
+                                type="checkbox"
+                                name="streetFacingWindow"
+                                checked={formData.streetFacingWindow}
+                                onChange={handleChange}
+                              />
+                              <AmenityLabel>{t("propertyDetails.streetFacingWindow")}</AmenityLabel>
+                            </AmenityItem>
+                            <AmenityItem>
+                              <Checkbox
+                                type="checkbox"
+                                name="privateToilet"
+                                checked={formData.privateToilet}
+                                onChange={handleChange}
+                              />
+                              <AmenityLabel>{t("propertyDetails.privateToilet")}</AmenityLabel>
+                            </AmenityItem>
+                          </AmenitiesGrid>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <Label>
+                            <BedDouble size={16} />
+                            {t("propertyDetails.bedType")}
+                          </Label>
+                          <Select
+                            name="bedType"
+                            value={formData.bedType}
+                            onChange={handleChange}
+                          >
+                            <option value="">{t("propertyDetails.select")}</option>
+                            <option value="SINGLE">{t("propertyDetails.bedTypes.SINGLE")}</option>
+                            <option value="DOUBLE">{t("propertyDetails.bedTypes.DOUBLE")}</option>
+                            <option value="SHARED_ROOM">{t("propertyDetails.bedTypes.SHARED_ROOM")}</option>
+                          </Select>
+                        </FormGroup>
+                      </>
+                    )}
+
+                    {/* Garage-specific fields */}
+                    {formData.type === "GARAGE" && (
                       <FormGroup>
                         <Label>
                           <Info size={16} />
-                          {t("propertyDetails.condition")}
+                          {t("propertyDetails.garageFeatures")}
+                        </Label>
+                        <AmenitiesGrid>
+                          <AmenityItem>
+                            <Checkbox
+                              type="checkbox"
+                              name="motorbikeGarage"
+                              checked={formData.motorbikeGarage}
+                              onChange={handleChange}
+                            />
+                            <AmenityLabel>{t("propertyDetails.motorbikeGarage")}</AmenityLabel>
+                          </AmenityItem>
+                          <AmenityItem>
+                            <Checkbox
+                              type="checkbox"
+                              name="automaticDoor"
+                              checked={formData.automaticDoor}
+                              onChange={handleChange}
+                            />
+                            <AmenityLabel>{t("propertyDetails.automaticDoor")}</AmenityLabel>
+                          </AmenityItem>
+                          <AmenityItem>
+                            <Checkbox
+                              type="checkbox"
+                              name="securitySystemAndGuards"
+                              checked={formData.securitySystemAndGuards}
+                              onChange={handleChange}
+                            />
+                            <AmenityLabel>{t("propertyDetails.securitySystemAndGuards")}</AmenityLabel>
+                          </AmenityItem>
+                        </AmenitiesGrid>
+                      </FormGroup>
+                    )}
+
+                    {/* Land-specific fields */}
+                    {formData.type === "LAND" && (
+                      <FormGroup>
+                        <Label>
+                          <MapPin size={16} />
+                          {t("propertyDetails.landType")}
                         </Label>
                         <Select
-                          name="condition"
-                          value={formData.condition}
+                          name="landType"
+                          value={formData.landType}
                           onChange={handleChange}
-                          required
                         >
-                          <option value="NEW">{t("propertyDetails.conditions.new")}</option>
-                          <option value="RENOVATED">{t("propertyDetails.conditions.renovated")}</option>
-                          <option value="NEEDS_RENOVATION">{t("propertyDetails.conditions.needsRenovation")}</option>
+                          <option value="">{t("propertyDetails.select")}</option>
+                          <option value="DEVELOPED">{t("propertyDetails.landTypes.DEVELOPED")}</option>
+                          <option value="BUILDABLE">{t("propertyDetails.landTypes.BUILDABLE")}</option>
+                          <option value="NON_BUILDING">{t("propertyDetails.landTypes.NON_BUILDING")}</option>
                         </Select>
                       </FormGroup>
-
-                      <FormGroup>
-                        <Label>
-                          <Building2 size={16} />
-                          {t("propertyDetails.floor")}
-                        </Label>
-                        <Input
-                          type="number"
-                          name="floor"
-                          value={formData.floor}
-                          onChange={handleChange}
-                          placeholder={t("propertyDetails.floorPlaceholder")}
-                        />
-                      </FormGroup>
-
-                      <FormGroup>
-                        <Label>
-                          <Building2 size={16} />
-                          {t("propertyDetails.totalFloors")}
-                        </Label>
-                        <Input
-                          type="number"
-                          name="totalFloors"
-                          value={formData.totalFloors}
-                          onChange={handleChange}
-                          placeholder={t("propertyDetails.totalFloorsPlaceholder")}
-                        />
-                      </FormGroup>
-                    </FormGrid>
-
-                    <FormGrid>
-                      <FormGroup>
-                        <Label>
-                          <BedDouble size={16} />
-                          {t("propertyDetails.rooms")}
-                        </Label>
-                        <Input
-                          type="number"
-                          name="rooms"
-                          value={formData.rooms}
-                          onChange={handleChange}
-                          placeholder={t("propertyDetails.roomsPlaceholder")}
-                        />
-                      </FormGroup>
-
-                      <FormGroup>
-                        <Label>
-                          <Bath size={16} />
-                          {t("propertyDetails.bathrooms")}
-                        </Label>
-                        <Input
-                          type="number"
-                          name="bathrooms"
-                          value={formData.bathrooms}
-                          onChange={handleChange}
-                          placeholder={t("propertyDetails.bathroomsPlaceholder")}
-                        />
-                      </FormGroup>
-                    </FormGrid>
+                    )}
 
                     <FormGroup>
                       <Label>

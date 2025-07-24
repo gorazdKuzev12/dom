@@ -71,6 +71,27 @@ export default function PropertyFilters({
 
   const { transaction: urlTransaction, type: urlType } = getUrlParams();
 
+  // Helper function to convert URL property type to enum value
+  const getPropertyTypeEnum = (urlType: string): string => {
+    const urlToEnumMap: Record<string, string> = {
+      "apartments": "APARTMENT",
+      "homes": "HOUSE",
+      "rooms": "ROOM",
+      "offices": "OFFICE",
+      "villas": "VILLA",
+      "garages": "GARAGE",
+      "storage-rooms": "STORAGE_ROOM",
+      "commercial-properties": "COMMERCIAL",
+      "land": "LAND",
+      "buildings": "BUILDING",
+      "holiday-rentals": "HOLIDAY",
+      "studios": "STUDIO",
+    };
+    return urlToEnumMap[urlType] || "APARTMENT";
+  };
+
+  const currentPropertyTypeEnum = getPropertyTypeEnum(urlType);
+
   // Filter states - NO DEFAULT VALUES, extract from URL only
   const [listingType, setListingType] = useState<FilterState["listingType"]>(urlTransaction || "");
   const [sortOption, setSortOption] = useState<FilterState["sortOption"]>("");
@@ -514,105 +535,113 @@ export default function PropertyFilters({
         </SizeDisplay>
       </FilterSection>
 
-      <FilterSection>
-        <FilterTitle>{t("Filters.features")}</FilterTitle>
-        <CheckboxGroup>
-          {[
-            { value: "balcony", label: t("Filters.balcony") },
-            { value: "heating", label: t("Filters.heating") },
-            { value: "air-conditioning", label: t("Filters.airConditioning") },
-            { value: "furnished", label: t("Filters.furnished") },
-            { value: "elevator", label: t("Filters.elevator") },
-            { value: "parking", label: t("Filters.parking") },
-            { value: "garden", label: t("Filters.garden") },
-            { value: "swimming-pool", label: t("Filters.swimmingPool") },
-            { value: "internet", label: t("Filters.internet") },
-            { value: "laundry", label: t("Filters.laundry") },
-            { value: "dishwasher", label: t("Filters.dishwasher") },
-            { value: "security", label: t("Filters.security") },
-            { value: "storage", label: t("Filters.storage") },
-            { value: "pet-friendly", label: t("Filters.petFriendly") },
-            { value: "terrace", label: t("Filters.terrace") },
-            { value: "fireplace", label: t("Filters.fireplace") },
-            { value: "cable-tv", label: t("Filters.cableTV") },
-            { value: "washing-machine", label: t("Filters.washingMachine") }
-          ].map((item) => (
-            <CheckboxItem key={`detail-${item.value}`}>
-              <Checkbox
-                type="checkbox"
-                id={`detail-${item.value}`}
-                checked={specificDetails.includes(item.value)}
-                onChange={() =>
-                  toggleSelection(
-                    item.value,
-                    specificDetails,
-                    setSpecificDetails,
-                    "specificDetails"
-                  )
-                }
-              />
-              <CheckboxLabel htmlFor={`detail-${item.value}`}>
-                {item.label}
-              </CheckboxLabel>
-            </CheckboxItem>
-          ))}
-        </CheckboxGroup>
-      </FilterSection>
+      {/* Hide features and condition filters for LAND type */}
+      {currentPropertyTypeEnum !== "LAND" && (
+        <>
+          <FilterSection>
+            <FilterTitle>{t("Filters.features")}</FilterTitle>
+            <CheckboxGroup>
+              {[
+                { value: "balcony", label: t("Filters.balcony") },
+                { value: "heating", label: t("Filters.heating") },
+                { value: "air-conditioning", label: t("Filters.airConditioning") },
+                { value: "furnished", label: t("Filters.furnished") },
+                { value: "elevator", label: t("Filters.elevator") },
+                { value: "parking", label: t("Filters.parking") },
+                { value: "garden", label: t("Filters.garden") },
+                { value: "swimming-pool", label: t("Filters.swimmingPool") },
+                { value: "internet", label: t("Filters.internet") },
+                { value: "laundry", label: t("Filters.laundry") },
+                { value: "dishwasher", label: t("Filters.dishwasher") },
+                { value: "security", label: t("Filters.security") },
+                { value: "storage", label: t("Filters.storage") },
+                { value: "pet-friendly", label: t("Filters.petFriendly") },
+                { value: "terrace", label: t("Filters.terrace") },
+                { value: "fireplace", label: t("Filters.fireplace") },
+                { value: "cable-tv", label: t("Filters.cableTV") },
+                { value: "washing-machine", label: t("Filters.washingMachine") }
+              ].map((item) => (
+                <CheckboxItem key={`detail-${item.value}`}>
+                  <Checkbox
+                    type="checkbox"
+                    id={`detail-${item.value}`}
+                    checked={specificDetails.includes(item.value)}
+                    onChange={() =>
+                      toggleSelection(
+                        item.value,
+                        specificDetails,
+                        setSpecificDetails,
+                        "specificDetails"
+                      )
+                    }
+                  />
+                  <CheckboxLabel htmlFor={`detail-${item.value}`}>
+                    {item.label}
+                  </CheckboxLabel>
+                </CheckboxItem>
+              ))}
+            </CheckboxGroup>
+          </FilterSection>
 
-      <FilterSection>
-        <FilterTitle>{t("Filters.condition")}</FilterTitle>
-        <CheckboxGroup>
-          {[
-            { value: "new", label: t("Filters.new") },
-            { value: "good", label: t("Filters.good") },
-            { value: "needs_renovation", label: t("Filters.needsRenovation") },
-            { value: "renovated", label: "Fully renovated" }
-          ].map((item) => (
-            <CheckboxItem key={`condition-${item.value}`}>
-              <Checkbox
-                type="checkbox"
-                id={`condition-${item.value}`}
-                checked={condition.includes(item.value)}
-                onChange={() =>
-                  toggleSelection(
-                    item.value,
-                    condition,
-                    setCondition,
-                    "condition"
-                  )
-                }
-              />
-              <CheckboxLabel htmlFor={`condition-${item.value}`}>
-                {item.label}
-              </CheckboxLabel>
-            </CheckboxItem>
-          ))}
-        </CheckboxGroup>
-      </FilterSection>
+          <FilterSection>
+            <FilterTitle>{t("Filters.condition")}</FilterTitle>
+            <CheckboxGroup>
+              {[
+                { value: "new", label: t("Filters.new") },
+                { value: "good", label: t("Filters.good") },
+                { value: "needs_renovation", label: t("Filters.needsRenovation") },
+                { value: "renovated", label: "Fully renovated" }
+              ].map((item) => (
+                <CheckboxItem key={`condition-${item.value}`}>
+                  <Checkbox
+                    type="checkbox"
+                    id={`condition-${item.value}`}
+                    checked={condition.includes(item.value)}
+                    onChange={() =>
+                      toggleSelection(
+                        item.value,
+                        condition,
+                        setCondition,
+                        "condition"
+                      )
+                    }
+                  />
+                  <CheckboxLabel htmlFor={`condition-${item.value}`}>
+                    {item.label}
+                  </CheckboxLabel>
+                </CheckboxItem>
+              ))}
+            </CheckboxGroup>
+          </FilterSection>
+        </>
+      )}
 
-      <FilterSection>
-        <FilterTitle>{t("Filters.bedrooms")}</FilterTitle>
-        <CheckboxGroup>
-          {[1, 2, 3, 4, "5+"].map((num) => (
-            <CheckboxItem key={`bedroom-${num}`}>
-              <Checkbox
-                type="checkbox"
-                id={`bedroom-${num}`}
-                checked={bedrooms.includes(num.toString())}
-                onChange={() =>
-                  toggleSelection(
-                    num.toString(),
-                    bedrooms,
-                    setBedrooms,
-                    "bedrooms"
-                  )
-                }
-              />
-              <CheckboxLabel htmlFor={`bedroom-${num}`}>{num}</CheckboxLabel>
-            </CheckboxItem>
-          ))}
-        </CheckboxGroup>
-      </FilterSection>
+      {/* Show bedrooms filter only for property types that have bedrooms */}
+      {["APARTMENT", "HOUSE", "VILLA", "STUDIO", "HOLIDAY"].includes(currentPropertyTypeEnum) && (
+        <FilterSection>
+          <FilterTitle>{t("Filters.bedrooms")}</FilterTitle>
+          <CheckboxGroup>
+            {[1, 2, 3, 4, "5+"].map((num) => (
+              <CheckboxItem key={`bedroom-${num}`}>
+                <Checkbox
+                  type="checkbox"
+                  id={`bedroom-${num}`}
+                  checked={bedrooms.includes(num.toString())}
+                  onChange={() =>
+                    toggleSelection(
+                      num.toString(),
+                      bedrooms,
+                      setBedrooms,
+                      "bedrooms"
+                    )
+                  }
+                />
+                <CheckboxLabel htmlFor={`bedroom-${num}`}>{num}</CheckboxLabel>
+              </CheckboxItem>
+            ))}
+          </CheckboxGroup>
+        </FilterSection>
+      )}
 
       <FilterSection>
         <FilterTitle>{t("Filters.bathrooms")}</FilterTitle>
@@ -688,6 +717,168 @@ export default function PropertyFilters({
           ))}
         </RadioGroup>
       </FilterSection>
+
+      {/* Room-specific filters */}
+      {currentPropertyTypeEnum === "ROOM" && (
+        <>
+          <FilterSection>
+            <FilterTitle>{t("propertyDetails.shareWith")}</FilterTitle>
+            <CheckboxGroup>
+              {[
+                { value: "ONE_PERSON", label: "1 person" },
+                { value: "TWO_PEOPLE", label: "2 people" },
+                { value: "THREE_OR_MORE", label: "3 or more people" }
+              ].map((item) => (
+                <CheckboxItem key={`share-${item.value}`}>
+                  <Checkbox
+                    type="checkbox"
+                    id={`share-${item.value}`}
+                    checked={specificDetails.includes(item.value)}
+                    onChange={() =>
+                      toggleSelection(
+                        item.value,
+                        specificDetails,
+                        setSpecificDetails,
+                        "specificDetails"
+                      )
+                    }
+                  />
+                  <CheckboxLabel htmlFor={`share-${item.value}`}>
+                    {item.label}
+                  </CheckboxLabel>
+                </CheckboxItem>
+              ))}
+            </CheckboxGroup>
+          </FilterSection>
+
+          <FilterSection>
+            <FilterTitle>Room Characteristics</FilterTitle>
+            <CheckboxGroup>
+              {[
+                { value: "couples_allowed", label: "Couples allowed" },
+                { value: "minors_allowed", label: "Minors allowed" },
+                { value: "street_facing_window", label: "Street facing window" },
+                { value: "private_toilet", label: "Private toilet" }
+              ].map((item) => (
+                <CheckboxItem key={`room-${item.value}`}>
+                  <Checkbox
+                    type="checkbox"
+                    id={`room-${item.value}`}
+                    checked={specificDetails.includes(item.value)}
+                    onChange={() =>
+                      toggleSelection(
+                        item.value,
+                        specificDetails,
+                        setSpecificDetails,
+                        "specificDetails"
+                      )
+                    }
+                  />
+                  <CheckboxLabel htmlFor={`room-${item.value}`}>
+                    {item.label}
+                  </CheckboxLabel>
+                </CheckboxItem>
+              ))}
+            </CheckboxGroup>
+          </FilterSection>
+
+          <FilterSection>
+            <FilterTitle>Bed Type</FilterTitle>
+            <CheckboxGroup>
+              {[
+                { value: "SINGLE", label: "Single bed" },
+                { value: "DOUBLE", label: "Double bed" },
+                { value: "SHARED_ROOM", label: "Shared room" }
+              ].map((item) => (
+                <CheckboxItem key={`bed-${item.value}`}>
+                  <Checkbox
+                    type="checkbox"
+                    id={`bed-${item.value}`}
+                    checked={specificDetails.includes(item.value)}
+                    onChange={() =>
+                      toggleSelection(
+                        item.value,
+                        specificDetails,
+                        setSpecificDetails,
+                        "specificDetails"
+                      )
+                    }
+                  />
+                  <CheckboxLabel htmlFor={`bed-${item.value}`}>
+                    {item.label}
+                  </CheckboxLabel>
+                </CheckboxItem>
+              ))}
+            </CheckboxGroup>
+          </FilterSection>
+        </>
+      )}
+
+      {/* Garage-specific filters */}
+      {currentPropertyTypeEnum === "GARAGE" && (
+        <FilterSection>
+          <FilterTitle>Garage Features</FilterTitle>
+          <CheckboxGroup>
+            {[
+              { value: "motorbike_garage", label: "Motorbike garage" },
+              { value: "automatic_door", label: "Automatic door" },
+              { value: "security_system_and_guards", label: "Security system and guards" }
+            ].map((item) => (
+              <CheckboxItem key={`garage-${item.value}`}>
+                <Checkbox
+                  type="checkbox"
+                  id={`garage-${item.value}`}
+                  checked={specificDetails.includes(item.value)}
+                  onChange={() =>
+                    toggleSelection(
+                      item.value,
+                      specificDetails,
+                      setSpecificDetails,
+                      "specificDetails"
+                    )
+                  }
+                />
+                <CheckboxLabel htmlFor={`garage-${item.value}`}>
+                  {item.label}
+                </CheckboxLabel>
+              </CheckboxItem>
+            ))}
+          </CheckboxGroup>
+        </FilterSection>
+      )}
+
+      {/* Land-specific filters */}
+      {currentPropertyTypeEnum === "LAND" && (
+        <FilterSection>
+          <FilterTitle>Type of Land</FilterTitle>
+          <CheckboxGroup>
+            {[
+              { value: "DEVELOPED", label: "Developed" },
+              { value: "BUILDABLE", label: "Buildable" },
+              { value: "NON_BUILDING", label: "Non building" }
+            ].map((item) => (
+              <CheckboxItem key={`land-${item.value}`}>
+                <Checkbox
+                  type="checkbox"
+                  id={`land-${item.value}`}
+                  checked={specificDetails.includes(item.value)}
+                  onChange={() =>
+                    toggleSelection(
+                      item.value,
+                      specificDetails,
+                      setSpecificDetails,
+                      "specificDetails"
+                    )
+                  }
+                />
+                <CheckboxLabel htmlFor={`land-${item.value}`}>
+                  {item.label}
+                </CheckboxLabel>
+              </CheckboxItem>
+            ))}
+          </CheckboxGroup>
+        </FilterSection>
+      )}
     </FilterContainer>
   );
 }

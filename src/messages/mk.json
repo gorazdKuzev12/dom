@@ -353,7 +353,34 @@
       "rooms": "Соби",
       "roomsPlaceholder": "Број на соби",
       "bathrooms": "Бањи",
-      "bathroomsPlaceholder": "Број на бањи"
+      "bathroomsPlaceholder": "Број на бањи",
+      "shareWith": "Сподели стан со",
+      "shareWithOptions": {
+        "ONE_PERSON": "1 лице",
+        "TWO_PEOPLE": "2 лица",
+        "THREE_OR_MORE": "3 или повеќе лица"
+      },
+      "roomCharacteristics": "Карактеристики на собата",
+      "couplesAllowed": "Парови дозволени",
+      "minorsAllowed": "Малолетници дозволени",
+      "streetFacingWindow": "Прозорец кон улица",
+      "privateToilet": "Приватен тоалет",
+      "bedType": "Тип на кревет",
+      "bedTypes": {
+        "SINGLE": "Една постела",
+        "DOUBLE": "Двојна постела",
+        "SHARED_ROOM": "Споделена соба"
+      },
+      "garageFeatures": "Карактеристики на гаражата",
+      "motorbikeGarage": "Гаража за мотор",
+      "automaticDoor": "Автоматска врата",
+      "securitySystemAndGuards": "Сигурносен систем и чување",
+      "landType": "Тип на земјиште",
+      "landTypes": {
+        "DEVELOPED": "Развиено",
+        "BUILDABLE": "За градба",
+        "NON_BUILDING": "За неградба"
+      }
     },
     "location": {
       "title": "Локација",

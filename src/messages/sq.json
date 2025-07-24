@@ -271,6 +271,7 @@
       "login": "Hyni",
       "loggingIn": "Duke u futur...",
       "noAccount": "Nuk keni llogari të agjencisë?",
+
       "registerNow": "Regjistrohuni tani"
     },
     "errors": {
@@ -355,7 +356,34 @@
       "rooms": "Dhomat",
       "roomsPlaceholder": "Numri i dhomave",
       "bathrooms": "Banjot",
-      "bathroomsPlaceholder": "Numri i banjove"
+      "bathroomsPlaceholder": "Numri i banjove",
+      "shareWith": "Ndaj apartamentin me",
+      "shareWithOptions": {
+        "ONE_PERSON": "1 person",
+        "TWO_PEOPLE": "2 persona",
+        "THREE_OR_MORE": "3 ose më shumë persona"
+      },
+      "roomCharacteristics": "Karakteristikat e dhomës",
+      "couplesAllowed": "Çiftet lejohen",
+      "minorsAllowed": "Të mituri lejohen",
+      "streetFacingWindow": "Dritare me pamje nga rruga",
+      "privateToilet": "Tualet privat",
+      "bedType": "Lloji i shtratit",
+      "bedTypes": {
+        "SINGLE": "Shtrat i vetëm",
+        "DOUBLE": "Shtrat i dyfishtë",
+        "SHARED_ROOM": "Dhomë e përbashkët"
+      },
+      "garageFeatures": "Karakteristikat e garazhit",
+      "motorbikeGarage": "Garazh për motor",
+      "automaticDoor": "Derë automatike",
+      "securitySystemAndGuards": "Sistemi i sigurisë dhe rojë",
+      "landType": "Lloji i tokës",
+      "landTypes": {
+        "DEVELOPED": "E zhvilluar",
+        "BUILDABLE": "E ndërtueshme",
+        "NON_BUILDING": "Jo për ndërtim"
+      }
     },
     "location": {
       "title": "Vendndodhja",

@@ -337,7 +337,34 @@
       "rooms": "Rooms",
       "roomsPlaceholder": "Number of rooms",
       "bathrooms": "Bathrooms",
-      "bathroomsPlaceholder": "Number of bathrooms"
+      "bathroomsPlaceholder": "Number of bathrooms",
+      "shareWith": "Share a flat with",
+      "shareWithOptions": {
+        "ONE_PERSON": "1 person",
+        "TWO_PEOPLE": "2 people",
+        "THREE_OR_MORE": "3 or more people"
+      },
+      "roomCharacteristics": "Characteristics of the room",
+      "couplesAllowed": "Couples allowed",
+      "minorsAllowed": "Minors allowed",
+      "streetFacingWindow": "Street facing window",
+      "privateToilet": "Private toilet",
+      "bedType": "Bed type",
+      "bedTypes": {
+        "SINGLE": "Single bed",
+        "DOUBLE": "Double bed",
+        "SHARED_ROOM": "Shared room"
+      },
+      "garageFeatures": "Garage features",
+      "motorbikeGarage": "Motorbike garage",
+      "automaticDoor": "Automatic door",
+      "securitySystemAndGuards": "Security system and guards",
+      "landType": "Type of land",
+      "landTypes": {
+        "DEVELOPED": "Developed",
+        "BUILDABLE": "Buildable",
+        "NON_BUILDING": "Non building"
+      }
     },
     "location": {
       "title": "Location",
