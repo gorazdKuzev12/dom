@@ -36,9 +36,9 @@ export default function AgencyLoginPage() {
   useEffect(() => {
     // Check if user was redirected from registration
     if (searchParams.get('registered') === 'true') {
-      setSuccess("Registration successful! Please login with your credentials.");
+      setSuccess(t("messages.registrationSuccess"));
     }
-  }, [searchParams]);
+  }, [searchParams, t]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -51,12 +51,12 @@ export default function AgencyLoginPage() {
 
   const validateForm = (): boolean => {
     if (!formData.email || !formData.password) {
-      setError("Please fill in all required fields");
+      setError(t("errors.requiredFields"));
       return false;
     }
     
     if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setError("Please enter a valid email address");
+      setError(t("errors.invalidEmail"));
       return false;
     }
     
@@ -97,7 +97,7 @@ export default function AgencyLoginPage() {
           sessionStorage.setItem('agencyData', JSON.stringify(agency));
         }
         
-        setSuccess("Login successful! Redirecting...");
+        setSuccess(t("messages.loginSuccess"));
         
         // Small delay to ensure cookie is set before redirect
         setTimeout(() => {
@@ -106,7 +106,7 @@ export default function AgencyLoginPage() {
       }
     } catch (err: any) {
       console.error('Login error:', err);
-      setError(err.message || "Login failed. Please check your credentials.");
+      setError(err.message || t("errors.loginFailed"));
     } finally {
       setLoading(false);
     }
@@ -119,8 +119,8 @@ export default function AgencyLoginPage() {
         <LoginContainer>
           <LoginCard>
             <Header>
-              <Title>Agency Login</Title>
-              <Subtitle>Sign in to manage your real estate agency</Subtitle>
+              <Title>{t("title")}</Title>
+              <Subtitle>{t("subtitle")}</Subtitle>
             </Header>
 
             {success && (
@@ -138,7 +138,7 @@ export default function AgencyLoginPage() {
 
             <Form onSubmit={handleSubmit}>
               <FormGroup>
-                <Label>Email Address</Label>
+                <Label>{t("form.email")}</Label>
                 <InputWrapper>
                   <InputIcon>
                     <FiMail />
@@ -148,14 +148,14 @@ export default function AgencyLoginPage() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="Enter your agency email"
+                    placeholder={t("form.emailPlaceholder")}
                     required
                   />
                 </InputWrapper>
               </FormGroup>
 
               <FormGroup>
-                <Label>Password</Label>
+                <Label>{t("form.password")}</Label>
                 <InputWrapper>
                   <InputIcon>
                     <FiLock />
@@ -165,7 +165,7 @@ export default function AgencyLoginPage() {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    placeholder="Enter your password"
+                    placeholder={t("form.passwordPlaceholder")}
                     required
                   />
                   <PasswordToggle
@@ -187,13 +187,13 @@ export default function AgencyLoginPage() {
                     onChange={handleChange}
                   />
                   <CheckboxLabel htmlFor="rememberMe">
-                    Remember me for 7 days
+                    {t("form.rememberMe")} for 7 days
                   </CheckboxLabel>
                 </CheckboxWrapper>
               </CheckboxGroup>
 
               <SubmitButton type="submit" disabled={loading}>
-                {loading ? "Signing in..." : "Sign In"}
+                {loading ? t("form.loggingIn") : t("form.login")}
                 <FiArrowRight />
               </SubmitButton>
             </Form>

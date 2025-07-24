@@ -269,7 +269,13 @@
     "errors": {
       "requiredFields": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
       "invalidCredentials": "Email ose fjalëkalim i pavlefshëm",
+      "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
+      "loginFailed": "Dështoi hyrja. Ju lutemi kontrolloni kredencialet tuaja.",
       "unknown": "Ndodhi një gabim i papritur"
+    },
+    "messages": {
+      "registrationSuccess": "Regjistrimi ishte i suksesshëm! Ju lutemi hyni me kredencialet tuaja.",
+      "loginSuccess": "Hyrja e suksesshme! Duke ridrejtuar..."
     },
     "benefits": {
       "title": "Përfitimet e Portalit të Agjencisë",
@@ -460,5 +466,76 @@
     "priceDataUnavailable": "Të dhënat për çmimin nuk janë të disponueshme",
     "noProperties": "Nuk ka prona",
     "viewProperties": "Shikoni pronat"
+  },
+  "MyAgency": {
+    "editProfile": "Ndrysho Profilin",
+    "settings": "Cilësimet",
+    "logout": "Dil",
+    "loggingOut": "Duke dalë...",
+    "stats": {
+      "activeListings": "Shpallje Aktive",
+      "agencySize": "Madhësia e Agjencisë",
+      "specializations": "Specializimet",
+      "status": "Statusi",
+      "active": "Aktiv",
+      "inactive": "Joaktiv"
+    },
+    "sizes": {
+      "small": "E vogël",
+      "medium": "Mesatare",
+      "large": "E madhe"
+    },
+    "sections": {
+      "aboutAgency": "Rreth Agjencisë",
+      "yourListings": "Shpalljet Tuaja",
+      "addNewListing": "Shto Shpallje të Re"
+    },
+    "listings": {
+      "noListings": "Ende nuk ka shpallje",
+      "noListingsText": "Filloni të ndërtoni portofolin tuaj të pasurive të patundshme duke shtuar shpalljen tuaj të parë.",
+      "addFirstListing": "Shtoni Shpalljen Tuaj të Parë",
+      "forSale": "Për Shitje",
+      "forRent": "Për Qira",
+      "view": "Shiko",
+      "edit": "Ndrysho",
+      "delete": "Fshi"
+    },
+    "editModal": {
+      "title": "Ndrysho Profilin e Agjencisë",
+      "companyName": "Emri i Kompanisë",
+      "companyNamePlaceholder": "Shkruani emrin e kompanisë",
+      "phone": "Telefoni",
+      "phonePlaceholder": "Shkruani numrin e telefonit",
+      "website": "Faqja Web",
+      "websitePlaceholder": "https://shembull.com",
+      "address": "Adresa",
+      "addressPlaceholder": "Shkruani adresën",
+      "city": "Qyteti",
+      "cityPlaceholder": "Shkruani qytetin",
+      "zipCode": "Kodi Postar",
+      "zipCodePlaceholder": "Shkruani kodin postar",
+      "contactPerson": "Personi i Kontaktit",
+      "contactPersonPlaceholder": "Shkruani emrin e personit të kontaktit",
+      "contactRole": "Roli i Kontaktit",
+      "contactRolePlaceholder": "Shkruanirolin e kontaktit",
+      "agencySize": "Madhësia e Agjencisë",
+      "logoUrl": "URL e Logos",
+      "logoUrlPlaceholder": "https://shembull.com/logo.jpg",
+      "description": "Përshkrimi",
+      "descriptionPlaceholder": "Shkruani përshkrimin e agjencisë",
+      "specializations": "Specializimet",
+      "cancel": "Anulo",
+      "saveChanges": "Ruaj Ndryshimet",
+      "saving": "Duke ruajtur..."
+    },
+    "specializationsList": {
+      "residentialSales": "Shitje Banimore",
+      "residentialRentals": "Qira Banimore",
+      "commercialProperties": "Prona Komerciale",
+      "officeSpaces": "Hapësira Zyresh",
+      "vacationRentals": "Qira për Pushime",
+      "luxuryProperties": "Prona Luksoze",
+      "propertyManagement": "Menaxhimi i Pronave"
+    }
   }
 }

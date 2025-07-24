@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { getClient } from './client';
-import { GET_AGENCY } from './queries';
+import { GET_AGENCY, GET_AGENCY_LISTINGS } from './queries';
 
 // Server-side function to get agency data using HTTP-only cookies
 export async function getServerAgencyData() {
@@ -26,20 +26,38 @@ export async function getServerAgencyData() {
       return { agency: null, isAuthenticated: false, error: 'Token expired' };
     }
 
-    // Fetch agency data from GraphQL with token in headers
-    const { data } = await getClient().query({
-      query: GET_AGENCY,
-      variables: { id: payload.agencyId },
-      context: {
-        headers: {
-          authorization: `Bearer ${token}`,
+    // Fetch agency data and listings from GraphQL with token in headers
+    const [agencyResult, listingsResult] = await Promise.all([
+      getClient().query({
+        query: GET_AGENCY,
+        variables: { id: payload.agencyId },
+        context: {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
         },
-      },
-      errorPolicy: 'all'
+        errorPolicy: 'all'
+      }),
+      getClient().query({
+        query: GET_AGENCY_LISTINGS,
+        variables: { agencyId: payload.agencyId },
+        context: {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        },
+        errorPolicy: 'all'
+      })
+    ]);
+
+    console.log('📊 Server-side data fetch results:', {
+      hasAgency: !!agencyResult.data?.agency,
+      listingsCount: listingsResult.data?.agencyListings?.length || 0
     });
 
     return { 
-      agency: data?.agency || null, 
+      agency: agencyResult.data?.agency || null,
+      listings: listingsResult.data?.agencyListings || [],
       isAuthenticated: true, 
       error: null 
     };

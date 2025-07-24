@@ -24,13 +24,55 @@ interface AgencyData {
   createdAt: string;
 }
 
+interface AgencyListing {
+  id: string;
+  title: string;
+  description?: string;
+  type: string;
+  transaction: string;
+  price: number;
+  size: number;
+  condition: string;
+  floor?: number;
+  totalFloors?: number;
+  rooms?: number;
+  bathrooms?: number;
+  amenities: string[];
+  address?: string;
+  images: string[];
+  contactName: string;
+  contactEmail: string;
+  contactPhone: string;
+  bookingNumber?: string;
+  createdAt: string;
+  expiresAt: string;
+  city: {
+    id: string;
+    name_en: string;
+    name_mk: string;
+    name_sq: string;
+    slug: string;
+  };
+  municipality?: {
+    id: string;
+    name_en: string;
+    name_mk: string;
+    name_sq: string;
+    isPopular: boolean;
+    averagePrice?: number;
+    image?: string;
+  };
+  isAgencyListing: boolean;
+}
+
 interface ClientWrapperProps {
   serverAgency: AgencyData | null;
+  serverListings: AgencyListing[] | null;
   serverAuth: boolean;
   locale: string;
 }
 
-export default function ClientWrapper({ serverAgency, serverAuth, locale }: ClientWrapperProps) {
+export default function ClientWrapper({ serverAgency, serverListings, serverAuth, locale }: ClientWrapperProps) {
   const router = useRouter();
   const [checkedLocalStorage, setCheckedLocalStorage] = useState(false);
 
@@ -61,6 +103,7 @@ export default function ClientWrapper({ serverAgency, serverAuth, locale }: Clie
     return (
       <MyAgencyClient 
         agencyData={serverAgency}
+        agencyListings={serverListings || []}
         isAuthenticated={true}
       />
     );
@@ -72,6 +115,7 @@ export default function ClientWrapper({ serverAgency, serverAuth, locale }: Clie
     return (
       <MyAgencyClient 
         agencyData={null}
+        agencyListings={[]}
         isAuthenticated={false}
       />
     );

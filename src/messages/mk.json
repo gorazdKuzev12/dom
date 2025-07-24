@@ -259,7 +259,7 @@
       "emailPlaceholder": "Внесете ја вашата деловна е-пошта",
       "password": "Лозинка",
       "passwordPlaceholder": "Внесете ја вашата лозинка",
-      "rememberMe": "Запомни ме",
+      "rememberMe": "Запомни ме 7 дена",
       "forgotPassword": "Заборавена лозинка?",
       "login": "Најави се",
       "loggingIn": "Најавување...",
@@ -269,7 +269,13 @@
     "errors": {
       "requiredFields": "Ве молиме пополнете ги сите задолжителни полиња",
       "invalidCredentials": "Невалидна е-пошта или лозинка",
+      "invalidEmail": "Ве молиме внесете валидна е-пошта адреса",
+      "loginFailed": "Најавувањето не успеа. Ве молиме проверете ги вашите податоци.",
       "unknown": "Се појави неочекувана грешка"
+    },
+    "messages": {
+      "registrationSuccess": "Регистрацијата е успешна! Ве молиме најавете се со вашите податоци.",
+      "loginSuccess": "Успешна најава! Пренасочување..."
     },
     "benefits": {
       "title": "Придобивки од порталот за агенции",
@@ -460,5 +466,76 @@
     "priceDataUnavailable": "Нема податоци за цена",
     "noProperties": "Нема имоти",
     "viewProperties": "Види имоти"
+  },
+  "MyAgency": {
+    "editProfile": "Уреди Профил",
+    "settings": "Подесувања",
+    "logout": "Одјави се",
+    "loggingOut": "Се одјавува...",
+    "stats": {
+      "activeListings": "Активни Огласи",
+      "agencySize": "Големина на Агенција",
+      "specializations": "Специјализации",
+      "status": "Статус",
+      "active": "Активна",
+      "inactive": "Неактивна"
+    },
+    "sizes": {
+      "small": "Мала",
+      "medium": "Средна",
+      "large": "Голема"
+    },
+    "sections": {
+      "aboutAgency": "За Агенцијата",
+      "yourListings": "Вашите Огласи",
+      "addNewListing": "Додај Нов Оглас"
+    },
+    "listings": {
+      "noListings": "Сè уште нема огласи",
+      "noListingsText": "Започнете да го градите вашето портфолио на недвижности со додавање на вашиот прв оглас.",
+      "addFirstListing": "Додајте го Вашиот Прв Оглас",
+      "forSale": "За Продажба",
+      "forRent": "За Изнајмување",
+      "view": "Види",
+      "edit": "Уреди",
+      "delete": "Избриши"
+    },
+    "editModal": {
+      "title": "Уреди Профил на Агенција",
+      "companyName": "Име на Компанија",
+      "companyNamePlaceholder": "Внесете име на компанија",
+      "phone": "Телефон",
+      "phonePlaceholder": "Внесете телефонски број",
+      "website": "Веб-страница",
+      "websitePlaceholder": "https://пример.com",
+      "address": "Адреса",
+      "addressPlaceholder": "Внесете адреса",
+      "city": "Град",
+      "cityPlaceholder": "Внесете град",
+      "zipCode": "Поштенски Број",
+      "zipCodePlaceholder": "Внесете поштенски број",
+      "contactPerson": "Контакт Лице",
+      "contactPersonPlaceholder": "Внесете име на контакт лице",
+      "contactRole": "Функција на Контакт",
+      "contactRolePlaceholder": "Внесете функција на контакт",
+      "agencySize": "Големина на Агенција",
+      "logoUrl": "URL на Лого",
+      "logoUrlPlaceholder": "https://пример.com/лого.jpg",
+      "description": "Опис",
+      "descriptionPlaceholder": "Внесете опис на агенцијата",
+      "specializations": "Специјализации",
+      "cancel": "Откажи",
+      "saveChanges": "Зачувај Промени",
+      "saving": "Се зачувува..."
+    },
+    "specializationsList": {
+      "residentialSales": "Продажба на Станбени Објекти",
+      "residentialRentals": "Изнајмување на Станбени Објекти",
+      "commercialProperties": "Комерцијални Недвижности",
+      "officeSpaces": "Канцелариски Простори",
+      "vacationRentals": "Изнајмување за Одмор",
+      "luxuryProperties": "Луксузни Недвижности",
+      "propertyManagement": "Управување со Недвижности"
+    }
   }
 }

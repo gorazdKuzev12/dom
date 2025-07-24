@@ -393,6 +393,14 @@ function PostPropertyForm() {
         agencyId: isAgencyLoggedIn ? agencyData?.id : null,
       };
 
+      console.log('🏗️ Creating listing with input:', {
+        title: input.title,
+        agencyId: input.agencyId,
+        isAgencyLoggedIn,
+        agencyDataId: agencyData?.id,
+        agencyCompany: agencyData?.companyName
+      });
+
       // Create the listing
       const { data } = await createListing({ variables: { input } });
       

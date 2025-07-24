@@ -86,12 +86,13 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
 }
 
 export default async function MyAgencyPage({ params }: { params: PageParams }) {
-  // Try to fetch agency data server-side using HTTP-only cookies
-  const { agency, isAuthenticated, error } = await getServerAgencyData();
+  // Try to fetch agency data and listings server-side using HTTP-only cookies
+  const { agency, listings, isAuthenticated, error } = await getServerAgencyData();
   
   console.log('🔍 Server-side auth check:', { 
     isAuthenticated, 
     hasAgency: !!agency, 
+    listingsCount: listings?.length || 0,
     error: error || 'None' 
   });
   
@@ -101,6 +102,7 @@ export default async function MyAgencyPage({ params }: { params: PageParams }) {
       <ApolloWrapper>
         <ClientWrapper 
           serverAgency={agency}
+          serverListings={listings}
           serverAuth={isAuthenticated}
           locale={params.locale}
         />

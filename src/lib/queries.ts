@@ -450,6 +450,76 @@ export const GET_AGENCY = gql`
   }
 `;
 
+export const GET_AGENCY_LISTINGS = gql`
+  query GetAgencyListings($agencyId: ID!) {
+    agencyListings(agencyId: $agencyId) {
+      id
+      title
+      description
+      type
+      transaction
+      price
+      size
+      condition
+      floor
+      totalFloors
+      rooms
+      bathrooms
+      amenities
+      address
+      images
+      contactName
+      contactEmail
+      contactPhone
+      bookingNumber
+      createdAt
+      expiresAt
+      city {
+        id
+        name_en
+        name_mk
+        name_sq
+        slug
+      }
+      municipality {
+        id
+        name_en
+        name_mk
+        name_sq
+        isPopular
+        averagePrice
+        image
+      }
+      isAgencyListing
+    }
+  }
+`;
+
+export const UPDATE_AGENCY = gql`
+  mutation UpdateAgency($id: ID!, $input: UpdateAgencyInput!) {
+    updateAgency(id: $id, input: $input) {
+      id
+      companyName
+      email
+      phone
+      website
+      address
+      city
+      zipCode
+      contactPerson
+      contactRole
+      agencySize
+      logo
+      description
+      specializations
+      isVerified
+      isActive
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const CREATE_BLOG_POST = gql`
   mutation CreateBlogPost($input: CreateBlogPostInput!) {
     createBlogPost(input: $input) {
