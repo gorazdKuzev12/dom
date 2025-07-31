@@ -407,6 +407,22 @@ export const LOGIN_USER = gql`
   }
 `;
 
+export const UPDATE_USER = gql`
+  mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {
+    updateUser(id: $id, input: $input) {
+      id
+      name
+      email
+      phone
+      isVerified
+      isActive
+      isGuest
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const GET_USER = gql`
   query GetUser($id: ID!) {
     user(id: $id) {

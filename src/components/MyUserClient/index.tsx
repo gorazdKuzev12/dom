@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import styled from "styled-components";
 import { FiUser, FiMail, FiPhone, FiSettings, FiLogOut, FiCheck, FiEdit3, FiEye, FiTrash2, FiPlus, FiHome, FiCalendar, FiX, FiSave, FiMapPin, FiShield } from "react-icons/fi";
 import { useRouter } from "next/navigation";
-import { GET_USER, GET_USER_LISTINGS } from "@/lib/queries";
+import { GET_USER, GET_USER_LISTINGS, UPDATE_USER } from "@/lib/queries";
 
 interface UserData {
   id: string;
@@ -152,6 +152,12 @@ export default function MyUserClient({ userData: initialUserData, userListings: 
     }
   });
 
+  const [updateUserMutation] = useMutation(UPDATE_USER, {
+    onError: (error) => {
+      console.error('Update user error:', error);
+    }
+  });
+
   const handleLogout = async () => {
     setLogoutLoading(true);
     
@@ -186,12 +192,39 @@ export default function MyUserClient({ userData: initialUserData, userListings: 
   const handleUpdateSubmit = async () => {
     setUpdateLoading(true);
     try {
-      // Here you would call an UPDATE_USER mutation when it's implemented
-      console.log('Would update user with:', editFormData);
+      const currentData = initialUserData || data?.user;
+      if (!currentData) {
+        throw new Error('No user data available');
+      }
+
+      await updateUserMutation({
+        variables: {
+          id: currentData.id,
+          input: editFormData
+        },
+        // Update the cache with the new data
+        update: (cache, { data: mutationData }) => {
+          if (mutationData?.updateUser) {
+            // Update the GET_USER query cache
+            cache.writeQuery({
+              query: GET_USER,
+              variables: { id: currentData.id },
+              data: { user: mutationData.updateUser }
+            });
+          }
+        }
+      });
+
+      console.log('✅ User profile updated successfully');
       setShowEditModal(false);
-      // You can add the actual mutation here when it's implemented in the backend
+      
+      // Optionally refetch the user data to ensure consistency
+      if (refetch) {
+        refetch();
+      }
     } catch (error) {
       console.error('Update error:', error);
+      alert('Failed to update profile. Please try again.');
     } finally {
       setUpdateLoading(false);
     }
