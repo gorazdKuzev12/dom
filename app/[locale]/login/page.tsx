@@ -36,9 +36,9 @@ export default function LoginPage() {
   useEffect(() => {
     // Check if user was redirected from registration
     if (searchParams.get('registered') === 'true') {
-      setSuccess("Registration successful! Please login with your credentials.");
+      setSuccess(t("messages.registrationSuccess") || "Registration successful! Please login with your credentials.");
     }
-  }, [searchParams]);
+  }, [searchParams, t]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -51,12 +51,12 @@ export default function LoginPage() {
 
   const validateForm = (): boolean => {
     if (!formData.email || !formData.password) {
-      setError("Please fill in all required fields");
+      setError(t("errors.requiredFields") || "Please fill in all required fields");
       return false;
     }
     
     if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setError("Please enter a valid email address");
+      setError(t("errors.invalidEmail") || "Please enter a valid email address");
       return false;
     }
     
@@ -78,11 +78,15 @@ export default function LoginPage() {
             email: formData.email,
             password: formData.password,
           }
+        },
+        // Ensure credentials (cookies) are included
+        context: {
+          credentials: 'include'
         }
       });
 
       if (result.data?.loginUser) {
-        // Store the token and user data
+        // Store the token and user data (backup for client-side auth)
         const { token, user } = result.data.loginUser;
         
         if (formData.rememberMe) {
@@ -93,12 +97,16 @@ export default function LoginPage() {
           sessionStorage.setItem('userData', JSON.stringify(user));
         }
         
-        // Redirect to home page or dashboard
-        router.push('/');
+        setSuccess(t("messages.loginSuccess") || "Login successful! Redirecting...");
+        
+        // Small delay to ensure cookie is set before redirect
+        setTimeout(() => {
+          router.push('/my-user');
+        }, 500);
       }
     } catch (err: any) {
       console.error('Login error:', err);
-      setError(err.message || "Login failed. Please check your credentials.");
+      setError(err.message || t("errors.loginFailed") || "Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }
@@ -111,8 +119,8 @@ export default function LoginPage() {
         <LoginContainer>
           <LoginCard>
             <Header>
-              <Title>Welcome Back</Title>
-              <Subtitle>Sign in to your dom.mk account</Subtitle>
+              <Title>{t("title") || "Welcome Back"}</Title>
+              <Subtitle>{t("subtitle") || "Sign in to your dom.mk account"}</Subtitle>
             </Header>
 
             {success && (
@@ -130,7 +138,7 @@ export default function LoginPage() {
 
             <Form onSubmit={handleSubmit}>
               <FormGroup>
-                <Label>Email Address</Label>
+                <Label>{t("form.email") || "Email Address"}</Label>
                 <InputWrapper>
                   <InputIcon>
                     <FiMail />
@@ -140,14 +148,14 @@ export default function LoginPage() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="Enter your email"
+                    placeholder={t("form.emailPlaceholder") || "Enter your email"}
                     required
                   />
                 </InputWrapper>
               </FormGroup>
 
               <FormGroup>
-                <Label>Password</Label>
+                <Label>{t("form.password") || "Password"}</Label>
                 <InputWrapper>
                   <InputIcon>
                     <FiLock />
@@ -157,7 +165,7 @@ export default function LoginPage() {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    placeholder="Enter your password"
+                    placeholder={t("form.passwordPlaceholder") || "Enter your password"}
                     required
                   />
                   <PasswordToggle
@@ -179,21 +187,21 @@ export default function LoginPage() {
                     onChange={handleChange}
                   />
                   <CheckboxLabel htmlFor="rememberMe">
-                    Remember me for 7 days
+                    {t("form.rememberMe") || "Remember me for 7 days"}
                   </CheckboxLabel>
                 </CheckboxWrapper>
               </CheckboxGroup>
 
               <SubmitButton type="submit" disabled={loading}>
-                {loading ? "Signing in..." : "Sign In"}
+                {loading ? (t("form.loggingIn") || "Signing in...") : (t("form.login") || "Sign In")}
                 <FiArrowRight />
               </SubmitButton>
             </Form>
 
             <RegisterLink>
-              Don't have an account?{" "}
+              {t("form.noAccount") || "Don't have an account?"}{" "}
               <Link href="/register">
-                Create one here
+                {t("form.registerNow") || "Create one here"}
               </Link>
             </RegisterLink>
           </LoginCard>
@@ -206,7 +214,7 @@ export default function LoginPage() {
 
 const PageWrapper = styled.div`
   min-height: 100vh;
-  background: #f8fafc;
+  background: rgb(239, 239, 239);
   display: flex;
   flex-direction: column;
 `;
@@ -221,14 +229,15 @@ const MainContent = styled.div`
 
 const LoginContainer = styled.div`
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
 `;
 
 const LoginCard = styled.div`
   background: white;
-  border-radius: 16px;
-  padding: 2.5rem 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
 `;
 
 const Header = styled.div`
@@ -237,21 +246,21 @@ const Header = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: #1a1a1a;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
   margin-bottom: 0.5rem;
 `;
 
 const Subtitle = styled.p`
-  color: #64748b;
-  font-size: 0.95rem;
+  color: #666;
+  font-size: 1rem;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
 `;
 
 const FormGroup = styled.div`
@@ -261,9 +270,9 @@ const FormGroup = styled.div`
 `;
 
 const Label = styled.label`
-  font-size: 0.9rem;
   font-weight: 500;
-  color: #475569;
+  color: #333;
+  font-size: 0.9rem;
 `;
 
 const InputWrapper = styled.div`
@@ -275,30 +284,26 @@ const InputWrapper = styled.div`
 const InputIcon = styled.div`
   position: absolute;
   left: 1rem;
-  color: #94a3b8;
-  display: flex;
-  align-items: center;
+  color: #999;
+  z-index: 1;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 0.875rem 1rem 0.875rem 2.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  color: #1a1a1a;
-  background: #f8fafc;
+  padding: 0.875rem 1rem 0.875rem 3rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 12px;
+  font-size: 1rem;
   transition: all 0.2s ease;
 
   &:focus {
     outline: none;
-    border-color: #0d9488;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
   }
 
   &::placeholder {
-    color: #94a3b8;
+    color: #999;
   }
 `;
 
@@ -307,22 +312,19 @@ const PasswordToggle = styled.button`
   right: 1rem;
   background: none;
   border: none;
-  color: #94a3b8;
+  color: #999;
   cursor: pointer;
-  padding: 0.25rem;
-  display: flex;
-  align-items: center;
-  transition: color 0.2s ease;
-
+  padding: 0.5rem;
+  
   &:hover {
-    color: #0d9488;
+    color: #667eea;
   }
 `;
 
 const CheckboxGroup = styled.div`
   display: flex;
   align-items: center;
-  margin: 0.5rem 0;
+  justify-content: space-between;
 `;
 
 const CheckboxWrapper = styled.div`
@@ -332,53 +334,41 @@ const CheckboxWrapper = styled.div`
 `;
 
 const Checkbox = styled.input`
-  width: 1rem;
-  height: 1rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 4px;
-  cursor: pointer;
-  accent-color: #0d9488;
+  width: 16px;
+  height: 16px;
+  accent-color: #667eea;
 `;
 
 const CheckboxLabel = styled.label`
   font-size: 0.9rem;
-  color: #475569;
+  color: #666;
   cursor: pointer;
 `;
 
 const SubmitButton = styled.button`
-  width: 100%;
-  padding: 0.875rem;
-  background: #0d9488;
+  background: linear-gradient(135deg, #0c4240 0%,rgb(48, 155, 151) 100%);
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 500;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  transition: all 0.2s ease;
 
-  &:hover {
-    background: #0f766e;
-    transform: translateY(-1px);
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
   }
 
   &:disabled {
-    background: #94a3b8;
+    opacity: 0.7;
     cursor: not-allowed;
     transform: none;
-  }
-
-  svg {
-    transition: transform 0.2s ease;
-  }
-
-  &:hover svg {
-    transform: translateX(2px);
   }
 `;
 
@@ -386,41 +376,39 @@ const RegisterLink = styled.p`
   text-align: center;
   margin-top: 1.5rem;
   font-size: 0.9rem;
-  color: #475569;
+  color: #666;
 
   a {
-    color: #0d9488;
+    color: #0c4240;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s ease;
 
     &:hover {
-      color: #0f766e;
+      color: rgb(48, 155, 151);
     }
   }
 `;
 
 const ErrorMessage = styled.div`
-  background: #fee2e2;
-  color: #dc2626;
-  padding: 0.875rem;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 0.75rem 1rem;
   border-radius: 8px;
+  margin-bottom: 1.5rem;
   font-size: 0.9rem;
-  margin-bottom: 1rem;
 `;
 
 const SuccessMessage = styled.div`
-  background: #dcfce7;
-  color: #16a34a;
-  padding: 0.875rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-
-  svg {
-    flex-shrink: 0;
-  }
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
 `; 

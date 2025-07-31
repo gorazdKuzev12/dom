@@ -407,6 +407,74 @@ export const LOGIN_USER = gql`
   }
 `;
 
+export const GET_USER = gql`
+  query GetUser($id: ID!) {
+    user(id: $id) {
+      id
+      name
+      email
+      phone
+      isVerified
+      isActive
+      isGuest
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_USER_LISTINGS = gql`
+  query GetUserListings($userId: ID!) {
+    userListings(userId: $userId) {
+      id
+      title
+      description
+      type
+      transaction
+      price
+      size
+      condition
+      floor
+      totalFloors
+      rooms
+      bathrooms
+      amenities
+      address
+      images
+      contactName
+      contactEmail
+      contactPhone
+      bookingNumber
+      createdAt
+      expiresAt
+      cityId
+      municipalityId
+      city {
+        id
+        name_en
+        name_mk
+        name_sq
+        slug
+      }
+      municipality {
+        id
+        name_en
+        name_mk
+        name_sq
+        isPopular
+        averagePrice
+        image
+      }
+      isAgencyListing
+    }
+  }
+`;
+
+// Note: These queries need to be added to the backend GraphQL schema and resolvers
+// Add to backend/graphql/schema.js Query type:
+// user(id: ID!): User
+// userListings(userId: ID!): [Listing!]!
+
 export const GET_AGENCIES = gql`
   query GetAgencies {
     agencies {

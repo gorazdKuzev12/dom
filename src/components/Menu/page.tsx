@@ -245,6 +245,10 @@ export default function Menu() {
                     </>
                   ) : (
                     <>
+                      <DropdownItem href={`/${locale}/my-user`}>
+                        <FiUser size={16} />
+                        <span>{t("myProfile")}</span>
+                      </DropdownItem>
                       <AgencyInfo>
                         <AgencyName>{userData?.name}</AgencyName>
                         <AgencyEmail>{userData?.email}</AgencyEmail>
@@ -404,6 +408,10 @@ export default function Menu() {
               </>
             ) : (
               <>
+                <MobileLink href={`/${locale}/my-user`}>
+                  <FiUser size={20} />
+                  <span>{t("myProfile")}</span>
+                </MobileLink>
                 <MobileAgencyInfo>
                   <AgencyName>{userData?.name}</AgencyName>
                   <AgencyEmail>{userData?.email}</AgencyEmail>

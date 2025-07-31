@@ -10,6 +10,7 @@
     "postWithoutLogin": "Publiko pronën (pa hyrje)",
     "agencyLogin": "Hyrja për agjencitë",
     "myAgency": "Agjencia Ime",
+    "myProfile": "Profili Im",
     "agency": "Agjencia",
     "account": "Llogaria",
     "register": "Regjistrohu",
@@ -249,13 +250,18 @@
       "login": "Hyni",
       "loggingIn": "Duke hyrë...",
       "noAccount": "Nuk keni llogari?",
-      "createOne": "Krijoni një këtu"
+      "registerNow": "Krijoni një këtu"
     },
     "errors": {
       "requiredFields": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
       "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
       "invalidCredentials": "Hyrja dështoi. Ju lutemi kontrolloni kredencialet tuaja.",
+      "loginFailed": "Dështoi hyrja. Ju lutemi kontrolloni kredencialet tuaja.",
       "unknown": "Ndodhi një gabim i papritur"
+    },
+    "messages": {
+      "registrationSuccess": "Regjistrimi ishte i suksesshëm! Ju lutemi hyni me kredencialet tuaja.",
+      "loginSuccess": "Hyrja e suksesshme! Duke ridrejtuar..."
     }
   },
   "AgencyLogin": {
@@ -299,190 +305,116 @@
     }
   },
   "PostProperty": {
-    "title": "Posto pronën",
-    "subtitle": "Plotësoni detajet për të listuar pronën tuaj",
-    "steps": {
-      "details": "Detajet",
-      "media": "Media",
-      "publish": "Publiko"
-    },
-    "contactInfo": {
-      "title": "Informacioni i kontaktit",
-      "fullName": "Emri i plotë",
-      "fullNamePlaceholder": "Shkruani emrin tuaj të plotë",
-      "email": "Adresa e emailit",
-      "emailPlaceholder": "Shkruani adresën tuaj të emailit",
-      "phone": "Numri i telefonit",
-      "phonePlaceholder": "Shkruani numrin tuaj të telefonit"
-    },
-    "propertyDetails": {
-      "title": "Detajet e pronës",
-      "listingTitle": "Titulli",
-      "listingTitlePlaceholder": "p.sh. Apartament i rehatshëm në Qendër",
-      "propertyType": "Lloji i pronës",
-      "types": {
-        "apartment": "Apartament",
-        "house": "Shtëpi",
-        "room": "Dhomë",
-        "office": "Zyrë",
-        "villa": "Vilë",
-        "garage": "Garazh",
-        "storageRoom": "Dhomë ruajtjeje",
-        "commercial": "Komerciale",
-        "land": "Tokë",
-        "building": "Ndërtesë",
-        "holiday": "Për pushime",
-        "studio": "Studio"
-      },
-      "listingType": "Lloji i listimit",
-      "listingTypes": {
-        "rent": "Me qira",
-        "buy": "Për shitje"
-      },
+    "title": "Publiko Pronën Tënde",
+    "subtitle": "Listo pronën tënde për shitje ose me qira në dom.mk",
+    "form": {
+      "title": "Titulli i Pronës",
+      "titlePlaceholder": "p.sh., Apartament modern me 2 dhoma gjumi dhe ballkon",
+      "description": "Përshkrimi i Pronës",
+      "descriptionPlaceholder": "Përshkruani pronën tuaj në detaje...",
       "price": "Çmimi",
-      "pricePlaceholder": "Çmimi (€)",
-      "size": "Sipërfaqja",
-      "sizePlaceholder": "Sipërfaqja (m²)",
-      "condition": "Gjendja",
-      "conditions": {
-        "new": "E re",
-        "renovated": "E rinovuar",
-        "needsRenovation": "Ka nevojë për rinovim"
-      },
+      "pricePlaceholder": "Vendos çmimin",
+      "currency": "Valuta",
+      "size": "Madhësia (m²)",
+      "sizePlaceholder": "Madhësia e pronës",
+      "rooms": "Numri i Dhomave",
+      "bathrooms": "Numri i Banjove",
       "floor": "Kati",
-      "floorPlaceholder": "Numri i katit",
-      "totalFloors": "Totali i kateve",
-      "totalFloorsPlaceholder": "Numri total i kateve",
-      "rooms": "Dhomat",
-      "roomsPlaceholder": "Numri i dhomave",
-      "bathrooms": "Banjot",
-      "bathroomsPlaceholder": "Numri i banjove",
-      "shareWith": "Ndaj apartamentin me",
-      "shareWithOptions": {
-        "ONE_PERSON": "1 person",
-        "TWO_PEOPLE": "2 persona",
-        "THREE_OR_MORE": "3 ose më shumë persona"
-      },
-      "roomCharacteristics": "Karakteristikat e dhomës",
-      "couplesAllowed": "Çiftet lejohen",
-      "minorsAllowed": "Të mituri lejohen",
-      "streetFacingWindow": "Dritare me pamje nga rruga",
-      "privateToilet": "Tualet privat",
-      "bedType": "Lloji i shtratit",
-      "bedTypes": {
-        "SINGLE": "Shtrat i vetëm",
-        "DOUBLE": "Shtrat i dyfishtë",
-        "SHARED_ROOM": "Dhomë e përbashkët"
-      },
-      "garageFeatures": "Karakteristikat e garazhit",
-      "motorbikeGarage": "Garazh për motor",
-      "automaticDoor": "Derë automatike",
-      "securitySystemAndGuards": "Sistemi i sigurisë dhe rojë",
-      "landType": "Lloji i tokës",
-      "landTypes": {
-        "DEVELOPED": "E zhvilluar",
-        "BUILDABLE": "E ndërtueshme",
-        "NON_BUILDING": "Jo për ndërtim"
-      }
-    },
-    "location": {
-      "title": "Vendndodhja",
+      "totalFloors": "Katët Totale",
+      "condition": "Gjendja",
+      "amenities": "Komoditetet",
+      "images": "Fotot e Pronës",
+      "contactInfo": "Informacionet e Kontaktit",
+      "name": "Emri Juaj",
+      "email": "Adresa e Email-it",
+      "phone": "Numri i Telefonit",
+      "address": "Adresa e Pronës",
       "city": "Qyteti",
-      "selectCity": "Zgjidhni qytetin",
       "municipality": "Komuna",
-      "selectMunicipality": "Zgjidhni komunën",
-      "noMunicipalities": "Nuk ka komuna të disponueshme për këtë qytet",
-      "selectCityFirst": "Ju lutemi zgjidhni qytetin së pari",
-      "cities": {
-        "skopje": "Shkup",
-        "bitola": "Manastir",
-        "kumanovo": "Kumanovë",
-        "ohrid": "Ohër",
-        "tetovo": "Tetovë"
-      },
-      "address": "Adresa",
-      "addressPlaceholder": "Shkruani adresën e pronës"
+      "submit": "Publiko Pronën",
+      "posting": "Duke publikuar..."
     },
-    "amenities": {
-      "title": "Pajisjet",
-      "balcony": "Ballkon",
-      "heating": "Ngrohje",
-      "air_conditioning": "Kondicionim",
-      "furnished": "I mobiluar",
-      "elevator": "Ashensor",
-      "parking": "Parking",
-      "garden": "Kopsht",
-      "swimming_pool": "Pishinë",
-      "internet": "Internet/WiFi",
-      "laundry": "Dhomë larjeje",
-      "dishwasher": "Makinë larëse enësh",
-      "security": "Siguri",
-      "storage": "Hapësirë ruajtjeje",
-      "pet_friendly": "Miqësor ndaj kafshëve",
-      "terrace": "Terrasë",
-      "fireplace": "Oxhak",
-      "cable_tv": "TV kabllore",
-      "washing_machine": "Makinë larëse"
+    "conditions": {
+      "NEW": "E re",
+      "GOOD": "Gjendje e mirë",
+      "NEEDS_RENOVATION": "Ka nevojë për rinovim"
     },
-    "description": {
-      "title": "Përshkrimi",
-      "placeholder": "Përshkruani pronën tuaj në detaje..."
+    "amenitiesList": {
+      "BALCONY": "Ballkon",
+      "HEATING": "Ngrohje",
+      "AIR_CONDITIONING": "Kondicionim ajri",
+      "FURNISHED": "E mobiluar",
+      "ELEVATOR": "Ashensor",
+      "PARKING": "Parking",
+      "GARDEN": "Kopsht",
+      "SWIMMING_POOL": "Pishinë",
+      "INTERNET": "Internet",
+      "LAUNDRY": "Lavanderi",
+      "DISHWASHER": "Makina larëse enësh",
+      "SECURITY": "Siguria",
+      "STORAGE": "Magazinim",
+      "PET_FRIENDLY": "Miqësore me kafshë shtëpiake",
+      "TERRACE": "Terracë",
+      "FIREPLACE": "Oxhak",
+      "CABLE_TV": "TV kabllor",
+      "WASHING_MACHINE": "Makina larëse"
     },
-    "media": {
-      "title": "Fotografitë",
-      "subtitle": "Shtoni fotografi të pronës suaj",
-      "dragDrop": "Tërhiqni dhe lëshoni fotografi këtu ose klikoni për të ngarkuar",
-      "dropHere": "Lëshoni fotografi këtu!",
-      "uploading": "Duke ngarkuar imazhe...",
-      "addMorePhotos": "Shtoni më shumë fotografi",
-      "choosePhotos": "Zgjidhni fotografi",
-      "currentPhotos": "Fotografi aktuale",
-      "maxPhotos": "Fotografi maks.",
-      "recommendedPhotos": "Ngarkoni 5-10 fotografi për rezultate më të mira",
-      "maxSize": "Madhësia maksimale e skedarit: 5MB",
-      "formats": "Formatet e mbështetura: JPG, PNG",
-      "selectedPhotos": "Fotografi të zgjedhura",
-      "tip1": "Filloni me foton më të mirë të jashtme si foto kryesore",
-      "tip2": "Përfshini fotografi të të gjitha dhomave, kuzhinës dhe banjove",
-      "tip3": "Tregoni pronën nga kënde të ndryshme dhe në ndriçim të mirë"
-    },
-    "buttons": {
-      "back": "Prapa",
-      "next": "Tjetër",
-      "publish": "Publiko listimin"
-    },
-    "controlMode": {
-      "fullControlMode": "Modaliteti i kontrollit të plotë",
-      "agencyControlMode": "Modaliteti i kontrollit të agjencisë",
-      "loggedInAs": "I kyçur si",
-      "verified": "✓ I verifikuar",
-      "agencyVerified": "✓ Agjenci e verifikuar"
-    },
-    "loginBenefits": {
-      "title": "Nuk Kërkohet Kyçje - Publiko Menjëherë!",
-      "description": "Mund ta publikoni pronën tuaj tani pa krijuar një llogari. Do t'ju japim një numër rezervimi për të menaxhuar gjithçka. Por nëse dëshironi edhe më shumë kontroll, krijimi i një llogarie ju jep:",
-      "goodNews": "Lajme të mira!",
-      "benefits": {
-        "editListings": "✓ Editoni dhe përditësoni listimet tuaja në çdo kohë nga paneli",
-        "viewAnalytics": "✓ Shikoni analitika të detajuara dhe statistika vizitorësh",
-        "saveFavorites": "✓ Ruani dhe organizoni prona të preferuara",
-        "manageMultiple": "✓ Menaxhoni disa listime në një vend",
-        "prioritySupport": "✓ Merrni mbështetje prioritare dhe njoftimet",
-        "noBookingNumbers": "✓ Nuk ka nevojë të mbani mend numrat e rezervimit"
-      },
-      "note": "💡 Gjithmonë mund të krijoni një llogari më vonë dhe të lidhni listimet tuaja ekzistuese!",
-      "actions": {
-        "login": "Kyçu",
-        "register": "Krijo Llogari"
-      }
+    "success": {
+      "title": "Prona u Publikua me Sukses!",
+      "message": "Prona juaj është listuar në dom.mk",
+      "bookingNumber": "Numri i Rezervimit",
+      "manageTip": "Ruajeni këtë numër rezervimi për të menaxhuar listimin tuaj më vonë",
+      "backToHome": "Kthehu te Shtëpia"
     },
     "errors": {
-      "required": "Ju lutemi plotësoni të gjitha fushat e detyrueshme",
-      "invalidEmail": "Ju lutemi shkruani një adresë emaili të vlefshme",
-      "invalidPhone": "Ju lutemi shkruani një numër telefoni të vlefshëm",
-      "uploadFailed": "Ngarkimi i fotografive dështoi",
-      "maxPhotos": "Lejohen maksimum 10 fotografi",
-      "minPhotos": "Ju lutemi shtoni të paktën një fotografi"
+      "required": "Kjo fushë është e detyrueshme",
+      "invalidEmail": "Ju lutemi vendosni një adresë email të vlefshme",
+      "invalidPhone": "Ju lutemi vendosni një numër telefoni të vlefshëm",
+      "minImages": "Ju lutemi ngarkoni të paktën një foto",
+      "maxImages": "Maksimumi 10 foto janë të lejuara",
+      "networkError": "Gabim në rrjet. Ju lutemi provoni përsëri.",
+      "serverError": "Gabim serveri. Ju lutemi provoni përsëri më vonë."
+    }
+  },
+  "MyUser": {
+    "title": "Profili Im",
+    "editProfile": "Ndrysho Profilin",
+    "logout": "Dil",
+    "loggingOut": "Duke dalë...",
+    "verifiedUser": "Përdorues i Verifikuar",
+    "stats": {
+      "activeListings": "Listime Aktive",
+      "memberSince": "Anëtar Që Prej",
+      "accountStatus": "Statusi i Llogarisë",
+      "verified": "I Verifikuar",
+      "pending": "Në Pritje"
+    },
+    "listings": {
+      "title": "Listimet e Mia",
+      "addNew": "Shto Listim të Ri",
+      "empty": {
+        "title": "Ende pa listime",
+        "description": "Filloni duke publikuar listimin tuaj të parë të pronës",
+        "button": "Publikoni Pronën Tuaj të Parë"
+      },
+      "actions": {
+        "view": "Shiko",
+        "edit": "Ndrysho",
+        "delete": "Fshij"
+      }
+    },
+    "editModal": {
+      "title": "Ndrysho Profilin",
+      "name": "Emri",
+      "email": "Email",
+      "phone": "Telefoni",
+      "cancel": "Anulo",
+      "save": "Ruaj Ndryshimet",
+      "saving": "Duke ruajtur..."
+    },
+    "messages": {
+      "authRequired": "Kërkohet autentikimi",
+      "userNotFound": "Të dhënat e përdoruesit nuk u gjetën"
     }
   },
   "MyAgency": {
