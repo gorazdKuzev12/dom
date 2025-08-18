@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import {
   FiSearch,
@@ -103,6 +103,11 @@ export default function ZoneListingsPage({
   const [propertyType, setPropertyType] = useState("All");
   const [activeFiltersCount, setActiveFiltersCount] = useState(0);
 
+  // Force a single deterministic locale for currency to avoid hydration mismatches
+  const currencyFormatter = useMemo(() => {
+    return new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' });
+  }, []);
+
   console.log(municipalityName);
   // Calculate active filters count
   useEffect(() => {
@@ -147,10 +152,7 @@ export default function ZoneListingsPage({
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat(locale, {
-      style: "currency",
-      currency: "EUR",
-    }).format(price);
+    return currencyFormatter.format(price);
   };
 
   // Pagination helper functions
@@ -302,7 +304,7 @@ export default function ZoneListingsPage({
                       <Subtitle>
                         {listing.type} in {municipalityName}
                       </Subtitle>
-                      <Price>{formatPrice(listing.price)}</Price>
+                      <Price>{formatPrice(listing?.price ?? 0)}</Price>
                       <Title>{listing.title}</Title>
                       <InfoRow>
                         {listing.size} m²
