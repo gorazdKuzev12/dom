@@ -35,6 +35,12 @@ interface Listing {
   createdAt: string;
   cityId: string;
   municipalityId: string;
+  agency?: {
+    id: string;
+    companyName: string;
+    logo?: string;
+  };
+  isAgencyListing: boolean;
 }
 
 interface City {
@@ -233,9 +239,9 @@ export default function ZoneListingsPage({
           </FilterButton>
         </MobileFilterBar>
 
-        <Main mobileFiltersOpen={mobileFiltersOpen}>
+        <Main $mobileFiltersOpen={mobileFiltersOpen}>
           {/* Sidebar for filters */}
-          <SidebarContainer mobileFiltersOpen={mobileFiltersOpen}>
+          <SidebarContainer $mobileFiltersOpen={mobileFiltersOpen}>
             <MobileFilterHeader>
               <BackButton onClick={toggleMobileFilters}>
                 <FiChevronLeft size={20} />
@@ -280,9 +286,15 @@ export default function ZoneListingsPage({
                   >
                     <CardImageContainer>
                       {listing.images && listing.images.length > 0 ? (
-                        <CardImage src="/so.png" alt="Property placeholder" />
+                        <CardImage src={listing.images[0]} alt={listing.title} />
                       ) : (
                         <CardImage src="/so.png" alt="Property placeholder" />
+                      )}
+                      {listing.isAgencyListing && listing.agency && (
+                        <AgencyBadge>
+                          <AgencyIcon>🏢</AgencyIcon>
+                          <AgencyName>{listing.agency.companyName}</AgencyName>
+                        </AgencyBadge>
                       )}
                     </CardImageContainer>
 
@@ -432,7 +444,7 @@ const FilterBadge = styled.span`
   font-weight: 700;
 `;
 
-const Main = styled.div<{ mobileFiltersOpen: boolean }>`
+const Main = styled.div<{ $mobileFiltersOpen: boolean }>`
   display: flex;
   padding: 2rem;
   gap: 2rem;
@@ -441,12 +453,12 @@ const Main = styled.div<{ mobileFiltersOpen: boolean }>`
   @media (max-width: 768px) {
     padding: 1rem;
     flex-direction: column;
-    transform: ${({ mobileFiltersOpen }) =>
-      mobileFiltersOpen ? "translateX(0)" : "translateX(0)"};
+    transform: ${({ $mobileFiltersOpen }) =>
+      $mobileFiltersOpen ? "translateX(0)" : "translateX(0)"};
   }
 `;
 
-const SidebarContainer = styled.div<{ mobileFiltersOpen: boolean }>`
+const SidebarContainer = styled.div<{ $mobileFiltersOpen: boolean }>`
   width: 300px;
   background: #fff;
   border-radius: 12px;
@@ -464,8 +476,8 @@ const SidebarContainer = styled.div<{ mobileFiltersOpen: boolean }>`
     max-width: 350px;
     z-index: 1000;
     border-radius: 0;
-    transform: ${({ mobileFiltersOpen }) =>
-      mobileFiltersOpen ? "translateX(0)" : "translateX(-100%)"};
+    transform: ${({ $mobileFiltersOpen }) =>
+      $mobileFiltersOpen ? "translateX(0)" : "translateX(-100%)"};
   }
 `;
 
@@ -551,7 +563,7 @@ const ApplyFilterButton = styled.button`
   }
 `;
 
-const Overlay = styled.div<{ isVisible: boolean }>`
+const Overlay = styled.div<{ $isVisible: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -559,8 +571,8 @@ const Overlay = styled.div<{ isVisible: boolean }>`
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 999;
-  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
-  visibility: ${({ isVisible }) => (isVisible ? "visible" : "hidden")};
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
+  visibility: ${({ $isVisible }) => ($isVisible ? "visible" : "hidden")};
   transition: opacity 0.3s, visibility 0.3s;
 `;
 
@@ -792,4 +804,34 @@ const PaginationButton = styled.button`
     opacity: 0.5;
     background: #f9f9f9;
   }
+`;
+
+const AgencyBadge = styled.div`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(12, 66, 64, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+`;
+
+const AgencyIcon = styled.span`
+  font-size: 0.7rem;
+`;
+
+const AgencyName = styled.span`
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;

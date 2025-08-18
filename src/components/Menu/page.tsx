@@ -153,7 +153,7 @@ export default function Menu() {
   const currentLanguage = languages.find(lang => lang.value === locale);
 
   return (
-    <Navbar scrolled={scrolled}>
+    <Navbar $scrolled={scrolled}>
       <NavbarInner>
         {/* Logo */}
         <LogoWrapper>
@@ -359,17 +359,17 @@ export default function Menu() {
         <MobileBurger 
           onClick={() => setMobileOpen(!mobileOpen)} 
           aria-label="menu"
-          isOpen={mobileOpen}
+          $isOpen={mobileOpen}
         >
-          <BurgerLine isOpen={mobileOpen} line={1} />
-          <BurgerLine isOpen={mobileOpen} line={2} />
-          <BurgerLine isOpen={mobileOpen} line={3} />
+          <BurgerLine $isOpen={mobileOpen} line={1} />
+          <BurgerLine $isOpen={mobileOpen} line={2} />
+          <BurgerLine $isOpen={mobileOpen} line={3} />
           <ButtonRipple />
         </MobileBurger>
       </NavbarInner>
 
       {/* Mobile Drawer */}
-      <MobileDrawer isOpen={mobileOpen}>
+      <MobileDrawer $isOpen={mobileOpen}>
         <DrawerContent>
           <MobileMainActions>
             <MobileLink href={`/${locale}/buy/apartments/skopje/centar/listings`}>
@@ -535,13 +535,13 @@ const gradient = keyframes`
 
 /* ───────────── styled components ───────────── */
 
-const Navbar = styled.nav<{ scrolled: boolean }>`
+const Navbar = styled.nav<{ $scrolled: boolean }>`
   position: sticky;
   top: 0;
   z-index: 10000;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
-  ${props => props.scrolled ? css`
+  ${props => props.$scrolled ? css`
     transform: translateY(-2px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   ` : css`
@@ -958,7 +958,7 @@ const ActiveIndicator = styled.div`
   background: #0c4240;
 `;
 
-const MobileBurger = styled.button<{ isOpen: boolean }>`
+const MobileBurger = styled.button<{ $isOpen: boolean }>`
   display: none;
   position: relative;
   background: transparent;
@@ -979,27 +979,27 @@ const MobileBurger = styled.button<{ isOpen: boolean }>`
   }
 `;
 
-const BurgerLine = styled.div<{ isOpen: boolean; line: number }>`
+const BurgerLine = styled.div<{ $isOpen: boolean; line: number }>`
   width: 20px;
   height: 1.5px;
   background: #0c4240;
   border-radius: 1px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
-  ${props => props.isOpen && props.line === 1 && css`
+  ${props => props.$isOpen && props.line === 1 && css`
     transform: translateY(4.5px) rotate(45deg);
   `}
   
-  ${props => props.isOpen && props.line === 2 && css`
+  ${props => props.$isOpen && props.line === 2 && css`
     opacity: 0;
   `}
   
-  ${props => props.isOpen && props.line === 3 && css`
+  ${props => props.$isOpen && props.line === 3 && css`
     transform: translateY(-4.5px) rotate(-45deg);
   `}
 `;
 
-const MobileDrawer = styled.div<{ isOpen: boolean }>`
+const MobileDrawer = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   top: 100%;
   left: 0;
@@ -1008,9 +1008,9 @@ const MobileDrawer = styled.div<{ isOpen: boolean }>`
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   z-index: 999;
   
-  opacity: ${props => props.isOpen ? 1 : 0};
-  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
-  transform: ${props => props.isOpen ? 'translateY(0)' : 'translateY(-10px)'};
+  opacity: ${props => props.$isOpen ? 1 : 0};
+  visibility: ${props => props.$isOpen ? 'visible' : 'hidden'};
+  transform: ${props => props.$isOpen ? 'translateY(0)' : 'translateY(-10px)'};
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
   @media (min-width: 1025px) {

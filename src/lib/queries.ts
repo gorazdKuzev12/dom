@@ -86,6 +86,12 @@ export const LISTINGS_BY_MUNICIPALITY_FILTER = gql`
           name_mk
           name_sq
         }
+        agency {
+          id
+          companyName
+          logo
+        }
+        isAgencyListing
       }
       totalCount
       hasNextPage
@@ -133,6 +139,12 @@ export const GET_LISTING_BY_ID = gql`
         name_mk
         name_sq
       }
+      agency {
+        id
+        companyName
+        logo
+      }
+      isAgencyListing
     }
   }
 `;
@@ -176,6 +188,12 @@ export const GET_LISTING_BY_BOOKING_NUMBER = gql`
         name_mk
         name_sq
       }
+      agency {
+        id
+        companyName
+        logo
+      }
+      isAgencyListing
     }
   }
 `;
@@ -481,6 +499,11 @@ export const GET_USER_LISTINGS = gql`
         averagePrice
         image
       }
+      agency {
+        id
+        companyName
+        logo
+      }
       isAgencyListing
     }
   }
@@ -580,6 +603,11 @@ export const GET_AGENCY_LISTINGS = gql`
         isPopular
         averagePrice
         image
+      }
+      agency {
+        id
+        companyName
+        logo
       }
       isAgencyListing
     }

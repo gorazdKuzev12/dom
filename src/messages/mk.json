@@ -304,73 +304,184 @@
   "PostProperty": {
     "title": "Објави го твојот имот",
     "subtitle": "Наведи го твојот имот за продажба или под наем на dom.mk",
-    "form": {
-      "title": "Наслов на имотот",
-      "titlePlaceholder": "пр., Модерен стан со 2 спални со балкон",
-      "description": "Опис на имотот",
-      "descriptionPlaceholder": "Опишете го вашиот имот детално...",
-      "price": "Цена",
+    "steps": {
+      "details": "Контакт и детали",
+      "media": "Информации за имот",
+      "publish": "Објави"
+    },
+    "contactInfo": {
+      "title": "Контакт информации",
+      "fullName": "Целосно име",
+      "fullNamePlaceholder": "Внесете го вашето целосно име",
+      "email": "Е-пошта",
+      "emailPlaceholder": "Внесете ја вашата е-пошта",
+      "phone": "Телефонски број",
+      "phonePlaceholder": "Внесете го вашиот телефонски број"
+    },
+    "propertyDetails": {
+      "title": "Детали за имот",
+      "listingTitle": "Наслов на огласот",
+      "listingTitlePlaceholder": "пр., Модерен стан со 2 спални со балкон",
+      "propertyType": "Тип на имот",
+      "listingType": "Тип на оглас",
+      "price": "Цена (€)",
       "pricePlaceholder": "Внеси цена",
-      "currency": "Валута",
       "size": "Големина (м²)",
       "sizePlaceholder": "Големина на имотот",
-      "rooms": "Број на соби",
-      "bathrooms": "Број на бањи",
-      "floor": "Кат",
-      "totalFloors": "Вкупно катови",
       "condition": "Состојба",
-      "amenities": "Погодности",
-      "images": "Слики од имотот",
-      "contactInfo": "Контакт информации",
-      "name": "Твоето име",
-      "email": "Е-пошта",
-      "phone": "Телефонски број",
-      "address": "Адреса на имотот",
+      "floor": "Кат",
+      "floorPlaceholder": "Внесете број на кат",
+      "totalFloors": "Вкупно катови",
+      "totalFloorsPlaceholder": "Внесете вкупно катови",
+      "rooms": "Соби",
+      "roomsPlaceholder": "Број на соби",
+      "bathrooms": "Бањи",
+      "bathroomsPlaceholder": "Број на бањи",
+      "description": "Опис",
+      "descriptionPlaceholder": "Опишете го вашиот имот детално..."
+    },
+    "description": {
+      "title": "Опис",
+      "placeholder": "Опишете го вашиот имот детално..."
+    },
+    "propertyDetails": {
+      "types": {
+        "apartment": "Стан",
+        "house": "Куќа",
+        "room": "Соба",
+        "office": "Канцеларија",
+        "villa": "Вила",
+        "garage": "Гаража",
+        "storageRoom": "Складиште",
+        "commercial": "Комерцијално",
+        "land": "Парцела",
+        "building": "Зграда",
+        "holiday": "Празничен",
+        "studio": "Студио"
+      },
+      "listingTypes": {
+        "rent": "За наем",
+        "buy": "За продажба"
+      },
+      "conditions": {
+        "new": "Нов",
+        "renovated": "Реновиран",
+        "needsRenovation": "Потребна реновација"
+      },
+      "shareWith": "Сподели со",
+      "shareWithOptions": {
+        "ONE_PERSON": "Едно лице",
+        "TWO_PEOPLE": "Двајца луѓе",
+        "THREE_OR_MORE": "Тројца или повеќе"
+      },
+      "roomCharacteristics": "Карактеристики на собата",
+      "couplesAllowed": "Дозволени парови",
+      "minorsAllowed": "Дозволени малолетници",
+      "streetFacingWindow": "Прозорец кон улица",
+      "privateToilet": "Приватна тоалетна",
+      "bedType": "Тип на кревет",
+      "bedTypes": {
+        "SINGLE": "Единечен кревет",
+        "DOUBLE": "Двоен кревет",
+        "SHARED_ROOM": "Споделена соба"
+      },
+      "garageFeatures": "Карактеристики на гаража",
+      "motorbikeGarage": "Гаража за мотор",
+      "automaticDoor": "Автоматска врата",
+      "securitySystemAndGuards": "Систем за безбедност и чувари",
+      "landType": "Тип на парцела",
+      "landTypes": {
+        "DEVELOPED": "Развиена",
+        "BUILDABLE": "Градежна",
+        "NON_BUILDING": "Неградежна"
+      },
+      "select": "Избери..."
+    },
+    "location": {
+      "title": "Локација",
       "city": "Град",
+      "selectCity": "Избери град",
       "municipality": "Општина",
-      "submit": "Објави имот",
-      "posting": "Објавувам..."
+      "selectMunicipality": "Избери општина",
+      "address": "Адреса",
+      "addressPlaceholder": "Внесете адреса на имотот",
+      "noMunicipalities": "Нема достапни општини за овој град",
+      "selectCityFirst": "Ве молиме прво изберете град"
     },
-    "conditions": {
-      "NEW": "Нов",
-      "GOOD": "Добра состојба",
-      "NEEDS_RENOVATION": "Потребна реновација"
+    "amenities": {
+      "title": "Погодности",
+      "balcony": "Балкон",
+      "heating": "Греење",
+      "air_conditioning": "Климатизација",
+      "furnished": "Наместен",
+      "elevator": "Лифт",
+      "parking": "Паркинг",
+      "garden": "Градина",
+      "swimming_pool": "Базен",
+      "internet": "Интернет/WiFi",
+      "laundry": "Перална",
+      "dishwasher": "Машина за садови",
+      "security": "Систем за безбедност",
+      "storage": "Простор за складирање",
+      "pet_friendly": "Дозволени миленичиња",
+      "terrace": "Тераса",
+      "fireplace": "Камин",
+      "cable_tv": "Кабелска ТВ",
+      "washing_machine": "Машина за перење"
     },
-    "amenitiesList": {
-      "BALCONY": "Балкон",
-      "HEATING": "Греење",
-      "AIR_CONDITIONING": "Климатизација",
-      "FURNISHED": "Наместен",
-      "ELEVATOR": "Лифт",
-      "PARKING": "Паркинг",
-      "GARDEN": "Градина",
-      "SWIMMING_POOL": "Базен",
-      "INTERNET": "Интернет",
-      "LAUNDRY": "Перална",
-      "DISHWASHER": "Машина за садови",
-      "SECURITY": "Обезбедување",
-      "STORAGE": "Остава",
-      "PET_FRIENDLY": "Дозволени милениче",
-      "TERRACE": "Тераса",
-      "FIREPLACE": "Камин",
-      "CABLE_TV": "Кабелска ТВ",
-      "WASHING_MACHINE": "Машина за перење"
+    "media": {
+      "title": "Слики од имот",
+      "dragDrop": "Повлечете и пуштете слики тука, или кликнете за преглед",
+      "choosePhotos": "Избери слики",
+      "addMorePhotos": "Додај повеќе слики",
+      "uploading": "Се качува...",
+      "currentPhotos": "Тековни слики",
+      "maxPhotos": "Макс слики",
+      "recommendedPhotos": "Препорачано: 5-10 висококвалитетни слики",
+      "maxSize": "Макс големина: 5MB по слика",
+      "formats": "Формати: JPG, PNG, WebP",
+      "selectedPhotos": "Избрани слики",
+      "tip1": "Фотографирајте во добро осветлување",
+      "tip2": "Прикажете ги сите соби и клучни карактеристики",
+      "tip3": "Вклучете надворешни снимки ако е применливо"
     },
-    "success": {
-      "title": "Имотот е успешно објавен!",
-      "message": "Вашиот имот е наведен на dom.mk",
-      "bookingNumber": "Број за резервација",
-      "manageTip": "Зачувај го овој број за да го управуваш твојот оглас подоцна",
-      "backToHome": "Назад кон дома"
+    "buttons": {
+      "next": "Следно",
+      "back": "Назад",
+      "publish": "Објави имот"
+    },
+    "controlMode": {
+      "fullControlMode": "Режим на целосна контрола",
+      "agencyControlMode": "Режим на контрола на агенција",
+      "loggedInAs": "Најавен како",
+      "verified": "Верификуван",
+      "agencyVerified": "Верификувана агенција"
+    },
+    "loginBenefits": {
+      "title": "Добри вести! Можете да објавите и без сметка",
+      "goodNews": "Добри вести!",
+      "description": "Можете да го објавите вашиот имот веднаш без да креирате сметка. Сепак, креирањето на бесплатна сметка ви дава многу придобивки:",
+      "benefits": {
+        "editListings": "Уредувајте и ажурирајте ги вашите огласи во секое време",
+        "viewAnalytics": "Прегледајте детални аналитики и перформанси",
+        "saveFavorites": "Зачувајте и управувајте со омилени имоти",
+        "manageMultiple": "Лесно управувајте со повеќе имоти",
+        "prioritySupport": "Добијте приоритетна корисничка поддршка",
+        "noBookingNumbers": "Нема потреба да паметите броеви за резервација"
+      },
+      "note": "Секогаш можете да креирате сметка подоцна и да ги поврзете вашите постоечки огласи.",
+      "actions": {
+        "login": "Најавете се",
+        "register": "Регистрирајте се"
+      }
     },
     "errors": {
-      "required": "Ова поле е задолжително",
+      "required": "Ве молиме пополнете ги сите задолжителни полиња",
       "invalidEmail": "Ве молиме внесете валидна е-пошта",
-      "invalidPhone": "Ве молиме внесете валиден телефонски број",
-      "minImages": "Ве молиме качете најмалку една слика",
-      "maxImages": "Максимум 10 слики се дозволени",
-      "networkError": "Мрежна грешка. Обидете се повторно.",
-      "serverError": "Серверска грешка. Обидете се повторно подоцна."
+      "minPhotos": "Ве молиме качете најмалку една слика",
+      "maxPhotos": "Максимум 10 слики се дозволени",
+      "uploadFailed": "Неуспешно качување на слики. Обидете се повторно.",
+      "unknown": "Се појави неочекувана грешка. Обидете се повторно."
     }
   },
   "MyUser": {

@@ -58,6 +58,11 @@ interface UserListing {
     averagePrice?: number;
     image?: string;
   };
+  agency?: {
+    id: string;
+    companyName: string;
+    logo?: string;
+  };
   isAgencyListing: boolean;
 }
 
@@ -333,6 +338,12 @@ export default function MyUserClient({ userData: initialUserData, userListings: 
                       <PlaceholderImage>
                         <FiHome size={24} />
                       </PlaceholderImage>
+                    )}
+                    {listing.isAgencyListing && listing.agency && (
+                      <AgencyBadge>
+                        <AgencyIcon>🏢</AgencyIcon>
+                        <AgencyName>{listing.agency.companyName}</AgencyName>
+                      </AgencyBadge>
                     )}
                   </ListingImage>
                   
@@ -660,6 +671,7 @@ const ListingCard = styled.div`
 const ListingImage = styled.div`
   height: 200px;
   overflow: hidden;
+  position: relative;
 
   img {
     width: 100%;
@@ -872,4 +884,34 @@ const SaveButton = styled.button`
     opacity: 0.6;
     cursor: not-allowed;
   }
+`;
+
+const AgencyBadge = styled.div`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(12, 66, 64, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+`;
+
+const AgencyIcon = styled.span`
+  font-size: 0.7rem;
+`;
+
+const AgencyName = styled.span`
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `; 
