@@ -85,6 +85,7 @@ interface ListingResult {
 }
 
 interface StyledProps {
+  // Deprecated: use transient props ($active/$completed) in styled-components
   active?: boolean;
   completed?: boolean;
 }
@@ -94,6 +95,7 @@ interface FormGridProps {
 }
 
 interface InputProps {
+  // Deprecated: use transient prop $autoFilled
   autoFilled?: boolean;
 }
 
@@ -542,23 +544,23 @@ function PostPropertyForm() {
 
           <FormContainer>
             <ProgressBar>
-              <ProgressStep active={step >= 1} completed={step > 1}>
-                <StepCircle active={step >= 1} completed={step > 1}>
+              <ProgressStep $active={step >= 1} $completed={step > 1}>
+                <StepCircle $active={step >= 1} $completed={step > 1}>
                   {step > 1 ? <Check size={16} /> : "1"}
                 </StepCircle>
-                <StepLabel active={step >= 1}>{t("steps.details")}</StepLabel>
+                <StepLabel $active={step >= 1}>{t("steps.details")}</StepLabel>
               </ProgressStep>
-              <ProgressLine completed={step > 1} />
-              <ProgressStep active={step >= 2} completed={step > 2}>
-                <StepCircle active={step >= 2} completed={step > 2}>
+              <ProgressLine $completed={step > 1} />
+              <ProgressStep $active={step >= 2} $completed={step > 2}>
+                <StepCircle $active={step >= 2} $completed={step > 2}>
                   {step > 2 ? <Check size={16} /> : "2"}
                 </StepCircle>
-                <StepLabel active={step >= 2}>{t("steps.media")}</StepLabel>
+                <StepLabel $active={step >= 2}>{t("steps.media")}</StepLabel>
               </ProgressStep>
-              <ProgressLine completed={step > 2} />
-              <ProgressStep active={step >= 3}>
-                <StepCircle active={step >= 3}>3</StepCircle>
-                <StepLabel active={step >= 3}>{t("steps.publish")}</StepLabel>
+              <ProgressLine $completed={step > 2} />
+              <ProgressStep $active={step >= 3}>
+                <StepCircle $active={step >= 3}>3</StepCircle>
+                <StepLabel $active={step >= 3}>{t("steps.publish")}</StepLabel>
               </ProgressStep>
             </ProgressBar>
 
@@ -596,7 +598,7 @@ function PostPropertyForm() {
                           placeholder={t("contactInfo.fullNamePlaceholder")}
                           required
                           disabled={isUserLoggedIn || isAgencyLoggedIn}
-                          autoFilled={isUserLoggedIn || isAgencyLoggedIn}
+                          $autoFilled={isUserLoggedIn || isAgencyLoggedIn}
                         />
                       </FormGroup>
                       <FormGroup>
@@ -612,7 +614,7 @@ function PostPropertyForm() {
                           placeholder={t("contactInfo.emailPlaceholder")}
                           required
                           disabled={isUserLoggedIn || isAgencyLoggedIn}
-                          autoFilled={isUserLoggedIn || isAgencyLoggedIn}
+                          $autoFilled={isUserLoggedIn || isAgencyLoggedIn}
                         />
                       </FormGroup>
                       <FormGroup>
@@ -628,7 +630,7 @@ function PostPropertyForm() {
                           placeholder={t("contactInfo.phonePlaceholder")}
                           required
                           disabled={isUserLoggedIn || isAgencyLoggedIn}
-                          autoFilled={isUserLoggedIn || isAgencyLoggedIn}
+                          $autoFilled={isUserLoggedIn || isAgencyLoggedIn}
                         />
                       </FormGroup>
                     </FormGrid>
@@ -1113,7 +1115,7 @@ function PostPropertyForm() {
                       onDragOver={handleDragOver}
                       onDragLeave={handleDragLeave}
                       onDrop={handleDrop}
-                      isDragOver={isDragOver}
+                      $isDragOver={isDragOver}
                     >
                       <input
                         type="file"
@@ -1145,7 +1147,7 @@ function PostPropertyForm() {
                         </UploadSubtext>
                         {uploadingImages && (
                           <UploadProgressBar>
-                            <UploadProgressFill progress={uploadProgress} />
+                            <UploadProgressFill $progress={uploadProgress} />
                           </UploadProgressBar>
                         )}
                         <UploadButton 
@@ -1376,12 +1378,12 @@ const ProgressBar = styled.div`
   }
 `;
 
-const ProgressStep = styled.div<StyledProps>`
+const ProgressStep = styled.div<{ $active?: boolean; $completed?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  opacity: ${props => props.active ? 1 : 0.5};
+  opacity: ${props => props.$active ? 1 : 0.5};
   transition: opacity 0.3s ease;
 
   @media (max-width: 640px) {
@@ -1392,13 +1394,13 @@ const ProgressStep = styled.div<StyledProps>`
   }
 `;
 
-const StepCircle = styled.div<StyledProps>`
+const StepCircle = styled.div<{ $active?: boolean; $completed?: boolean }>`
   width: 32px;
   height: 32px;
   border-radius: 50%;
   background: ${props =>
-    props.completed ? "#0c4240" : props.active ? "#0c4240" : "#e1e5eb"};
-  color: ${props => (props.active ? "white" : "#777")};
+    props.$completed ? "#0c4240" : props.$active ? "#0c4240" : "#e1e5eb"};
+  color: ${props => (props.$active ? "white" : "#777")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1406,17 +1408,17 @@ const StepCircle = styled.div<StyledProps>`
   transition: all 0.3s ease;
 `;
 
-const StepLabel = styled.div<StyledProps>`
+const StepLabel = styled.div<{ $active?: boolean }>`
   font-size: 0.85rem;
   font-weight: 500;
-  color: ${props => (props.active ? "#0c4240" : "#777")};
+  color: ${props => (props.$active ? "#0c4240" : "#777")};
   transition: color 0.3s ease;
 `;
 
-const ProgressLine = styled.div<StyledProps>`
+const ProgressLine = styled.div<{ $completed?: boolean }>`
   flex-grow: 1;
   height: 2px;
-  background: ${props => (props.completed ? "#0c4240" : "#e1e5eb")};
+  background: ${props => (props.$completed ? "#0c4240" : "#e1e5eb")};
   margin: 0 0.5rem;
   transition: background 0.3s ease;
 
@@ -1480,14 +1482,14 @@ const Label = styled.label`
   }
 `;
 
-const Input = styled.input<InputProps>`
+const Input = styled.input<{ $autoFilled?: boolean }>`
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #e1e5eb;
   border-radius: 6px;
   font-size: 0.95rem;
   transition: all 0.2s ease;
-  background: ${props => props.autoFilled ? '#f0f9ff' : 'white'};
+  background: ${props => props.$autoFilled ? '#f0f9ff' : 'white'};
   position: relative;
 
   &:focus {
@@ -1640,11 +1642,11 @@ const AmenityLabel = styled.label`
   cursor: pointer;
 `;
 
-const UploadArea = styled.div<{ isDragOver?: boolean }>`
-  border: 2px dashed ${props => props.isDragOver ? '#0c4240' : '#e1e5eb'};
+const UploadArea = styled.div<{ $isDragOver?: boolean }>`
+  border: 2px dashed ${props => props.$isDragOver ? '#0c4240' : '#e1e5eb'};
   border-radius: 8px;
   padding: 2rem;
-  background: ${props => props.isDragOver ? '#f0f9ff' : '#f9fafb'};
+  background: ${props => props.$isDragOver ? '#f0f9ff' : '#f9fafb'};
   transition: all 0.2s ease;
   cursor: pointer;
   position: relative;
@@ -1654,7 +1656,7 @@ const UploadArea = styled.div<{ isDragOver?: boolean }>`
     background: #f0f9ff;
   }
 
-  ${props => props.isDragOver && `
+  ${props => props.$isDragOver && `
     transform: scale(1.02);
     box-shadow: 0 4px 12px rgba(12, 66, 64, 0.15);
   `}
@@ -2170,12 +2172,12 @@ const UploadProgressBar = styled.div`
   margin: 1rem 0;
 `;
 
-const UploadProgressFill = styled.div<{ progress: number }>`
+const UploadProgressFill = styled.div<{ $progress: number }>`
   height: 100%;
   background: linear-gradient(90deg, #10b981 0%, #059669 100%);
   border-radius: 4px;
   transition: width 0.3s ease;
-  width: ${props => props.progress}%;
+  width: ${props => props.$progress}%;
 `;
 
 // Image Preview Components

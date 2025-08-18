@@ -49,27 +49,27 @@ export default function RegisterPage() {
 
   const validateForm = (): boolean => {
     if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-      setError("Please fill in all required fields");
+      setError(t("errors.requiredFields"));
       return false;
     }
     
     if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setError("Please enter a valid email address");
+      setError(t("errors.invalidEmail"));
       return false;
     }
     
     if (formData.password.length < 8) {
-      setError("Password must be at least 8 characters long");
+      setError(t("errors.passwordTooShort"));
       return false;
     }
     
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("errors.passwordMismatch"));
       return false;
     }
     
     if (!formData.agreeTerms) {
-      setError("Please agree to the terms and conditions");
+      setError(t("errors.agreeTermsRequired"));
       return false;
     }
     
@@ -119,8 +119,8 @@ export default function RegisterPage() {
         <RegisterContainer>
           <RegisterCard>
             <Header>
-              <Title>Create Your Account</Title>
-              <Subtitle>Join dom.mk to save favorites and manage your listings</Subtitle>
+              <Title>{t("title")}</Title>
+              <Subtitle>{t("subtitle")}</Subtitle>
             </Header>
 
             {error && (
@@ -133,14 +133,14 @@ export default function RegisterPage() {
               <FormGroup>
                 <Label>
                   <FiUser size={16} />
-                  Full Name
+                  {t("form.fullName")}
                 </Label>
                 <Input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="Enter your full name"
+                  placeholder={t("form.fullNamePlaceholder")}
                   required
                 />
               </FormGroup>
@@ -148,14 +148,14 @@ export default function RegisterPage() {
               <FormGroup>
                 <Label>
                   <FiMail size={16} />
-                  Email Address
+                  {t("form.email")}
                 </Label>
                 <Input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="Enter your email address"
+                  placeholder={t("form.emailPlaceholder")}
                   required
                 />
               </FormGroup>
@@ -163,14 +163,14 @@ export default function RegisterPage() {
               <FormGroup>
                 <Label>
                   <FiPhone size={16} />
-                  Phone Number (Optional)
+                  {t("form.phone")}
                 </Label>
                 <Input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="Enter your phone number"
+                  placeholder={t("form.phonePlaceholder")}
                 />
               </FormGroup>
 
@@ -178,7 +178,7 @@ export default function RegisterPage() {
                 <FormGroup>
                   <Label>
                     <FiLock size={16} />
-                    Password
+                    {t("form.password")}
                   </Label>
                   <PasswordWrapper>
                     <Input
@@ -186,7 +186,7 @@ export default function RegisterPage() {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      placeholder="Create a password"
+                      placeholder={t("form.passwordPlaceholder")}
                       required
                     />
                     <PasswordToggle
@@ -199,14 +199,14 @@ export default function RegisterPage() {
                 </FormGroup>
 
                 <FormGroup>
-                  <Label>Confirm Password</Label>
+                  <Label>{t("form.confirmPassword")}</Label>
                   <PasswordWrapper>
                     <Input
                       type={showConfirmPassword ? "text" : "password"}
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      placeholder="Confirm your password"
+                      placeholder={t("form.confirmPasswordPlaceholder")}
                       required
                     />
                     <PasswordToggle
@@ -230,29 +230,20 @@ export default function RegisterPage() {
                     required
                   />
                   <CheckboxLabel htmlFor="agreeTerms">
-                    I agree to dom.mk's{" "}
-                    <Link href="/terms" target="_blank">
-                      Terms of Service
-                    </Link>{" "}
-                    and{" "}
-                    <Link href="/privacy" target="_blank">
-                      Privacy Policy
-                    </Link>
+                    {t("form.agreeTerms")}
                   </CheckboxLabel>
                 </CheckboxWrapper>
               </CheckboxGroup>
 
               <SubmitButton type="submit" disabled={loading}>
-                {loading ? "Creating Account..." : "Create Account"}
+                {loading ? t("form.creating") : t("form.submit")}
                 <FiArrowRight />
               </SubmitButton>
             </Form>
 
             <LoginLink>
-              Already have an account?{" "}
-              <Link href="/login">
-                Sign in here
-              </Link>
+              {t("form.alreadyHaveAccount")} {" "}
+              <Link href="/login">{t("form.signInHere")}</Link>
             </LoginLink>
           </RegisterCard>
         </RegisterContainer>
@@ -423,7 +414,7 @@ const CheckboxLabel = styled.label`
 `;
 
 const SubmitButton = styled.button`
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  background: #0c4240;
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -439,9 +430,9 @@ const SubmitButton = styled.button`
   margin-top: 1rem;
 
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+    background: #0a3533;
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 10px 25px rgba(12, 66, 64, 0.3);
   }
 
   &:disabled {
