@@ -5,18 +5,19 @@ import ArchitectProfileClient from "@/components/ArchitectProfile";
 import { Metadata } from "next";
 
 interface ArchitectPageProps {
-  params: {
+  params: Promise<{
     locale: string;
     id: string;
-  };
+  }>;
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: ArchitectPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
   try {
     const { data } = await getClient().query({
       query: GET_ARCHITECT_BY_ID,
-      variables: { id: params.id },
+      variables: { id: resolvedParams.id },
     });
 
     const architect = data.architectById;
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: ArchitectPageProps): Promise<
     }
 
     const getLocalizedText = (en?: string, mk?: string, sq?: string) => {
-      switch (params.locale) {
+      switch (resolvedParams.locale) {
         case 'mk': return mk || en || '';
         case 'sq': return sq || en || '';
         default: return en || '';
@@ -56,7 +57,7 @@ export async function generateMetadata({ params }: ArchitectPageProps): Promise<
         title,
         description,
         images: architect.profileImage ? [architect.profileImage] : [],
-        url: `https://dom.mk/${params.locale}/architects/${params.id}`,
+        url: `https://dom.mk/${resolvedParams.locale}/architects/${resolvedParams.id}`,
         type: 'profile',
       },
       twitter: {
@@ -66,11 +67,11 @@ export async function generateMetadata({ params }: ArchitectPageProps): Promise<
         images: architect.profileImage ? [architect.profileImage] : [],
       },
       alternates: {
-        canonical: `https://dom.mk/${params.locale}/architects/${params.id}`,
+        canonical: `https://dom.mk/${resolvedParams.locale}/architects/${resolvedParams.id}`,
         languages: {
-          'en': `https://dom.mk/en/architects/${params.id}`,
-          'mk': `https://dom.mk/mk/architects/${params.id}`,
-          'sq': `https://dom.mk/sq/architects/${params.id}`,
+          'en': `https://dom.mk/en/architects/${resolvedParams.id}`,
+          'mk': `https://dom.mk/mk/architects/${resolvedParams.id}`,
+          'sq': `https://dom.mk/sq/architects/${resolvedParams.id}`,
         },
       },
     };
@@ -83,12 +84,13 @@ export async function generateMetadata({ params }: ArchitectPageProps): Promise<
 }
 
 export default async function ArchitectPage({ params }: ArchitectPageProps) {
+  const resolvedParams = await params;
   let architect = null;
 
   try {
     const { data } = await getClient().query({
       query: GET_ARCHITECT_BY_ID,
-      variables: { id: params.id },
+      variables: { id: resolvedParams.id },
     });
     
     architect = data.architectById;
@@ -100,7 +102,7 @@ export default async function ArchitectPage({ params }: ArchitectPageProps) {
     notFound();
   }
 
-  return <ArchitectProfileClient architect={architect} locale={params.locale} />;
+  return <ArchitectProfileClient architect={architect} locale={resolvedParams.locale} />;
 }
 
 // Generate static params for common architect IDs (optional)

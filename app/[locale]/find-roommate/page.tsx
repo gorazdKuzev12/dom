@@ -8,8 +8,9 @@ interface PageParams {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
-  const { locale } = params;
+export async function generateMetadata({ params }: { params: Promise<PageParams> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const { locale } = resolvedParams;
   
   const titles = {
     en: "Find Your Perfect Roommate | DOM Real Estate",
@@ -154,14 +155,16 @@ export default async function FindRoommatePage({
   params,
   searchParams 
 }: { 
-  params: PageParams;
-  searchParams: SearchParams 
+  params: Promise<PageParams>;
+  searchParams: Promise<SearchParams> 
 }) {
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
   const client = getClient();
-  const { locale } = params;
+  const { locale } = resolvedParams;
   
   // Build filter from search params
-  const filter = buildFilter(searchParams);
+  const filter = buildFilter(resolvedSearchParams);
   
   try {
     // Fetch roommates and cities

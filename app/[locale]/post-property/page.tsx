@@ -4,9 +4,10 @@ import PostPropertyClient from "./PostPropertyClient";
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const { locale } = params;
+  const resolvedParams = await params;
+  const { locale } = resolvedParams;
 
   const titles: Record<string, string> = {
     en: "Post Your Property | dom.mk",

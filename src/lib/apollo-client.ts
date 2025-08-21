@@ -16,7 +16,11 @@ const authLink = setContext((_, { headers }) => {
   let token = null;
   
   if (typeof window !== 'undefined') {
-    token = localStorage.getItem('agencyToken') || sessionStorage.getItem('agencyToken');
+    // Check for both agency and user tokens
+    token = localStorage.getItem('agencyToken') || 
+            sessionStorage.getItem('agencyToken') ||
+            localStorage.getItem('userToken') || 
+            sessionStorage.getItem('userToken');
   }
 
   // return the headers to the context so httpLink can read them

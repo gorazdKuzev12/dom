@@ -2,6 +2,18 @@
 
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+
+interface FavoriteItem {
+  id: string;
+  title: string;
+  location: string;
+  price: string;
+  currency: string;
+  period: string;
+  size: string;
+  pricePerMeter: string;
+  image: string;
+}
 import {
   Heart,
   Trash2,
@@ -32,15 +44,15 @@ export default function ApartmentPage() {
 
   // Check if apartment is saved in localStorage on component mount
   useEffect(() => {
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    setSaved(favorites.some(fav => fav.id === 'current-apartment-id')); // Replace with actual apartment ID
+    const favorites: FavoriteItem[] = JSON.parse(localStorage.getItem('favorites') || '[]');
+    setSaved(favorites.some((fav: FavoriteItem) => fav.id === 'current-apartment-id')); // Replace with actual apartment ID
   }, []);
 
   const handleSave = () => {
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const favorites: FavoriteItem[] = JSON.parse(localStorage.getItem('favorites') || '[]');
     
     // Create apartment object
-    const apartment = {
+    const apartment: FavoriteItem = {
       id: 'current-apartment-id', // Replace with actual apartment ID
       title: 'Office for rent in Ronda de Sant Pere',
       location: 'La Dreta de l\'Eixample, Barcelona',
@@ -59,7 +71,7 @@ export default function ApartmentPage() {
       setSaved(true);
     } else {
       // Remove from favorites
-      const newFavorites = favorites.filter(fav => fav.id !== apartment.id);
+      const newFavorites = favorites.filter((fav: FavoriteItem) => fav.id !== apartment.id);
       localStorage.setItem('favorites', JSON.stringify(newFavorites));
       setSaved(false);
     }
@@ -426,7 +438,12 @@ const SubImagesGrid = styled.div`
   }
 `;
 
-const SubImage = styled.div`
+interface SubImageProps {
+  src: string;
+  overlay?: boolean;
+}
+
+const SubImage = styled.div<SubImageProps>`
   position: relative;
   width: 100%;
   height: 100%;
@@ -645,7 +662,11 @@ const AgentCompany = styled.div`
   color: #666;
 `;
 
-const ContactButton = styled.button`
+interface ContactButtonProps {
+  secondary?: boolean;
+}
+
+const ContactButton = styled.button<ContactButtonProps>`
   background: ${(props) => (props.secondary ? "white" : "#27795b")};
   color: ${(props) => (props.secondary ? "#27795b" : "white")};
   border: ${(props) => (props.secondary ? "1px solid #27795b" : "none")};
@@ -747,7 +768,11 @@ const ButtonRow = styled.div`
   gap: 0.8rem;
 `;
 
-const ActionButton = styled.button`
+interface ActionButtonProps {
+  primary?: boolean;
+}
+
+const ActionButton = styled.button<ActionButtonProps>`
   background: ${(props) => (props.primary ? "#3c3c3c" : "#f5f5f5")};
   color: ${(props) => (props.primary ? "white" : "#444")};
   padding: 0.6rem 1.2rem;

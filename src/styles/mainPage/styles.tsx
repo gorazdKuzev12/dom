@@ -425,12 +425,12 @@ export const ToggleButton = styled.button<{ $active?: boolean }>`
   }
 
   &:hover {
-    background: ${({ active }) => 
-      active 
+    background: ${({ $active }) => 
+      $active 
         ? 'linear-gradient(135deg, #0a3937 0%, #17524f 100%)' 
         : 'rgba(12, 66, 64, 0.08)'
     };
-    color: ${({ active }) => (active ? '#fff' : '#0c4240')};
+    color: ${({ $active }) => ($active ? '#fff' : '#0c4240')};
     transform: translateY(-1px);
   }
   

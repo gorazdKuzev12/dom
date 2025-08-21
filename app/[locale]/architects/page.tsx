@@ -4,12 +4,13 @@ import { GET_ALL_ARCHITECTS } from "@/lib/queries";
 import Footer from "@/components/Footer/page";
 
 interface ArchitectsPageProps {
-  params: {
+  params: Promise<{
     locale: string;
-  };
+  }>;
 }
 
 export default async function ArchitectsPage({ params }: ArchitectsPageProps) {
+  const resolvedParams = await params;
   let architects = [];
 
   try {
@@ -28,7 +29,7 @@ export default async function ArchitectsPage({ params }: ArchitectsPageProps) {
 
   return (
     <div>
-      <ArchitectsPageClient initialArchitects={architects} locale={params.locale} />
+      <ArchitectsPageClient initialArchitects={architects} locale={resolvedParams.locale} />
       <Footer />
     </div>
   );
@@ -45,7 +46,8 @@ export async function generateStaticParams() {
 
 // Add metadata for SEO
 export async function generateMetadata({ params }: ArchitectsPageProps) {
-  const locale = params.locale;
+  const resolvedParams = await params;
+  const locale = resolvedParams.locale;
   
   const titles = {
     en: "Architects in Macedonia - Professional Architectural Services | DOM.MK",

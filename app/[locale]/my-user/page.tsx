@@ -10,8 +10,9 @@ interface PageParams {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
-  const { locale } = params;
+export async function generateMetadata({ params }: { params: Promise<PageParams> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const { locale } = resolvedParams;
   
   const titles = {
     en: "My Profile | DOM Real Estate",
@@ -68,7 +69,9 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
   };
 }
 
-export default async function MyUserPage({ params }: { params: PageParams }) {
+export default async function MyUserPage({ params }: { params: Promise<PageParams> }) {
+  const resolvedParams = await params;
+  
   // Try to fetch user data and listings server-side using HTTP-only cookies
   const { user, listings, isAuthenticated, error } = await getServerUserData();
   
@@ -87,7 +90,7 @@ export default async function MyUserPage({ params }: { params: PageParams }) {
           serverUser={user}
           serverListings={listings}
           serverAuth={isAuthenticated}
-          locale={params.locale}
+          locale={resolvedParams.locale}
         />
       </ApolloWrapper>
       <Footer />

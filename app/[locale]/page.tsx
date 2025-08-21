@@ -34,8 +34,9 @@ const getLocalizedContent = (locale: string) => {
 };
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  const { locale } = params;
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const { locale } = resolvedParams;
   const content = getLocalizedContent(locale);
   
   // Create canonical URL
@@ -101,7 +102,7 @@ export async function generateMetadata({ params }: { params: { locale: string } 
   };
 }
 
-export default async function HomePage({ params }: HomePageProps) {
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   let cities = [];
 
   try {
