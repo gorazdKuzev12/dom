@@ -56,33 +56,46 @@ export const LISTINGS_BY_MUNICIPALITY_FILTER = gql`
   query ListingsByMunicipalityFilter(
     $name: String!
     $filter: ListingFilterInput
+    $limit: Int
+    $offset: Int
   ) {
-    listingsByMunicipalityFilter(name: $name, filter: $filter) {
-      id
-      title
-      price
-      rooms
-      bathrooms
-      size
-      images
-      createdAt 
-      type
-      transaction
-      cityId
-      municipalityId
-      city {
+    listingsByMunicipalityFilter(name: $name, filter: $filter, limit: $limit, offset: $offset) {
+      listings {
         id
-        name_en
-        name_mk
-        name_sq
-        slug
+        title
+        price
+        rooms
+        bathrooms
+        size
+        images
+        createdAt 
+        type
+        transaction
+        cityId
+        municipalityId
+        city {
+          id
+          name_en
+          name_mk
+          name_sq
+          slug
+        }
+        municipality {
+          id
+          name_en
+          name_mk
+          name_sq
+        }
+        agency {
+          id
+          companyName
+          logo
+        }
+        isAgencyListing
       }
-      municipality {
-        id
-        name_en
-        name_mk
-        name_sq
-      }
+      totalCount
+      hasNextPage
+      hasPreviousPage
     }
   }
 `;
@@ -126,6 +139,12 @@ export const GET_LISTING_BY_ID = gql`
         name_mk
         name_sq
       }
+      agency {
+        id
+        companyName
+        logo
+      }
+      isAgencyListing
     }
   }
 `;
@@ -169,6 +188,12 @@ export const GET_LISTING_BY_BOOKING_NUMBER = gql`
         name_mk
         name_sq
       }
+      agency {
+        id
+        companyName
+        logo
+      }
+      isAgencyListing
     }
   }
 `;
@@ -400,6 +425,95 @@ export const LOGIN_USER = gql`
   }
 `;
 
+export const UPDATE_USER = gql`
+  mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {
+    updateUser(id: $id, input: $input) {
+      id
+      name
+      email
+      phone
+      isVerified
+      isActive
+      isGuest
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_USER = gql`
+  query GetUser($id: ID!) {
+    user(id: $id) {
+      id
+      name
+      email
+      phone
+      isVerified
+      isActive
+      isGuest
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_USER_LISTINGS = gql`
+  query GetUserListings($userId: ID!) {
+    userListings(userId: $userId) {
+      id
+      title
+      description
+      type
+      transaction
+      price
+      size
+      condition
+      floor
+      totalFloors
+      rooms
+      bathrooms
+      amenities
+      address
+      images
+      contactName
+      contactEmail
+      contactPhone
+      bookingNumber
+      createdAt
+      expiresAt
+      cityId
+      municipalityId
+      city {
+        id
+        name_en
+        name_mk
+        name_sq
+        slug
+      }
+      municipality {
+        id
+        name_en
+        name_mk
+        name_sq
+        isPopular
+        averagePrice
+        image
+      }
+      agency {
+        id
+        companyName
+        logo
+      }
+      isAgencyListing
+    }
+  }
+`;
+
+// Note: These queries need to be added to the backend GraphQL schema and resolvers
+// Add to backend/graphql/schema.js Query type:
+// user(id: ID!): User
+// userListings(userId: ID!): [Listing!]!
+
 export const GET_AGENCIES = gql`
   query GetAgencies {
     agencies {
@@ -428,6 +542,81 @@ export const GET_AGENCIES = gql`
 export const GET_AGENCY = gql`
   query GetAgency($id: ID!) {
     agency(id: $id) {
+      id
+      companyName
+      email
+      phone
+      website
+      address
+      city
+      zipCode
+      contactPerson
+      contactRole
+      agencySize
+      logo
+      description
+      specializations
+      isVerified
+      isActive
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_AGENCY_LISTINGS = gql`
+  query GetAgencyListings($agencyId: ID!) {
+    agencyListings(agencyId: $agencyId) {
+      id
+      title
+      description
+      type
+      transaction
+      price
+      size
+      condition
+      floor
+      totalFloors
+      rooms
+      bathrooms
+      amenities
+      address
+      images
+      contactName
+      contactEmail
+      contactPhone
+      bookingNumber
+      createdAt
+      expiresAt
+      city {
+        id
+        name_en
+        name_mk
+        name_sq
+        slug
+      }
+      municipality {
+        id
+        name_en
+        name_mk
+        name_sq
+        isPopular
+        averagePrice
+        image
+      }
+      agency {
+        id
+        companyName
+        logo
+      }
+      isAgencyListing
+    }
+  }
+`;
+
+export const UPDATE_AGENCY = gql`
+  mutation UpdateAgency($id: ID!, $input: UpdateAgencyInput!) {
+    updateAgency(id: $id, input: $input) {
       id
       companyName
       email

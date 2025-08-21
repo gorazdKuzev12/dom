@@ -62,6 +62,12 @@ interface Listing {
     name_mk: string;
     name_sq: string;
   };
+  agency?: {
+    id: string;
+    companyName: string;
+    logo?: string;
+  };
+  isAgencyListing: boolean;
 }
 
 interface ListingClientProps {
@@ -76,8 +82,10 @@ export default function ListingClient({ listing, locale }: ListingClientProps) {
   const [showImageGallery, setShowImageGallery] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Create array of all images (we'll use so.png for all since that's what we're using)
-  const allImages = Array(8).fill('/so.png'); // Creating 8 placeholder images
+  // Create array of all images - use actual listing images or fallback to placeholder
+  const allImages = listing.images && listing.images.length > 0 
+    ? listing.images 
+    : ['/so.png']; // Fallback to single placeholder image if no images
 
   // Check if listing is saved in localStorage on component mount
   useEffect(() => {
@@ -130,7 +138,7 @@ export default function ListingClient({ listing, locale }: ListingClientProps) {
         period: listing.transaction === 'RENT' ? 'month' : '',
         size: listing.size.toString(),
         pricePerMeter: (listing.price / listing.size).toFixed(2),
-        image: '/so.png'
+        image: allImages[0] // Use first image from the actual listing images
       };
       favorites.push(favoriteItem);
       localStorage.setItem('favorites', JSON.stringify(favorites));
@@ -266,29 +274,37 @@ export default function ListingClient({ listing, locale }: ListingClientProps) {
 
       <Gallery>
         <ImageGrid>
-          <MainImage 
-            src="/so.png" 
-            onClick={() => openImageGallery(0)}
-            style={{ cursor: 'pointer' }}
-          />
+          <MainImageContainer>
+            <MainImage 
+              src={allImages[0]} 
+              onClick={() => openImageGallery(0)}
+              style={{ cursor: 'pointer' }}
+            />
+            {listing.isAgencyListing && listing.agency && (
+              <AgencyBadge>
+                <AgencyIcon>🏢</AgencyIcon>
+                <AgencyName>{listing.agency.companyName}</AgencyName>
+              </AgencyBadge>
+            )}
+          </MainImageContainer>
           <SubImagesGrid>
             <SubImage 
-              src="/so.png" 
+              src={allImages[1] || allImages[0]} 
               onClick={() => openImageGallery(1)}
               style={{ cursor: 'pointer' }}
             />
             <SubImage 
-              src="/so.png" 
+              src={allImages[2] || allImages[0]} 
               onClick={() => openImageGallery(2)}
               style={{ cursor: 'pointer' }}
             />
             <SubImage 
-              src="/so.png" 
+              src={allImages[3] || allImages[0]} 
               onClick={() => openImageGallery(3)}
               style={{ cursor: 'pointer' }}
             />
             <SubImage 
-              src="/so.png" 
+              src={allImages[4] || allImages[0]} 
               overlay
               onClick={() => openImageGallery(4)}
               style={{ cursor: 'pointer' }}
@@ -519,7 +535,7 @@ export default function ListingClient({ listing, locale }: ListingClientProps) {
                   key={index}
                   src={image}
                   alt={`Thumbnail ${index + 1}`}
-                  active={index === currentImageIndex}
+                  $active={index === currentImageIndex}
                   onClick={() => setCurrentImageIndex(index)}
                 />
               ))}
@@ -594,6 +610,12 @@ const ImageGrid = styled.div`
   }
 `;
 
+const MainImageContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
 const MainImage = styled.img`
   width: 100%;
   height: 500px;
@@ -608,6 +630,36 @@ const MainImage = styled.img`
   @media (max-width: 768px) {
     height: 250px;
   }
+`;
+
+const AgencyBadge = styled.div`
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(12, 66, 64, 0.95);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+`;
+
+const AgencyIcon = styled.span`
+  font-size: 0.75rem;
+`;
+
+const AgencyName = styled.span`
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const SubImagesGrid = styled.div`
@@ -844,7 +896,7 @@ const GalleryThumbnails = styled.div`
 `;
 
 interface GalleryThumbnailProps {
-  active: boolean;
+  $active: boolean;
 }
 
 const GalleryThumbnail = styled.img<GalleryThumbnailProps>`
@@ -854,8 +906,8 @@ const GalleryThumbnail = styled.img<GalleryThumbnailProps>`
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
-  opacity: ${props => props.active ? 1 : 0.6};
-  border: ${props => props.active ? '2px solid #27795b' : '2px solid transparent'};
+  opacity: ${props => props.$active ? 1 : 0.6};
+  border: ${props => props.$active ? '2px solid #27795b' : '2px solid transparent'};
   flex-shrink: 0;
 
   &:hover {

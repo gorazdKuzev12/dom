@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import {
   FiSearch,
@@ -14,7 +14,7 @@ import {
 import { BiSolidBuildingHouse } from "react-icons/bi";
 import Menu from "@/components/Menu/page";
 import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import PropertyFilters from "../PropertyFilters";
 
@@ -35,6 +35,12 @@ interface Listing {
   createdAt: string;
   cityId: string;
   municipalityId: string;
+  agency?: {
+    id: string;
+    companyName: string;
+    logo?: string;
+  };
+  isAgencyListing: boolean;
 }
 
 interface City {
@@ -63,6 +69,12 @@ interface ZoneListingsPageProps {
   citySlug: string;
   cities: City[];
   municipalities: Municipality[];
+  // Pagination props
+  currentPage: number;
+  totalCount: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  itemsPerPage: number;
 }
 
 export default function ZoneListingsPage({
@@ -72,9 +84,15 @@ export default function ZoneListingsPage({
   citySlug,
   cities,
   municipalities,
+  currentPage,
+  totalCount,
+  hasNextPage,
+  hasPreviousPage,
+  itemsPerPage,
 }: ZoneListingsPageProps) {
   const locale = useLocale();
   const router = useRouter();
+  const t = useTranslations('Listings');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("Buy");
@@ -84,6 +102,11 @@ export default function ZoneListingsPage({
   const [sizeMax, setSizeMax] = useState("");
   const [propertyType, setPropertyType] = useState("All");
   const [activeFiltersCount, setActiveFiltersCount] = useState(0);
+
+  // Force a single deterministic locale for currency to avoid hydration mismatches
+  const currencyFormatter = useMemo(() => {
+    return new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' });
+  }, []);
 
   console.log(municipalityName);
   // Calculate active filters count
@@ -129,10 +152,61 @@ export default function ZoneListingsPage({
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat(locale, {
-      style: "currency",
-      currency: "EUR",
-    }).format(price);
+    return currencyFormatter.format(price);
+  };
+
+  // Pagination helper functions
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
+  
+  const handlePageChange = (page: number) => {
+    const url = new URL(window.location.href);
+    if (page === 1) {
+      url.searchParams.delete('page');
+    } else {
+      url.searchParams.set('page', page.toString());
+    }
+    router.push(url.pathname + url.search);
+  };
+
+  const getResultsCountText = () => {
+    if (totalCount === 0) {
+      return t('pagination.noResults', { municipality: municipalityName });
+    } else if (totalCount === 1) {
+      return t('pagination.singleResult', { municipality: municipalityName });
+    } else if (totalPages <= 1) {
+      return t('pagination.resultsCount', { 
+        count: totalCount, 
+        municipality: municipalityName,
+        current: 1,
+        total: 1
+      });
+    } else {
+      return t('pagination.resultsCount', { 
+        count: totalCount, 
+        municipality: municipalityName,
+        current: currentPage,
+        total: totalPages
+      });
+    }
+  };
+
+  const generatePageNumbers = () => {
+    const pages = [];
+    const showPages = 5; // Show 5 page numbers at a time
+    
+    let startPage = Math.max(1, currentPage - Math.floor(showPages / 2));
+    let endPage = Math.min(totalPages, startPage + showPages - 1);
+    
+    // Adjust start page if we're near the end
+    if (endPage - startPage < showPages - 1) {
+      startPage = Math.max(1, endPage - showPages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    
+    return pages;
   };
 
   const toggleMobileFilters = () => {
@@ -167,9 +241,9 @@ export default function ZoneListingsPage({
           </FilterButton>
         </MobileFilterBar>
 
-        <Main mobileFiltersOpen={mobileFiltersOpen}>
+        <Main $mobileFiltersOpen={mobileFiltersOpen}>
           {/* Sidebar for filters */}
-          <SidebarContainer mobileFiltersOpen={mobileFiltersOpen}>
+          <SidebarContainer $mobileFiltersOpen={mobileFiltersOpen}>
             <MobileFilterHeader>
               <BackButton onClick={toggleMobileFilters}>
                 <FiChevronLeft size={20} />
@@ -196,7 +270,7 @@ export default function ZoneListingsPage({
           <ListArea>
             <ResultsHeader>
               <ResultsCount>
-                {listings.length} properties in {municipalityName}
+                {getResultsCountText()}
               </ResultsCount>
               <SortDropdown>
                 <option>Newest first</option>
@@ -214,9 +288,15 @@ export default function ZoneListingsPage({
                   >
                     <CardImageContainer>
                       {listing.images && listing.images.length > 0 ? (
-                        <CardImage src="/so.png" alt="Property placeholder" />
+                        <CardImage src={listing.images[0]} alt={listing.title} />
                       ) : (
                         <CardImage src="/so.png" alt="Property placeholder" />
+                      )}
+                      {listing.isAgencyListing && listing.agency && (
+                        <AgencyBadge>
+                          <AgencyIcon>🏢</AgencyIcon>
+                          <AgencyName>{listing.agency.companyName}</AgencyName>
+                        </AgencyBadge>
                       )}
                     </CardImageContainer>
 
@@ -224,7 +304,7 @@ export default function ZoneListingsPage({
                       <Subtitle>
                         {listing.type} in {municipalityName}
                       </Subtitle>
-                      <Price>{formatPrice(listing.price)}</Price>
+                      <Price>{formatPrice(listing?.price ?? 0)}</Price>
                       <Title>{listing.title}</Title>
                       <InfoRow>
                         {listing.size} m²
@@ -248,11 +328,42 @@ export default function ZoneListingsPage({
                 <EmptyTitle>No properties match your filters</EmptyTitle>
                 <EmptyDescription>
                   Try adjusting your filters to see more results
-                </EmptyDescription>
+                </EmptyDescription>  
                 <ResetButton onClick={clearAllFilters}>
                   Reset filters
                 </ResetButton>
               </EmptyState>
+            )}
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <PaginationContainer>
+                <PaginationButton 
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={!hasPreviousPage}
+                >
+                  {t('pagination.previous')}
+                </PaginationButton>
+                
+                <PaginationNumbers>
+                  {generatePageNumbers().map((pageNum) => (
+                    <PageNumber
+                      key={pageNum}
+                      $active={pageNum === currentPage}
+                      onClick={() => handlePageChange(pageNum)}
+                    >
+                      {pageNum}
+                    </PageNumber>
+                  ))}
+                </PaginationNumbers>
+                
+                <PaginationButton 
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={!hasNextPage}
+                >
+                  {t('pagination.next')}
+                </PaginationButton>
+              </PaginationContainer>
             )}
           </ListArea>
         </Main>
@@ -335,7 +446,7 @@ const FilterBadge = styled.span`
   font-weight: 700;
 `;
 
-const Main = styled.div<{ mobileFiltersOpen: boolean }>`
+const Main = styled.div<{ $mobileFiltersOpen: boolean }>`
   display: flex;
   padding: 2rem;
   gap: 2rem;
@@ -344,12 +455,12 @@ const Main = styled.div<{ mobileFiltersOpen: boolean }>`
   @media (max-width: 768px) {
     padding: 1rem;
     flex-direction: column;
-    transform: ${({ mobileFiltersOpen }) =>
-      mobileFiltersOpen ? "translateX(0)" : "translateX(0)"};
+    transform: ${({ $mobileFiltersOpen }) =>
+      $mobileFiltersOpen ? "translateX(0)" : "translateX(0)"};
   }
 `;
 
-const SidebarContainer = styled.div<{ mobileFiltersOpen: boolean }>`
+const SidebarContainer = styled.div<{ $mobileFiltersOpen: boolean }>`
   width: 300px;
   background: #fff;
   border-radius: 12px;
@@ -367,8 +478,8 @@ const SidebarContainer = styled.div<{ mobileFiltersOpen: boolean }>`
     max-width: 350px;
     z-index: 1000;
     border-radius: 0;
-    transform: ${({ mobileFiltersOpen }) =>
-      mobileFiltersOpen ? "translateX(0)" : "translateX(-100%)"};
+    transform: ${({ $mobileFiltersOpen }) =>
+      $mobileFiltersOpen ? "translateX(0)" : "translateX(-100%)"};
   }
 `;
 
@@ -454,7 +565,7 @@ const ApplyFilterButton = styled.button`
   }
 `;
 
-const Overlay = styled.div<{ isVisible: boolean }>`
+const Overlay = styled.div<{ $isVisible: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -462,8 +573,8 @@ const Overlay = styled.div<{ isVisible: boolean }>`
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 999;
-  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
-  visibility: ${({ isVisible }) => (isVisible ? "visible" : "hidden")};
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
+  visibility: ${({ $isVisible }) => ($isVisible ? "visible" : "hidden")};
   transition: opacity 0.3s, visibility 0.3s;
 `;
 
@@ -636,4 +747,93 @@ const ResetButton = styled.button`
   &:hover {
     background: #143823;
   }
+`;
+
+const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding: 2rem 0;
+`;
+
+const PaginationNumbers = styled.div`
+  display: flex;
+  gap: 0.5rem;
+`;
+
+const PageNumber = styled.button<{ $active: boolean }>`
+  width: 40px;
+  height: 40px;
+  border: 1px solid ${({ $active }) => ($active ? '#0c4240' : '#e0e0e0')};
+  background: ${({ $active }) => ($active ? '#0c4240' : 'white')};
+  color: ${({ $active }) => ($active ? 'white' : '#333')};
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: ${({ $active }) => ($active ? '600' : '400')};
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: ${({ $active }) => ($active ? '#143823' : '#f5f5f5')};
+    border-color: #0c4240;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+`;
+
+const PaginationButton = styled.button`
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #e0e0e0;
+  background: white;
+  color: #333;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: #f5f5f5;
+    border-color: #0c4240;
+    color: #0c4240;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background: #f9f9f9;
+  }
+`;
+
+const AgencyBadge = styled.div`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(12, 66, 64, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+`;
+
+const AgencyIcon = styled.span`
+  font-size: 0.7rem;
+`;
+
+const AgencyName = styled.span`
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;

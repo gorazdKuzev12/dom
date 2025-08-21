@@ -7,10 +7,15 @@
     "favorites": "Saved properties",
     "registerAgency": "Register as Agency",
     "properties": "Properties",
-  "postWithoutLogin": "Post Property (No Login required)",
+    "postWithoutLogin": "Post Property (No Login required)",
     "agencyLogin": "Agency Login",
     "myAgency": "My Agency",
-        "agency": " Agencies"
+    "myProfile": "My Profile",
+    "agency": "Agency",
+    "account": "Account",
+    "register": "Register",
+    "login": "Login",
+    "logout": "Logout"
   },
   "Roommates": {
     "title": "Find Your Perfect Roommate",
@@ -75,11 +80,18 @@
   "Filters": {
     "propertyType": "Property Type",
     "select": "Select...",
-    "house": "House",
     "apartment": "Apartment",
-    "villa": "Villa",
+    "house": "House",
+    "room": "Room",
     "office": "Office",
+    "villa": "Villa",
+    "garage": "Garage",
+    "storageRoom": "Storage Room",
+    "commercial": "Commercial",
     "land": "Land",
+    "building": "Building",
+    "holiday": "Holiday Rental",
+    "studio": "Studio",
     "priceRange": "Price Range",
     "min": "Min",
     "max": "Max",
@@ -222,13 +234,18 @@
       "login": "Sign In",
       "loggingIn": "Signing in...",
       "noAccount": "Don't have an account?",
-      "createOne": "Create one here"
+      "registerNow": "Create one here"
     },
     "errors": {
       "requiredFields": "Please fill in all required fields",
       "invalidEmail": "Please enter a valid email address",
       "invalidCredentials": "Login failed. Please check your credentials.",
+      "loginFailed": "Login failed. Please check your credentials.",
       "unknown": "An unexpected error occurred"
+    },
+    "messages": {
+      "registrationSuccess": "Registration successful! Please login with your credentials.",
+      "loginSuccess": "Login successful! Redirecting..."
     }
   },
   "AgencyLogin": {
@@ -239,17 +256,23 @@
       "emailPlaceholder": "Enter your business email",
       "password": "Password",
       "passwordPlaceholder": "Enter your password",
-      "rememberMe": "Remember me",
+      "rememberMe": "Remember me for 7 days",
       "forgotPassword": "Forgot password?",
-      "login": "Login",
-      "loggingIn": "Logging in...",
+      "login": "Sign In",
+      "loggingIn": "Signing in...",
       "noAccount": "Don't have an agency account?",
       "registerNow": "Register now"
     },
     "errors": {
       "requiredFields": "Please fill in all required fields",
       "invalidCredentials": "Invalid email or password",
+      "invalidEmail": "Please enter a valid email address",
+      "loginFailed": "Login failed. Please check your credentials.",
       "unknown": "An unexpected error occurred"
+    },
+    "messages": {
+      "registrationSuccess": "Registration successful! Please login with your credentials.",
+      "loginSuccess": "Login successful! Redirecting..."
     },
     "benefits": {
       "title": "Agency Portal Benefits",
@@ -264,10 +287,10 @@
   },
   "PostProperty": {
     "title": "Post Your Property",
-    "subtitle": "Fill in the details to list your property",
+    "subtitle": "List your property for sale or rent on dom.mk",
     "steps": {
-      "details": "Details",
-      "media": "Media",
+      "details": "Contact & Details",
+      "media": "Property Info",
       "publish": "Publish"
     },
     "contactInfo": {
@@ -281,58 +304,99 @@
     },
     "propertyDetails": {
       "title": "Property Details",
-      "listingTitle": "Title",
-      "listingTitlePlaceholder": "e.g. Cozy Studio in Centar",
+      "listingTitle": "Listing Title",
+      "listingTitlePlaceholder": "e.g., Modern 2-bedroom apartment with balcony",
       "propertyType": "Property Type",
-      "types": {
-        "apartment": "Apartment",
-        "house": "House",
-        "office": "Office",
-        "land": "Land"
-      },
       "listingType": "Listing Type",
-      "listingTypes": {
-        "rent": "Rent",
-        "buy": "Buy"
-      },
-      "price": "Price",
-      "pricePlaceholder": "Price (€)",
-      "size": "Size",
-      "sizePlaceholder": "Size (m²)",
+      "price": "Price (€)",
+      "pricePlaceholder": "Enter price",
+      "size": "Size (m²)",
+      "sizePlaceholder": "Property size",
       "condition": "Condition",
-      "conditions": {
-        "new": "New",
-        "renovated": "Renovated",
-        "needsRenovation": "Needs renovation"
-      },
       "floor": "Floor",
-      "floorPlaceholder": "Floor number",
+      "floorPlaceholder": "Enter floor number",
       "totalFloors": "Total Floors",
-      "totalFloorsPlaceholder": "Total number of floors",
+      "totalFloorsPlaceholder": "Enter total floors",
       "rooms": "Rooms",
       "roomsPlaceholder": "Number of rooms",
       "bathrooms": "Bathrooms",
-      "bathroomsPlaceholder": "Number of bathrooms"
+      "bathroomsPlaceholder": "Number of bathrooms",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your property in detail..."
+    },
+    "description": {
+      "title": "Description",
+      "placeholder": "Describe your property in detail..."
+    },
+    "propertyDetails": {
+      "types": {
+        "apartment": "Apartment",
+        "house": "House",
+        "room": "Room",
+        "office": "Office",
+        "villa": "Villa",
+        "garage": "Garage",
+        "storageRoom": "Storage Room",
+        "commercial": "Commercial",
+        "land": "Land",
+        "building": "Building",
+        "holiday": "Holiday",
+        "studio": "Studio"
+      },
+      "listingTypes": {
+        "rent": "For Rent",
+        "buy": "For Sale"
+      },
+      "conditions": {
+        "new": "New",
+        "renovated": "Renovated",
+        "needsRenovation": "Needs Renovation"
+      },
+      "shareWith": "Share with",
+      "shareWithOptions": {
+        "ONE_PERSON": "One person",
+        "TWO_PEOPLE": "Two people",
+        "THREE_OR_MORE": "Three or more"
+      },
+      "roomCharacteristics": "Room Characteristics",
+      "couplesAllowed": "Couples allowed",
+      "minorsAllowed": "Minors allowed",
+      "streetFacingWindow": "Street facing window",
+      "privateToilet": "Private toilet",
+      "bedType": "Bed Type",
+      "bedTypes": {
+        "SINGLE": "Single bed",
+        "DOUBLE": "Double bed",
+        "SHARED_ROOM": "Shared room"
+      },
+      "garageFeatures": "Garage Features",
+      "motorbikeGarage": "Motorbike garage",
+      "automaticDoor": "Automatic door",
+      "securitySystemAndGuards": "Security system and guards",
+      "landType": "Land Type",
+      "landTypes": {
+        "DEVELOPED": "Developed",
+        "BUILDABLE": "Buildable",
+        "NON_BUILDING": "Non-building"
+      },
+      "select": "Select..."
     },
     "location": {
       "title": "Location",
       "city": "City",
       "selectCity": "Select a city",
-      "cities": {
-        "skopje": "Skopje",
-        "bitola": "Bitola",
-        "kumanovo": "Kumanovo",
-        "ohrid": "Ohrid",
-        "tetovo": "Tetovo"
-      },
+      "municipality": "Municipality",
+      "selectMunicipality": "Select a municipality",
       "address": "Address",
-      "addressPlaceholder": "Enter the property address"
+      "addressPlaceholder": "Enter property address",
+      "noMunicipalities": "No municipalities available for this city",
+      "selectCityFirst": "Please select a city first"
     },
     "amenities": {
       "title": "Amenities",
       "balcony": "Balcony",
       "heating": "Heating",
-      "air_conditioning": "Air conditioning",
+      "air_conditioning": "Air Conditioning",
       "furnished": "Furnished",
       "elevator": "Elevator",
       "parking": "Parking",
@@ -349,30 +413,100 @@
       "cable_tv": "Cable TV",
       "washing_machine": "Washing Machine"
     },
-    "description": {
-      "title": "Description",
-      "placeholder": "Describe your property in detail..."
-    },
     "media": {
-      "title": "Photos",
-      "subtitle": "Add photos of your property",
-      "dragDrop": "Drag and drop photos here or click to upload",
-      "maxSize": "Maximum file size: 5MB",
-      "formats": "Supported formats: JPG, PNG"
+      "title": "Property Photos",
+      "dragDrop": "Drag and drop photos here, or click to browse",
+      "choosePhotos": "Choose Photos",
+      "addMorePhotos": "Add More Photos",
+      "uploading": "Uploading...",
+      "currentPhotos": "Current photos",
+      "maxPhotos": "Max photos",
+      "recommendedPhotos": "Recommended: 5-10 high-quality photos",
+      "maxSize": "Max size: 5MB per photo",
+      "formats": "Formats: JPG, PNG, WebP",
+      "selectedPhotos": "Selected Photos",
+      "tip1": "Take photos in good lighting",
+      "tip2": "Show all rooms and key features",
+      "tip3": "Include exterior shots if applicable"
     },
     "buttons": {
-      "back": "Back",
       "next": "Next",
-      "publish": "Publish Listing"
+      "back": "Back",
+      "publish": "Publish Property"
+    },
+    "controlMode": {
+      "fullControlMode": "Full Control Mode",
+      "agencyControlMode": "Agency Control Mode",
+      "loggedInAs": "Logged in as",
+      "verified": "Verified",
+      "agencyVerified": "Agency Verified"
+    },
+    "loginBenefits": {
+      "title": "Good News! You Can Still Post Without an Account",
+      "goodNews": "Good news!",
+      "description": "You can post your property right now without creating an account. However, creating a free account gives you many benefits:",
+      "benefits": {
+        "editListings": "Edit and update your listings anytime",
+        "viewAnalytics": "View detailed analytics and performance",
+        "saveFavorites": "Save and manage favorite properties",
+        "manageMultiple": "Manage multiple properties easily",
+        "prioritySupport": "Get priority customer support",
+        "noBookingNumbers": "No need to remember booking numbers"
+      },
+      "note": "You can always create an account later and link your existing listings.",
+      "actions": {
+        "login": "Login",
+        "register": "Register"
+      }
     },
     "errors": {
       "required": "Please fill in all required fields",
       "invalidEmail": "Please enter a valid email address",
-      "invalidPhone": "Please enter a valid phone number",
-      "uploadFailed": "Failed to upload photos",
+      "minPhotos": "Please upload at least one photo",
       "maxPhotos": "Maximum 10 photos allowed",
-      "minPhotos": "Please add at least one photo",
-      "unknown": "An unexpected error occurred"
+      "uploadFailed": "Failed to upload images. Please try again.",
+      "unknown": "An unexpected error occurred. Please try again."
+    }
+  },
+  "MyUser": {
+    "title": "My Profile",
+    "editProfile": "Edit Profile",
+    "logout": "Logout",
+    "loggingOut": "Logging out...",
+    "verifiedUser": "Verified User",
+    "stats": {
+      "activeListings": "Active Listings",
+      "memberSince": "Member Since",
+      "accountStatus": "Account Status",
+      "verified": "Verified",
+      "pending": "Pending"
+    },
+    "listings": {
+      "title": "My Listings",
+      "addNew": "Add New Listing",
+      "empty": {
+        "title": "No listings yet",
+        "description": "Start by posting your first property listing",
+        "button": "Post Your First Property"
+      },
+      "actions": {
+        "view": "View",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    },
+    "editModal": {
+      "title": "Edit Profile",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "saving": "Saving..."
+    },
+    "messages": {
+      "authRequired": "Authentication required",
+      "userNotFound": "User data not found"
     }
   },
   "MyAgency": {
@@ -426,5 +560,85 @@
     "priceDataUnavailable": "Price data unavailable",
     "noProperties": "No properties",
     "viewProperties": "View properties"
+  },
+  "MyAgency": {
+    "editProfile": "Edit Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "loggingOut": "Logging out...",
+    "stats": {
+      "activeListings": "Active Listings",
+      "agencySize": "Agency Size",
+      "specializations": "Specializations",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "sizes": {
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large"
+    },
+    "sections": {
+      "aboutAgency": "About Agency",
+      "yourListings": "Your Listings",
+      "addNewListing": "Add New Listing"
+    },
+    "listings": {
+      "noListings": "No listings yet",
+      "noListingsText": "Start building your property portfolio by adding your first listing.",
+      "addFirstListing": "Add Your First Listing",
+      "forSale": "For Sale",
+      "forRent": "For Rent",
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "editModal": {
+      "title": "Edit Agency Profile",
+      "companyName": "Company Name",
+      "companyNamePlaceholder": "Enter company name",
+      "phone": "Phone",
+      "phonePlaceholder": "Enter phone number",
+      "website": "Website",
+      "websitePlaceholder": "https://example.com",
+      "address": "Address",
+      "addressPlaceholder": "Enter address",
+      "city": "City",
+      "cityPlaceholder": "Enter city",
+      "zipCode": "ZIP Code",
+      "zipCodePlaceholder": "Enter ZIP code",
+      "contactPerson": "Contact Person",
+      "contactPersonPlaceholder": "Enter contact person name",
+      "contactRole": "Contact Role",
+      "contactRolePlaceholder": "Enter contact role",
+      "agencySize": "Agency Size",
+      "logoUrl": "Logo URL",
+      "logoUrlPlaceholder": "https://example.com/logo.jpg",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter agency description",
+      "specializations": "Specializations",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "saving": "Saving..."
+    },
+    "specializationsList": {
+      "residentialSales": "Residential Sales",
+      "residentialRentals": "Residential Rentals",
+      "commercialProperties": "Commercial Properties",
+      "officeSpaces": "Office Spaces",
+      "vacationRentals": "Vacation Rentals",
+      "luxuryProperties": "Luxury Properties",
+      "propertyManagement": "Property Management"
+    }
+  },
+  "Listings": {
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "resultsCount": "{count} properties in {municipality} (Page {current} of {total})",
+      "singleResult": "1 property in {municipality}",
+      "noResults": "No properties in {municipality}"
+    }
   }
 }

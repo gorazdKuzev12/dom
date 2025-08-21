@@ -7,10 +7,15 @@
     "favorites": "Зачувани имоти",
     "registerAgency": "Регистрирај се како агенција",
     "properties": "Недвижности",
-  "postWithoutLogin": "Објави имот (без најава)",
+    "postWithoutLogin": "Објави имот (без најава)",
     "agencyLogin": "Најава за агенции",
     "myAgency": "Моја Агенција",
-    "agency": "Агенција"
+    "myProfile": "Мој Профил",
+    "agency": "Агенција",
+    "account": "Сметка",
+    "register": "Регистрирај се",
+    "login": "Најави се",
+    "logout": "Одјави се"
   },
   "Roommates": {
     "title": "Најди го твојот совршен цимер",
@@ -73,11 +78,18 @@
   "Filters": {
     "propertyType": "Тип на имот",
     "select": "Избери...",
-    "house": "Куќа",
     "apartment": "Стан",
-    "villa": "Вила",
+    "house": "Куќа",
+    "room": "Соба",
     "office": "Канцеларија",
+    "villa": "Вила",
+    "garage": "Гаража",
+    "storageRoom": "Магацински простор",
+    "commercial": "Комерцијален",
     "land": "Земјиште",
+    "building": "Зграда",
+    "holiday": "За одмор",
+    "studio": "Студио",
     "priceRange": "Опсег на цена",
     "min": "Мин",
     "max": "Макс",
@@ -238,13 +250,18 @@
       "login": "Најави се",
       "loggingIn": "Најавување...",
       "noAccount": "Немате сметка?",
-      "createOne": "Создадете тука"
+      "registerNow": "Создадете тука"
     },
     "errors": {
       "requiredFields": "Ве молиме пополнете ги сите задолжителни полиња",
       "invalidEmail": "Ве молиме внесете валидна емаил адреса",
       "invalidCredentials": "Најавата не успеа. Ве молиме проверете ги вашите податоци.",
+      "loginFailed": "Најавувањето не успеа. Ве молиме проверете ги вашите податоци.",
       "unknown": "Се појави неочекувана грешка"
+    },
+    "messages": {
+      "registrationSuccess": "Регистрацијата е успешна! Ве молиме најавете се со вашите податоци.",
+      "loginSuccess": "Успешна најава! Пренасочување..."
     }
   },
   "AgencyLogin": {
@@ -255,17 +272,23 @@
       "emailPlaceholder": "Внесете ја вашата деловна е-пошта",
       "password": "Лозинка",
       "passwordPlaceholder": "Внесете ја вашата лозинка",
-      "rememberMe": "Запомни ме",
+      "rememberMe": "Запомни ме 7 дена",
       "forgotPassword": "Заборавена лозинка?",
       "login": "Најави се",
-      "loggingIn": "Најавување...",
+      "loggingIn": "Се најавувам...",
       "noAccount": "Немате агенциска сметка?",
       "registerNow": "Регистрирајте се сега"
     },
     "errors": {
       "requiredFields": "Ве молиме пополнете ги сите задолжителни полиња",
       "invalidCredentials": "Невалидна е-пошта или лозинка",
+      "invalidEmail": "Ве молиме внесете валидна е-пошта адреса",
+      "loginFailed": "Најавувањето не успеа. Ве молиме проверете ги вашите податоци.",
       "unknown": "Се појави неочекувана грешка"
+    },
+    "messages": {
+      "registrationSuccess": "Регистрацијата е успешна! Ве молиме најавете се со вашите податоци.",
+      "loginSuccess": "Успешна најава! Пренасочување..."
     },
     "benefits": {
       "title": "Придобивки од порталот за агенции",
@@ -279,76 +302,117 @@
     }
   },
   "PostProperty": {
-    "title": "Објави недвижнина",
-    "subtitle": "Пополнете ги деталите за да ја објавите вашата недвижнина",
+    "title": "Објави го твојот имот",
+    "subtitle": "Наведи го твојот имот за продажба или под наем на dom.mk",
     "steps": {
-      "details": "Детали",
-      "media": "Медиа",
+      "details": "Контакт и детали",
+      "media": "Информации за имот",
       "publish": "Објави"
     },
     "contactInfo": {
       "title": "Контакт информации",
       "fullName": "Целосно име",
       "fullNamePlaceholder": "Внесете го вашето целосно име",
-      "email": "Емаил адреса",
-      "emailPlaceholder": "Внесете ја вашата емаил адреса",
+      "email": "Е-пошта",
+      "emailPlaceholder": "Внесете ја вашата е-пошта",
       "phone": "Телефонски број",
       "phonePlaceholder": "Внесете го вашиот телефонски број"
     },
     "propertyDetails": {
-      "title": "Детали за недвижнината",
-      "listingTitle": "Наслов",
-      "listingTitlePlaceholder": "пр. Уреден стан во Центар",
-      "propertyType": "Тип на недвижнина",
-      "types": {
-        "apartment": "Стан",
-        "house": "Куќа",
-        "office": "Канцеларија",
-        "land": "Земјиште"
-      },
+      "title": "Детали за имот",
+      "listingTitle": "Наслов на огласот",
+      "listingTitlePlaceholder": "пр., Модерен стан со 2 спални со балкон",
+      "propertyType": "Тип на имот",
       "listingType": "Тип на оглас",
-      "listingTypes": {
-        "rent": "Изнајмување",
-        "buy": "Продажба"
-      },
-      "price": "Цена",
-      "pricePlaceholder": "Цена (€)",
-      "size": "Површина",
-      "sizePlaceholder": "Површина (м²)",
+      "price": "Цена (€)",
+      "pricePlaceholder": "Внеси цена",
+      "size": "Големина (м²)",
+      "sizePlaceholder": "Големина на имотот",
       "condition": "Состојба",
-      "conditions": {
-        "new": "Нова",
-        "renovated": "Реновирана",
-        "needsRenovation": "Потребно реновирање"
-      },
       "floor": "Кат",
-      "floorPlaceholder": "Број на кат",
+      "floorPlaceholder": "Внесете број на кат",
       "totalFloors": "Вкупно катови",
-      "totalFloorsPlaceholder": "Вкупен број на катови",
+      "totalFloorsPlaceholder": "Внесете вкупно катови",
       "rooms": "Соби",
       "roomsPlaceholder": "Број на соби",
       "bathrooms": "Бањи",
-      "bathroomsPlaceholder": "Број на бањи"
+      "bathroomsPlaceholder": "Број на бањи",
+      "description": "Опис",
+      "descriptionPlaceholder": "Опишете го вашиот имот детално..."
+    },
+    "description": {
+      "title": "Опис",
+      "placeholder": "Опишете го вашиот имот детално..."
+    },
+    "propertyDetails": {
+      "types": {
+        "apartment": "Стан",
+        "house": "Куќа",
+        "room": "Соба",
+        "office": "Канцеларија",
+        "villa": "Вила",
+        "garage": "Гаража",
+        "storageRoom": "Складиште",
+        "commercial": "Комерцијално",
+        "land": "Парцела",
+        "building": "Зграда",
+        "holiday": "Празничен",
+        "studio": "Студио"
+      },
+      "listingTypes": {
+        "rent": "За наем",
+        "buy": "За продажба"
+      },
+      "conditions": {
+        "new": "Нов",
+        "renovated": "Реновиран",
+        "needsRenovation": "Потребна реновација"
+      },
+      "shareWith": "Сподели со",
+      "shareWithOptions": {
+        "ONE_PERSON": "Едно лице",
+        "TWO_PEOPLE": "Двајца луѓе",
+        "THREE_OR_MORE": "Тројца или повеќе"
+      },
+      "roomCharacteristics": "Карактеристики на собата",
+      "couplesAllowed": "Дозволени парови",
+      "minorsAllowed": "Дозволени малолетници",
+      "streetFacingWindow": "Прозорец кон улица",
+      "privateToilet": "Приватна тоалетна",
+      "bedType": "Тип на кревет",
+      "bedTypes": {
+        "SINGLE": "Единечен кревет",
+        "DOUBLE": "Двоен кревет",
+        "SHARED_ROOM": "Споделена соба"
+      },
+      "garageFeatures": "Карактеристики на гаража",
+      "motorbikeGarage": "Гаража за мотор",
+      "automaticDoor": "Автоматска врата",
+      "securitySystemAndGuards": "Систем за безбедност и чувари",
+      "landType": "Тип на парцела",
+      "landTypes": {
+        "DEVELOPED": "Развиена",
+        "BUILDABLE": "Градежна",
+        "NON_BUILDING": "Неградежна"
+      },
+      "select": "Избери..."
     },
     "location": {
       "title": "Локација",
       "city": "Град",
       "selectCity": "Избери град",
-      "cities": {
-        "skopje": "Скопје",
-        "bitola": "Битола",
-        "kumanovo": "Куманово",
-        "ohrid": "Охрид",
-        "tetovo": "Тетово"
-      },
+      "municipality": "Општина",
+      "selectMunicipality": "Избери општина",
       "address": "Адреса",
-      "addressPlaceholder": "Внесете ја адресата на недвижнината"
+      "addressPlaceholder": "Внесете адреса на имотот",
+      "noMunicipalities": "Нема достапни општини за овој град",
+      "selectCityFirst": "Ве молиме прво изберете град"
     },
     "amenities": {
-      "title": "Карактеристики",
-      "balcony": "Тераса",
+      "title": "Погодности",
+      "balcony": "Балкон",
       "heating": "Греење",
-      "air_conditioning": "Клима",
+      "air_conditioning": "Климатизација",
       "furnished": "Наместен",
       "elevator": "Лифт",
       "parking": "Паркинг",
@@ -357,37 +421,108 @@
       "internet": "Интернет/WiFi",
       "laundry": "Перална",
       "dishwasher": "Машина за садови",
-      "security": "Сигурност",
-      "storage": "Складишен простор",
-      "pet_friendly": "Дозволени миленици",
+      "security": "Систем за безбедност",
+      "storage": "Простор за складирање",
+      "pet_friendly": "Дозволени миленичиња",
       "terrace": "Тераса",
       "fireplace": "Камин",
       "cable_tv": "Кабелска ТВ",
       "washing_machine": "Машина за перење"
     },
-    "description": {
-      "title": "Опис",
-      "placeholder": "Опишете ја вашата недвижнина детално..."
-    },
     "media": {
-      "title": "Фотографии",
-      "subtitle": "Додадете фотографии од вашата недвижнина",
-      "dragDrop": "Повлечете и пуштете фотографии тука или кликнете за прикачување",
-      "maxSize": "Максимална големина на датотека: 5MB",
-      "formats": "Поддржани формати: JPG, PNG"
+      "title": "Слики од имот",
+      "dragDrop": "Повлечете и пуштете слики тука, или кликнете за преглед",
+      "choosePhotos": "Избери слики",
+      "addMorePhotos": "Додај повеќе слики",
+      "uploading": "Се качува...",
+      "currentPhotos": "Тековни слики",
+      "maxPhotos": "Макс слики",
+      "recommendedPhotos": "Препорачано: 5-10 висококвалитетни слики",
+      "maxSize": "Макс големина: 5MB по слика",
+      "formats": "Формати: JPG, PNG, WebP",
+      "selectedPhotos": "Избрани слики",
+      "tip1": "Фотографирајте во добро осветлување",
+      "tip2": "Прикажете ги сите соби и клучни карактеристики",
+      "tip3": "Вклучете надворешни снимки ако е применливо"
     },
     "buttons": {
-      "back": "Назад",
       "next": "Следно",
-      "publish": "Објави оглас"
+      "back": "Назад",
+      "publish": "Објави имот"
+    },
+    "controlMode": {
+      "fullControlMode": "Режим на целосна контрола",
+      "agencyControlMode": "Режим на контрола на агенција",
+      "loggedInAs": "Најавен како",
+      "verified": "Верификуван",
+      "agencyVerified": "Верификувана агенција"
+    },
+    "loginBenefits": {
+      "title": "Добри вести! Можете да објавите и без сметка",
+      "goodNews": "Добри вести!",
+      "description": "Можете да го објавите вашиот имот веднаш без да креирате сметка. Сепак, креирањето на бесплатна сметка ви дава многу придобивки:",
+      "benefits": {
+        "editListings": "Уредувајте и ажурирајте ги вашите огласи во секое време",
+        "viewAnalytics": "Прегледајте детални аналитики и перформанси",
+        "saveFavorites": "Зачувајте и управувајте со омилени имоти",
+        "manageMultiple": "Лесно управувајте со повеќе имоти",
+        "prioritySupport": "Добијте приоритетна корисничка поддршка",
+        "noBookingNumbers": "Нема потреба да паметите броеви за резервација"
+      },
+      "note": "Секогаш можете да креирате сметка подоцна и да ги поврзете вашите постоечки огласи.",
+      "actions": {
+        "login": "Најавете се",
+        "register": "Регистрирајте се"
+      }
     },
     "errors": {
       "required": "Ве молиме пополнете ги сите задолжителни полиња",
-      "invalidEmail": "Ве молиме внесете валидна емаил адреса",
-      "invalidPhone": "Ве молиме внесете валиден телефонски број",
-      "uploadFailed": "Прикачувањето на фотографиите не успеа",
-      "maxPhotos": "Максимум 10 фотографии се дозволени",
-      "minPhotos": "Ве молиме додадете барем една фотографија"
+      "invalidEmail": "Ве молиме внесете валидна е-пошта",
+      "minPhotos": "Ве молиме качете најмалку една слика",
+      "maxPhotos": "Максимум 10 слики се дозволени",
+      "uploadFailed": "Неуспешно качување на слики. Обидете се повторно.",
+      "unknown": "Се појави неочекувана грешка. Обидете се повторно."
+    }
+  },
+  "MyUser": {
+    "title": "Мој Профил",
+    "editProfile": "Уреди Профил",
+    "logout": "Одјави се",
+    "loggingOut": "Се одјавувам...",
+    "verifiedUser": "Верификуван Корисник",
+    "stats": {
+      "activeListings": "Активни Огласи",
+      "memberSince": "Член од",
+      "accountStatus": "Статус на Сметка",
+      "verified": "Верификуван",
+      "pending": "Во исчекување"
+    },
+    "listings": {
+      "title": "Мои Огласи",
+      "addNew": "Додај Нов Оглас",
+      "empty": {
+        "title": "Сè уште нема огласи",
+        "description": "Започни со објавување на твојот прв оглас за имот",
+        "button": "Објави го Првиот Имот"
+      },
+      "actions": {
+        "view": "Прегледај",
+        "edit": "Уреди",
+        "delete": "Избриши"
+      }
+    },
+    "editModal": {
+      "title": "Уреди Профил",
+      "name": "Име",
+      "email": "Е-пошта",
+      "phone": "Телефон",
+      "cancel": "Откажи",
+      "save": "Зачувај Промени",
+      "saving": "Зачувувам..."
+    },
+    "messages": {
+      "authRequired": "Потребна е автентикација",
+      "userNotFound": "Податоците за корисникот не се пронајдени"
     }
   },
   "MyAgency": {
@@ -441,5 +576,85 @@
     "priceDataUnavailable": "Нема податоци за цена",
     "noProperties": "Нема имоти",
     "viewProperties": "Види имоти"
+  },
+  "MyAgency": {
+    "editProfile": "Уреди Профил",
+    "settings": "Подесувања",
+    "logout": "Одјави се",
+    "loggingOut": "Се одјавува...",
+    "stats": {
+      "activeListings": "Активни Огласи",
+      "agencySize": "Големина на Агенција",
+      "specializations": "Специјализации",
+      "status": "Статус",
+      "active": "Активна",
+      "inactive": "Неактивна"
+    },
+    "sizes": {
+      "small": "Мала",
+      "medium": "Средна",
+      "large": "Голема"
+    },
+    "sections": {
+      "aboutAgency": "За Агенцијата",
+      "yourListings": "Вашите Огласи",
+      "addNewListing": "Додај Нов Оглас"
+    },
+    "listings": {
+      "noListings": "Сè уште нема огласи",
+      "noListingsText": "Започнете да го градите вашето портфолио на недвижности со додавање на вашиот прв оглас.",
+      "addFirstListing": "Додајте го Вашиот Прв Оглас",
+      "forSale": "За Продажба",
+      "forRent": "За Изнајмување",
+      "view": "Види",
+      "edit": "Уреди",
+      "delete": "Избриши"
+    },
+    "editModal": {
+      "title": "Уреди Профил на Агенција",
+      "companyName": "Име на Компанија",
+      "companyNamePlaceholder": "Внесете име на компанија",
+      "phone": "Телефон",
+      "phonePlaceholder": "Внесете телефонски број",
+      "website": "Веб-страница",
+      "websitePlaceholder": "https://пример.com",
+      "address": "Адреса",
+      "addressPlaceholder": "Внесете адреса",
+      "city": "Град",
+      "cityPlaceholder": "Внесете град",
+      "zipCode": "Поштенски Број",
+      "zipCodePlaceholder": "Внесете поштенски број",
+      "contactPerson": "Контакт Лице",
+      "contactPersonPlaceholder": "Внесете име на контакт лице",
+      "contactRole": "Функција на Контакт",
+      "contactRolePlaceholder": "Внесете функција на контакт",
+      "agencySize": "Големина на Агенција",
+      "logoUrl": "URL на Лого",
+      "logoUrlPlaceholder": "https://пример.com/лого.jpg",
+      "description": "Опис",
+      "descriptionPlaceholder": "Внесете опис на агенцијата",
+      "specializations": "Специјализации",
+      "cancel": "Откажи",
+      "saveChanges": "Зачувај Промени",
+      "saving": "Се зачувува..."
+    },
+    "specializationsList": {
+      "residentialSales": "Продажба на Станбени Објекти",
+      "residentialRentals": "Изнајмување на Станбени Објекти",
+      "commercialProperties": "Комерцијални Недвижности",
+      "officeSpaces": "Канцелариски Простори",
+      "vacationRentals": "Изнајмување за Одмор",
+      "luxuryProperties": "Луксузни Недвижности",
+      "propertyManagement": "Управување со Недвижности"
+    }
+  },
+  "Listings": {
+    "pagination": {
+      "previous": "Претходна",
+      "next": "Следна",
+      "resultsCount": "{count} имоти во {municipality} (Страница {current} од {total})",
+      "singleResult": "1 имот во {municipality}",
+      "noResults": "Нема имоти во {municipality}"
+    }
   }
 }
