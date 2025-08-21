@@ -27,8 +27,9 @@ const getStoredAgencyData = () => {
 };
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
-  const { locale } = params;
+export async function generateMetadata({ params }: { params: Promise<PageParams> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const { locale } = resolvedParams;
   
   const titles = {
     en: "My Agency Dashboard | DOM Real Estate",
@@ -85,7 +86,9 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
   };
 }
 
-export default async function MyAgencyPage({ params }: { params: PageParams }) {
+export default async function MyAgencyPage({ params }: { params: Promise<PageParams> }) {
+  const resolvedParams = await params;
+  
   // Try to fetch agency data and listings server-side using HTTP-only cookies
   const { agency, listings, isAuthenticated, error } = await getServerAgencyData();
   
@@ -104,7 +107,7 @@ export default async function MyAgencyPage({ params }: { params: PageParams }) {
           serverAgency={agency}
           serverListings={listings}
           serverAuth={isAuthenticated}
-          locale={params.locale}
+          locale={resolvedParams.locale}
         />
       </ApolloWrapper>
       <Footer />

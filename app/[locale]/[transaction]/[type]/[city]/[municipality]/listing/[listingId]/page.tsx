@@ -43,14 +43,14 @@ const LISTING_QUERY = `
 `;
 
 interface PageProps {
-  params: {
+  params: Promise<{
     locale: string;
     transaction: string;
     type: string;
     city: string;
     municipality: string;
     listingId: string;
-  };
+  }>;
 }
 
 async function fetchListing(listingId: string) {
@@ -93,7 +93,8 @@ async function fetchListing(listingId: string) {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const listing = await fetchListing(params.listingId);
+  const resolvedParams = await params;
+  const listing = await fetchListing(resolvedParams.listingId);
 
   if (!listing) {
     return {
@@ -102,7 +103,7 @@ export async function generateMetadata({
     };
   }
 
-  const { locale } = params;
+  const { locale } = resolvedParams;
   const municipalityName =
     locale === "mk"
       ? listing.municipality?.name_mk
@@ -134,7 +135,7 @@ export async function generateMetadata({
         listing.images && listing.images.length > 0
           ? [listing.images[0]]
           : ["/so.png"],
-      url: `https://dom.mk/${locale}/${params.transaction}/${params.type}/${params.city}/${params.municipality}/listing/${params.listingId}`,
+      url: `https://dom.mk/${locale}/${resolvedParams.transaction}/${resolvedParams.type}/${resolvedParams.city}/${resolvedParams.municipality}/listing/${resolvedParams.listingId}`,
     },
     twitter: {
       card: "summary_large_image",
@@ -151,7 +152,8 @@ export async function generateMetadata({
 }
 
 export default async function ListingPage({ params }: PageProps) {
-  const listing = await fetchListing(params.listingId);
+  const resolvedParams = await params;
+  const listing = await fetchListing(resolvedParams.listingId);
 
   // Validate that the URL params match the listing data
   const expectedTransaction = listing.transaction === "SALE" ? "buy" : "rent";
@@ -163,10 +165,10 @@ export default async function ListingPage({ params }: PageProps) {
 
   // If URL doesn't match listing data, redirect to correct URL
   if (
-    params.transaction !== expectedTransaction ||
-    !params.type.includes(expectedPropertyType) ||
-    params.city !== expectedCity ||
-    !params.municipality.includes(
+    resolvedParams.transaction !== expectedTransaction ||
+    !resolvedParams.type.includes(expectedPropertyType) ||
+    resolvedParams.city !== expectedCity ||
+    !resolvedParams.municipality.includes(
       expectedMunicipality?.replace(/[^\w-]/g, "") || ""
     )
   ) {
@@ -174,5 +176,5 @@ export default async function ListingPage({ params }: PageProps) {
     // For now, we'll just continue to show the listing
   }
 
-  return <ListingClient listing={listing} locale={params.locale} />;
+  return <ListingClient listing={listing} locale={resolvedParams.locale} />;
 }

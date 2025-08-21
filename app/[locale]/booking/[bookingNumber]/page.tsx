@@ -153,7 +153,7 @@ function BookingPage() {
                 <AmenitiesList>
                   {listing.amenities.map((amenity: string) => (
                     <AmenityItem key={amenity}>
-                      ✓ {amenity.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}
+                      ✓ {amenity.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, (l: string) => l.toUpperCase())}
                     </AmenityItem>
                   ))}
                 </AmenitiesList>
@@ -193,7 +193,7 @@ function BookingPage() {
                 </InfoItem>
                 <InfoItem>
                   <InfoLabel>Type:</InfoLabel>
-                  <InfoValue>{listing.type.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</InfoValue>
+                  <InfoValue>{listing.type.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, (l: string) => l.toUpperCase())}</InfoValue>
                 </InfoItem>
                 <InfoItem>
                   <InfoLabel>Transaction:</InfoLabel>

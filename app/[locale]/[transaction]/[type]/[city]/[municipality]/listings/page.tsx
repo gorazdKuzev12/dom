@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
 // helpers/enums.ts
-export const toEnum = (val?: string) =>
+const toEnum = (val?: string) =>
   typeof val === "string" ? val.toUpperCase() : undefined;
 
 // Convert specificDetails to Amenity enum format
@@ -279,10 +279,12 @@ export async function generateMetadata({
   params,
   searchParams,
 }: {
-  params: PageParams;
-  searchParams: SearchParams;
+  params: Promise<PageParams>;
+  searchParams: Promise<SearchParams>;
 }): Promise<Metadata> {
-  const { municipality, city, transaction, type, locale } = params;
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+  const { municipality, city, transaction, type, locale } = resolvedParams;
   
   const client = getClient();
   
@@ -323,20 +325,20 @@ export async function generateMetadata({
   
   // Build price range for meta description
   let priceRange = "";
-  if (searchParams.priceMin || searchParams.priceMax) {
-    if (searchParams.priceMin && searchParams.priceMax) {
-      priceRange = ` ${seoTexts.from} €${searchParams.priceMin} ${seoTexts.to} €${searchParams.priceMax}`;
-    } else if (searchParams.priceMin) {
-      priceRange = ` ${seoTexts.startingFrom} €${searchParams.priceMin}`;
-    } else if (searchParams.priceMax) {
-      priceRange = ` ${seoTexts.upTo} €${searchParams.priceMax}`;
+  if (resolvedSearchParams.priceMin || resolvedSearchParams.priceMax) {
+    if (resolvedSearchParams.priceMin && resolvedSearchParams.priceMax) {
+      priceRange = ` ${seoTexts.from} €${resolvedSearchParams.priceMin} ${seoTexts.to} €${resolvedSearchParams.priceMax}`;
+    } else if (resolvedSearchParams.priceMin) {
+      priceRange = ` ${seoTexts.startingFrom} €${resolvedSearchParams.priceMin}`;
+    } else if (resolvedSearchParams.priceMax) {
+      priceRange = ` ${seoTexts.upTo} €${resolvedSearchParams.priceMax}`;
     }
   }
   
   // Build bedrooms filter for description
   let bedroomsText = "";
-  if (searchParams.bedrooms) {
-    const bedrooms = searchParams.bedrooms.split(",");
+  if (resolvedSearchParams.bedrooms) {
+    const bedrooms = resolvedSearchParams.bedrooms.split(",");
     if (bedrooms.length === 1) {
       const bedroomWord = bedrooms[0] === "1" ? seoTexts.bedroom : seoTexts.bedrooms;
       bedroomsText = ` ${seoTexts.with} ${bedrooms[0]} ${bedroomWord}`;
@@ -541,10 +543,12 @@ export default async function MunicipalityListingsPage({
   params, 
   searchParams 
 }: { 
-  params: PageParams; 
-  searchParams: SearchParams;
+  params: Promise<PageParams>; 
+  searchParams: Promise<SearchParams>;
 }) {
-  const { municipality, city, transaction, type } = params;
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+  const { municipality, city, transaction, type } = resolvedParams;
   
   // Convert URL parameters to GraphQL enum values
   const transactionEnum = transactionTypeMap[transaction.toLowerCase()];
@@ -562,26 +566,26 @@ export default async function MunicipalityListingsPage({
 
   // Calculate pagination parameters
   const LISTINGS_PER_PAGE = 8;
-  const currentPage = parseInt(searchParams.page || '1', 10);
+  const currentPage = parseInt(resolvedSearchParams.page || '1', 10);
   const offset = (currentPage - 1) * LISTINGS_PER_PAGE;
 
   // map URL → GraphQL filter
   const filter = {
     transaction: transactionEnum,
     type: propertyTypeEnum,
-    condition: toEnum(searchParams.condition),
+    condition: toEnum(resolvedSearchParams.condition),
     // primitives
-    priceMin: searchParams.priceMin && +searchParams.priceMin,
-    priceMax: searchParams.priceMax && +searchParams.priceMax,
-    rooms: searchParams.bedrooms
-      ? String(searchParams.bedrooms).split(",").map(Number)
+    priceMin: resolvedSearchParams.priceMin && +resolvedSearchParams.priceMin,
+    priceMax: resolvedSearchParams.priceMax && +resolvedSearchParams.priceMax,
+    rooms: resolvedSearchParams.bedrooms
+      ? String(resolvedSearchParams.bedrooms).split(",").map(Number)
       : undefined,
-    bathrooms: searchParams.bathrooms && +searchParams.bathrooms,
-    amenities: searchParams.specificDetails
-      ? String(searchParams.specificDetails).split(",").map(toAmenityEnum)
+    bathrooms: resolvedSearchParams.bathrooms && +resolvedSearchParams.bathrooms,
+    amenities: resolvedSearchParams.specificDetails
+      ? String(resolvedSearchParams.specificDetails).split(",").map(toAmenityEnum)
       : undefined,
-    listingDate: searchParams.listingDate,
-    sort: searchParams.sort,
+    listingDate: resolvedSearchParams.listingDate,
+    sort: resolvedSearchParams.sort,
   };
 
   try {
@@ -619,7 +623,7 @@ export default async function MunicipalityListingsPage({
     // Get localized municipality name for display
     let displayMunicipalityName = municipalityName;
     if (listings.length > 0 && listings[0].municipality) {
-      displayMunicipalityName = getLocalizedName(listings[0].municipality, params.locale);
+      displayMunicipalityName = getLocalizedName(listings[0].municipality, resolvedParams.locale);
     }
     
     const structuredData = generateStructuredData(
@@ -628,7 +632,7 @@ export default async function MunicipalityListingsPage({
       city,
       transaction,
       type,
-      params.locale
+      resolvedParams.locale
     );
 
     return (

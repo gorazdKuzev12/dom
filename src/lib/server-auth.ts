@@ -5,7 +5,7 @@ import { GET_AGENCY, GET_AGENCY_LISTINGS, GET_USER, GET_USER_LISTINGS } from './
 // Server-side function to get agency data using HTTP-only cookies
 export async function getServerAgencyData() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('agencyToken')?.value;
 
     console.log('🍪 Server-side cookie check:', {
@@ -67,7 +67,7 @@ export async function getServerAgencyData() {
     return { 
       agency: null, 
       isAuthenticated: false, 
-      error: error.message || 'Failed to fetch agency data' 
+      error: error instanceof Error ? error.message : 'Failed to fetch agency data' 
     };
   }
 } 
@@ -75,7 +75,7 @@ export async function getServerAgencyData() {
 // Server-side function to get user data using HTTP-only cookies
 export async function getServerUserData() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('userToken')?.value;
 
     console.log('🍪 Server-side user cookie check:', {
@@ -138,7 +138,7 @@ export async function getServerUserData() {
       user: null, 
       listings: null,
       isAuthenticated: false, 
-      error: error.message || 'Failed to fetch user data' 
+      error: error instanceof Error ? error.message : 'Failed to fetch user data' 
     };
   }
 } 

@@ -126,8 +126,9 @@ const getLocalizedCityName = (city: string, locale: string): string => {
 };
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
-  const { city, transaction, type, locale } = params;
+export async function generateMetadata({ params }: { params: Promise<PageParams> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const { city, transaction, type, locale } = resolvedParams;
   
   // Get localized city name
   const cityName = getLocalizedCityName(city, locale);
@@ -199,8 +200,9 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
   };
 }
 
-export default async function PropertyListingPage({ params }: { params: PageParams }) {
-  const { city, transaction, type } = params;
+export default async function PropertyListingPage({ params }: { params: Promise<PageParams> }) {
+  const resolvedParams = await params;
+  const { city, transaction, type } = resolvedParams;
 
   // Convert URL parameters to GraphQL enum values
   const transactionEnum = transactionTypeMap[transaction.toLowerCase()];
@@ -233,9 +235,9 @@ export default async function PropertyListingPage({ params }: { params: PagePara
     const municipalities = data.municipalitiesByCityName.map(
       (municipality: any) => {
         const name =
-          params.locale === "mk"
+          resolvedParams.locale === "mk"
             ? municipality.name_mk
-            : params.locale === "sq"
+            : resolvedParams.locale === "sq"
             ? municipality.name_sq
             : municipality.name_en;
 
@@ -254,7 +256,7 @@ export default async function PropertyListingPage({ params }: { params: PagePara
     );
 
     // Get localized city name for display
-    const localizedCityName = getLocalizedCityName(city, params.locale);
+    const localizedCityName = getLocalizedCityName(city, resolvedParams.locale);
 
           return (
         <div>

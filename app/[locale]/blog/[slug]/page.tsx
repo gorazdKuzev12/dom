@@ -73,10 +73,11 @@ interface BlogPost {
 export default async function BlogPostPage({ 
   params 
 }: { 
-  params: { slug: string; locale: string } 
+  params: Promise<{ slug: string; locale: string }> 
 }) {
+  const resolvedParams = await params;
   const client = getClient();
-  const { slug, locale } = params;
+  const { slug, locale } = resolvedParams;
   
   try {
     // Fetch blog post by slug

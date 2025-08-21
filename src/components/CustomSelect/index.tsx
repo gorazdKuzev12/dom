@@ -1,6 +1,22 @@
 import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 
+interface Option {
+  value: string;
+  label: string;
+}
+
+interface CustomSelectProps {
+  options: Option[];
+  value?: string;
+  onChange?: (event: { target: { value: string } }) => void;
+  placeholder?: string;
+}
+
+interface OptionProps {
+  selected?: boolean;
+}
+
 // Styled components for custom select
 const SelectContainer = styled.div`
   position: relative;
@@ -43,7 +59,7 @@ const OptionsContainer = styled.div<{ $isOpen: boolean }>`
   display: ${(props) => (props.$isOpen ? "block" : "none")};
 `;
 
-const Option = styled.div`
+const Option = styled.div<OptionProps>`
   padding: 0.8rem 1.2rem;
   cursor: pointer;
 
@@ -60,15 +76,15 @@ const Option = styled.div`
 `;
 
 // Custom Select Component
-const CustomSelect = ({ options, value, onChange, placeholder }) => {
+const CustomSelect = ({ options, value, onChange, placeholder }: CustomSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(value || "");
-  const selectRef = useRef(null);
+  const selectRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (selectRef.current && !selectRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -80,7 +96,7 @@ const CustomSelect = ({ options, value, onChange, placeholder }) => {
   }, []);
 
   // Handle option selection
-  const handleOptionClick = (option) => {
+  const handleOptionClick = (option: Option) => {
     setSelectedOption(option.value);
     setIsOpen(false);
     if (onChange) {
@@ -91,7 +107,7 @@ const CustomSelect = ({ options, value, onChange, placeholder }) => {
 
   // Find selected option label
   const getSelectedLabel = () => {
-    const option = options.find((opt) => opt.value === selectedOption);
+    const option = options.find((opt: Option) => opt.value === selectedOption);
     return option ? option.label : placeholder || "Select an option";
   };
 
@@ -102,7 +118,7 @@ const CustomSelect = ({ options, value, onChange, placeholder }) => {
       </SelectButton>
 
       <OptionsContainer $isOpen={isOpen}>
-        {options.map((option, index) => (
+        {options.map((option: Option, index: number) => (
           <Option
             key={index}
             selected={option.value === selectedOption}
